@@ -7,11 +7,12 @@ class InterestBarChart extends StatelessWidget {
     required this.groupName,
     required this.rates,
     required this.minHeight,
-    required this.positiveColor,
-    required this.negativeColor,
+    required this.barColor,
+    required this.notApplicableColor,
     required this.axisColor,
     required this.axisGroupPadding,
     required this.groupNameBottomPadding,
+    required this.chartBottomPadding,
     this.groupNameStyle,
     this.noteTextStyle,
     this.barValueTextStyle,
@@ -20,12 +21,13 @@ class InterestBarChart extends StatelessWidget {
   final String groupName;
   final Map<String, double> rates;
 
-  final Color positiveColor;
-  final Color negativeColor;
+  final Color barColor;
+  final Color notApplicableColor;
   final Color axisColor;
   final double axisGroupPadding;
   final double minHeight;
   final double groupNameBottomPadding;
+  final double chartBottomPadding;
 
   final TextStyle? groupNameStyle;
   final TextStyle? noteTextStyle;
@@ -37,10 +39,9 @@ class InterestBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     int groupIndex = 0;
     final xAxisGroups = rates.keys;
-    final hasNoNegativeBar =
-        rates.values.where((element) => element < 0).isEmpty;
-    final hasNoZeroOrPositiveBar =
-        rates.values.where((element) => element >= 0).isEmpty;
+    final hasNABar = rates.values
+        .where((element) => element == double.negativeInfinity)
+        .isNotEmpty;
     return Container(
       constraints: BoxConstraints(minHeight: minHeight),
       padding: EdgeInsets.only(
@@ -69,16 +70,12 @@ class InterestBarChart extends StatelessWidget {
                         x: groupIndex,
                         barRods: [
                           BarChartRodData(
-                            toY: rate,
-                            color: rate > 0 ? positiveColor : negativeColor,
+                            toY: rate > 0 ? rate : 0.0,
+                            color: barColor,
                             width: barWidth,
-                            borderRadius: rate > 0
-                                ? BorderRadius.vertical(
-                                    top: Radius.circular(barWidth / 2),
-                                  )
-                                : BorderRadius.vertical(
-                                    bottom: Radius.circular(barWidth / 2),
-                                  ),
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(barWidth / 2),
+                            ),
                           )
                         ],
                       );
@@ -86,21 +83,12 @@ class InterestBarChart extends StatelessWidget {
                       return data;
                     },
                   ).toList(),
-                  gridData: FlGridData(
-                    show: true,
-                    checkToShowVerticalLine: (value) => false,
-                    checkToShowHorizontalLine: (value) => value % 5 == 0,
-                    getDrawingHorizontalLine: (value) {
-                      final strokeWidth = value == 0 ? 1.0 : 0.0;
-                      return FlLine(
-                        strokeWidth: strokeWidth,
-                        color: axisColor,
-                      );
-                    },
-                  ),
                   borderData: FlBorderData(
-                    show: hasNoNegativeBar || hasNoZeroOrPositiveBar,
-                    border: const Border(bottom: BorderSide(width: 1)),
+                    show: true,
+                    border: const Border(
+                      bottom: BorderSide(width: 1),
+                      left: BorderSide(width: 1),
+                    ),
                   ),
                   titlesData: FlTitlesData(
                     bottomTitles: AxisTitles(
@@ -125,11 +113,19 @@ class InterestBarChart extends StatelessWidget {
                       sideTitles: SideTitles(
                         showTitles: true,
                         getTitlesWidget: (value, meta) {
-                          return Text(
-                            rates[xAxisGroups.elementAt(value.toInt())]
-                                .toString(),
-                            style: barValueTextStyle,
-                          );
+                          final rate =
+                              rates[xAxisGroups.elementAt(value.toInt())] ?? -1;
+                          return rate >= 0
+                              ? Text(
+                                  rate.toString(),
+                                  style: barValueTextStyle,
+                                )
+                              : Text(
+                                  "—",
+                                  style: barValueTextStyle?.copyWith(
+                                    color: notApplicableColor,
+                                  ),
+                                );
                         },
                       ),
                     ),
@@ -140,30 +136,46 @@ class InterestBarChart extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 50),
-          Wrap(
-            children: [
-              Text('* KKH: Không kỳ hạn', style: noteTextStyle),
-              if (!hasNoZeroOrPositiveBar) ...[
-                const SizedBox(width: 8),
-                Text(
-                  '* Lãi suất dương',
-                  style: noteTextStyle?.copyWith(
-                    color: positiveColor,
-                  ),
-                ),
-              ],
-              if (!hasNoNegativeBar) ...[
-                const SizedBox(width: 8),
-                Text(
-                  '* Lãi suất âm',
-                  style: noteTextStyle?.copyWith(
-                    color: negativeColor,
-                  ),
-                ),
-              ]
-            ],
+          SizedBox(height: chartBottomPadding),
+          Text('* KKH: Không kỳ hạn', style: noteTextStyle),
+          const SizedBox(height: 4),
+          if (hasNABar)
+            _NotApplicableText(
+              textStyle: noteTextStyle,
+              notApplicableColor: notApplicableColor,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NotApplicableText extends StatelessWidget {
+  const _NotApplicableText({
+    required this.textStyle,
+    required this.notApplicableColor,
+  });
+
+  final TextStyle? textStyle;
+  final Color notApplicableColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        text: '* ',
+        style: textStyle,
+        children: [
+          TextSpan(
+            text: '—',
+            style: textStyle?.copyWith(
+              color: notApplicableColor,
+            ),
           ),
+          TextSpan(
+            text: ': Không có thông tin',
+            style: textStyle,
+          )
         ],
       ),
     );

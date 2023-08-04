@@ -48,7 +48,7 @@ class InterestRepositoryImpl implements InterestRepository {
               double.tryParse(
                 e.replaceAll(',', '.'),
               ) ??
-              -1.0,
+              double.negativeInfinity,
         )
     };
     final onlineInterestMap = {
@@ -58,7 +58,7 @@ class InterestRepositoryImpl implements InterestRepository {
               double.tryParse(
                 e.replaceAll(',', '.'),
               ) ??
-              -1.0,
+              double.negativeInfinity,
         )
     };
 

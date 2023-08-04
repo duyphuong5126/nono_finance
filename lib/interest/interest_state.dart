@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:nono_finance/interest/interest_type.dart';
 
 part 'interest_state.freezed.dart';
 
@@ -9,15 +10,15 @@ sealed class InterestState with _$InterestState {
 
   @Implements<InterestInitializedState>()
   const factory InterestState.initialized({
-    required Map<String, Map<String, double>> counterInterestByGroup,
-    required Map<String, Map<String, double>> onlineInterestByGroup,
+    required InterestType type,
+    required Map<String, Map<String, double>> interestRatesByGroup,
   }) = Initialized;
 }
 
 abstract class InterestInitialState implements InterestState {}
 
 abstract class InterestInitializedState implements InterestState {
-  Map<String, Map<String, double>> get counterInterestByGroup;
+  Map<String, Map<String, double>> get interestRatesByGroup;
 
-  Map<String, Map<String, double>> get onlineInterestByGroup;
+  InterestType get type;
 }
