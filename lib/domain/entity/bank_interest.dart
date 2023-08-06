@@ -5,7 +5,7 @@ part 'bank_interest.freezed.dart';
 @freezed
 class BankInterest with _$BankInterest {
   const factory BankInterest({
-    required String name,
+    required String bankName,
     required Map<int, double> counterInterestByTermMap,
     required Map<int, double> onlineInterestByTermMap,
   }) = _BankInterest;

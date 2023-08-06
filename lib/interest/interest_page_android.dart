@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nono_finance/interest/interest_cubit.dart';
+import 'package:nono_finance/shared/dimens.dart';
+import 'package:nono_finance/shared/extension/interest_type_ext.dart';
+import 'package:nono_finance/shared/widget/nono_icon.dart';
 
-import 'interest_bar_chart.dart';
+import '../shared/widget/material_widget_util.dart';
+import '../shared/widget/chart/bar_chart/nono_bar_chart.dart';
 import 'interest_state.dart';
 import 'interest_type.dart';
+import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 
 class InterestPageAndroid extends StatelessWidget {
   const InterestPageAndroid({super.key});
@@ -15,21 +20,48 @@ class InterestPageAndroid extends StatelessWidget {
       create: (context) => InterestCubit()..init(),
       child: Scaffold(
         appBar: AppBar(
+          actions: [
+            BlocBuilder<InterestCubit, InterestState>(
+              builder: (context, state) {
+                return switch (state) {
+                  InterestInitialState() => const SizedBox.shrink(),
+                  InterestInitializedState() => IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: const NonoIcon(
+                        'assets/icon/ic_swap.svg',
+                        width: actionBarIconSize,
+                        height: actionBarIconSize,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        showActionsModalPopup(
+                          context: context,
+                          selectedAction: state.type,
+                          title: 'Chọn danh mục',
+                          cancelButtonLabel: 'Huỷ',
+                          actionMap: {
+                            for (final type in InterestType.values)
+                              type: type.label
+                          },
+                          onActionSelected: (InterestType type) {
+                            context
+                                .read<InterestCubit>()
+                                .changeInterestType(type);
+                          },
+                        );
+                      },
+                    ),
+                };
+              },
+            )
+          ],
           title: BlocBuilder<InterestCubit, InterestState>(
             builder: (context, state) {
               final text = switch (state) {
-                InterestInitialState() => 'Initializing',
-                InterestInitializedState() => switch (state.type) {
-                    InterestType.counterByBank =>
-                      'Lãi suất tại quầy theo ngân hàng',
-                    InterestType.counterByTerm =>
-                      'Lãi suất tại quầy theo kỳ hạn',
-                    InterestType.onlineByBank =>
-                      'Lãi suất online theo ngân hàng',
-                    InterestType.onlineByTerm => 'Lãi suất online theo kỳ hạn',
-                  },
+                InterestInitialState() => 'Đang tải...',
+                InterestInitializedState() => state.type.label,
               };
-              return Center(child: Text(text));
+              return Text(text);
             },
           ),
         ),
@@ -46,20 +78,41 @@ class InterestPageAndroid extends StatelessWidget {
                         state.interestRatesByGroup.keys.elementAt(index);
                     final rates = state.interestRatesByGroup[group]!;
                     final theme = Theme.of(context);
-                    return InterestBarChart(
-                      groupName: group,
-                      rates: rates,
-                      barColor: Colors.blue,
-                      notApplicableColor: Colors.red,
-                      axisColor: Colors.black,
-                      axisGroupPadding: 40,
-                      groupNameBottomPadding: 16,
-                      chartBottomPadding: 32,
-                      minHeight: 330,
-                      groupNameStyle: theme.textTheme.bodyLarge,
-                      barValueTextStyle: theme.textTheme.bodySmall!,
-                      noteTextStyle: theme.textTheme.bodySmall,
-                    );
+                    return switch (state.type) {
+                      InterestType.onlineByBank ||
+                      InterestType.counterByBank =>
+                        rates.isNotEmpty
+                            ? NonoBarChart(
+                                groupName: group,
+                                barData: rates,
+                                barColor: Colors.blue,
+                                notApplicableColor: Colors.red,
+                                axisColor: Colors.black,
+                                axisGroupPadding: 40,
+                                groupNameBottomPadding: 16,
+                                chartBottomPadding: 32,
+                                minHeight: 330,
+                                groupNameStyle: theme.textTheme.bodyLarge,
+                                barValueTextStyle: theme.textTheme.bodySmall!,
+                                noteTextStyle: theme.textTheme.bodySmall,
+                              )
+                            : const SizedBox.shrink(),
+                      InterestType.onlineByTerm ||
+                      InterestType.counterByTerm =>
+                        rates.isNotEmpty
+                            ? NonoHorizontalBarChart(
+                                groupName: group,
+                                barData: rates,
+                                barColor: Colors.blue,
+                                notApplicableColor: Colors.red,
+                                axisColor: Colors.black,
+                                minHeight: 800,
+                                groupNameStyle: theme.textTheme.bodyLarge,
+                                barValueTextStyle: theme.textTheme.bodySmall!,
+                                noteTextStyle: theme.textTheme.bodySmall,
+                              )
+                            : const SizedBox.shrink(),
+                    };
                   },
                 )
             };

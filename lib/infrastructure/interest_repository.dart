@@ -13,14 +13,25 @@ abstract class InterestRepository {
 }
 
 const _monthSuffix = ' tháng';
+const _cacheTime = 60 * 60 * 1000;
 
 class InterestRepositoryImpl implements InterestRepository {
+  final List<BankInterest> _bankInterests = [];
+  int _lastUpdatedTime = -1;
+
   @override
   Future<Iterable<BankInterest>> getBankInterestList() {
+    if (_bankInterests.isNotEmpty && _lastUpdatedTime != -1 ||
+        DateTime.now().millisecondsSinceEpoch - _lastUpdatedTime < _cacheTime) {
+      return Future.value(_bankInterests);
+    }
     StreamController<Iterable<BankInterest>> dataStream =
         StreamController.broadcast();
     callbackByCrawlerMap[interestCrawler]!.add((data) async {
-      dataStream.add(await compute(_convertBankInterestData, data));
+      _bankInterests.clear();
+      _bankInterests.addAll(await compute(_convertBankInterestData, data));
+      _lastUpdatedTime = DateTime.now().millisecondsSinceEpoch;
+      dataStream.add(_bankInterests);
     });
     interestCrawler.loadUrl(urlByCrawlerMap[interestCrawler]!);
     return dataStream.stream.first;
@@ -64,7 +75,7 @@ class InterestRepositoryImpl implements InterestRepository {
 
     return bankNames.map(
       (name) => BankInterest(
-        name: name,
+        bankName: name,
         counterInterestByTermMap: {
           for (int i = 0; i < counterTerms.length; i++)
             counterTerms.elementAt(i):

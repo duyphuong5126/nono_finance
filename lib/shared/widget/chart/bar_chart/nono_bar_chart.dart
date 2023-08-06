@@ -1,11 +1,16 @@
+import 'dart:developer';
+
+import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/widgets.dart';
 
-class InterestBarChart extends StatelessWidget {
-  const InterestBarChart({
+import 'bar_chart_util.dart';
+
+class NonoBarChart extends StatelessWidget {
+  const NonoBarChart({
     super.key,
     required this.groupName,
-    required this.rates,
+    required this.barData,
     required this.minHeight,
     required this.barColor,
     required this.notApplicableColor,
@@ -16,10 +21,12 @@ class InterestBarChart extends StatelessWidget {
     this.groupNameStyle,
     this.noteTextStyle,
     this.barValueTextStyle,
+    this.barValueSteps = 5,
   });
 
   final String groupName;
-  final Map<String, double> rates;
+  final Map<String, double> barData;
+  final int barValueSteps;
 
   final Color barColor;
   final Color notApplicableColor;
@@ -38,10 +45,28 @@ class InterestBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int groupIndex = 0;
-    final xAxisGroups = rates.keys;
-    final hasNABar = rates.values
+    final xAxisGroups = barData.keys;
+    final hasNABar = barData.values
         .where((element) => element == double.negativeInfinity)
         .isNotEmpty;
+    final values = barData.values.toList()..sort();
+    log('Test>>> values ${values.length}');
+    final normalizedValues = values.whereNot((element) => element < 0);
+    final avg = normalizedValues.isNotEmpty ? normalizedValues.average : 0.0;
+
+    double min = values.firstOrNull ?? 0.0;
+    if (min < 0) {
+      min = 0.0;
+    }
+    double max = values.lastOrNull ?? 0.0;
+    if (max < 0) {
+      max = 0.0;
+    }
+    final barInterval = calculateInterval(
+      min,
+      max + (avg / values.length),
+      barValueSteps,
+    );
     return Container(
       constraints: BoxConstraints(minHeight: minHeight),
       padding: EdgeInsets.only(
@@ -65,7 +90,7 @@ class InterestBarChart extends StatelessWidget {
                 BarChartData(
                   barGroups: xAxisGroups.map(
                     (group) {
-                      final rate = rates[group] ?? 0.0;
+                      final rate = barData[group] ?? 0.0;
                       final data = BarChartGroupData(
                         x: groupIndex,
                         barRods: [
@@ -107,14 +132,24 @@ class InterestBarChart extends StatelessWidget {
                         },
                       ),
                     ),
-                    leftTitles:
-                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          return Text(
+                            value != meta.max ? value.toString() : '',
+                          );
+                        },
+                        interval: barInterval > 0 ? barInterval : null,
+                      ),
+                    ),
                     topTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
                         getTitlesWidget: (value, meta) {
                           final rate =
-                              rates[xAxisGroups.elementAt(value.toInt())] ?? -1;
+                              barData[xAxisGroups.elementAt(value.toInt())] ??
+                                  -1;
                           return rate >= 0
                               ? Text(
                                   rate.toString(),
@@ -137,6 +172,8 @@ class InterestBarChart extends StatelessWidget {
             ),
           ),
           SizedBox(height: chartBottomPadding),
+          Text('* Đơn vị lãi suất: %/năm', style: noteTextStyle),
+          const SizedBox(height: 4),
           Text('* KKH: Không kỳ hạn', style: noteTextStyle),
           const SizedBox(height: 4),
           if (hasNABar)
