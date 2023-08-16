@@ -86,6 +86,8 @@ class InterestPageAndroid extends StatelessWidget {
                                 groupName: group,
                                 barData: rates,
                                 barColor: Colors.blue,
+                                maxColor: Colors.green,
+                                minColor: Colors.red,
                                 notApplicableColor: Colors.red,
                                 axisColor: Colors.black,
                                 axisGroupPadding: 40,
@@ -95,6 +97,10 @@ class InterestPageAndroid extends StatelessWidget {
                                 groupNameStyle: theme.textTheme.bodyLarge,
                                 barValueTextStyle: theme.textTheme.bodySmall!,
                                 noteTextStyle: theme.textTheme.bodySmall,
+                                valueSegmentTitleTextStyle:
+                                    theme.textTheme.bodySmall?.copyWith(
+                                  color: Colors.black,
+                                ),
                               )
                             : const SizedBox.shrink(),
                       InterestType.onlineByTerm ||
@@ -104,6 +110,8 @@ class InterestPageAndroid extends StatelessWidget {
                                 groupName: group,
                                 barData: rates,
                                 barColor: Colors.blue,
+                                maxColor: Colors.green,
+                                minColor: Colors.red,
                                 notApplicableColor: Colors.red,
                                 axisColor: Colors.black,
                                 minHeight: 800,

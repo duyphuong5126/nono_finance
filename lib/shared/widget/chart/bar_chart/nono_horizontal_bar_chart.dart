@@ -11,6 +11,8 @@ class NonoHorizontalBarChart extends StatelessWidget {
     required this.barData,
     required this.minHeight,
     required this.barColor,
+    required this.maxColor,
+    required this.minColor,
     required this.notApplicableColor,
     required this.axisColor,
     this.groupNameStyle,
@@ -24,6 +26,8 @@ class NonoHorizontalBarChart extends StatelessWidget {
   final int barValueSteps;
 
   final Color barColor;
+  final Color maxColor;
+  final Color minColor;
   final Color notApplicableColor;
   final Color axisColor;
   final double minHeight;
@@ -43,14 +47,8 @@ class NonoHorizontalBarChart extends StatelessWidget {
     final normalizedValues = values.whereNot((element) => element < 0);
     final avg = normalizedValues.isNotEmpty ? normalizedValues.average : 0.0;
 
-    double min = values.firstOrNull ?? 0.0;
-    if (min < 0) {
-      min = 0.0;
-    }
-    double max = values.lastOrNull ?? 0.0;
-    if (max < 0) {
-      max = 0.0;
-    }
+    double min = normalizedValues.minOrNull ?? 0.0;
+    double max = normalizedValues.maxOrNull ?? 0.0;
     final barInterval = calculateInterval(
       min,
       max + (avg / values.length),
@@ -72,7 +70,7 @@ class NonoHorizontalBarChart extends StatelessWidget {
               child: SfCartesianChart(
                 primaryXAxis: CategoryAxis(),
                 primaryYAxis: NumericAxis(
-                  minimum: min,
+                  minimum: min - 0.5 > 0 ? min - 0.5 : 0,
                   maximum: max,
                   interval: barInterval,
                 ),
@@ -84,6 +82,15 @@ class NonoHorizontalBarChart extends StatelessWidget {
                     yValueMapper: (MapEntry<String, double> data, _) =>
                         data.value > 0 ? data.value : 0.0,
                     name: groupName,
+                    pointColorMapper:
+                        (MapEntry<String, double> data, int index) {
+                      final rate = data.value;
+                      return rate == min
+                          ? minColor
+                          : rate == max
+                              ? maxColor
+                              : barColor;
+                    },
                     color: barColor,
                     borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(5.0),

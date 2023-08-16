@@ -13,6 +13,8 @@ class NonoBarChart extends StatelessWidget {
     required this.barData,
     required this.minHeight,
     required this.barColor,
+    required this.maxColor,
+    required this.minColor,
     required this.notApplicableColor,
     required this.axisColor,
     required this.axisGroupPadding,
@@ -21,6 +23,7 @@ class NonoBarChart extends StatelessWidget {
     this.groupNameStyle,
     this.noteTextStyle,
     this.barValueTextStyle,
+    this.valueSegmentTitleTextStyle,
     this.barValueSteps = 5,
   });
 
@@ -29,6 +32,8 @@ class NonoBarChart extends StatelessWidget {
   final int barValueSteps;
 
   final Color barColor;
+  final Color maxColor;
+  final Color minColor;
   final Color notApplicableColor;
   final Color axisColor;
   final double axisGroupPadding;
@@ -39,6 +44,7 @@ class NonoBarChart extends StatelessWidget {
   final TextStyle? groupNameStyle;
   final TextStyle? noteTextStyle;
   final TextStyle? barValueTextStyle;
+  final TextStyle? valueSegmentTitleTextStyle;
 
   final double barWidth = 10;
 
@@ -46,22 +52,15 @@ class NonoBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     int groupIndex = 0;
     final xAxisGroups = barData.keys;
-    final hasNABar = barData.values
-        .where((element) => element == double.negativeInfinity)
-        .isNotEmpty;
+    final hasNABar = barData.values.where((element) => element < 0).isNotEmpty;
     final values = barData.values.toList()..sort();
-    log('Test>>> values ${values.length}');
     final normalizedValues = values.whereNot((element) => element < 0);
     final avg = normalizedValues.isNotEmpty ? normalizedValues.average : 0.0;
 
-    double min = values.firstOrNull ?? 0.0;
-    if (min < 0) {
-      min = 0.0;
-    }
-    double max = values.lastOrNull ?? 0.0;
-    if (max < 0) {
-      max = 0.0;
-    }
+    log('Test>>> groupName=$groupName, hasNABar=$hasNABar');
+
+    double min = normalizedValues.minOrNull ?? 0.0;
+    double max = normalizedValues.maxOrNull ?? 0.0;
     final barInterval = calculateInterval(
       min,
       max + (avg / values.length),
@@ -96,7 +95,11 @@ class NonoBarChart extends StatelessWidget {
                         barRods: [
                           BarChartRodData(
                             toY: rate > 0 ? rate : 0.0,
-                            color: barColor,
+                            color: rate == min
+                                ? minColor
+                                : rate == max
+                                    ? maxColor
+                                    : barColor,
                             width: barWidth,
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(barWidth / 2),
@@ -138,6 +141,7 @@ class NonoBarChart extends StatelessWidget {
                         getTitlesWidget: (value, meta) {
                           return Text(
                             value != meta.max ? value.toString() : '',
+                            style: valueSegmentTitleTextStyle,
                           );
                         },
                         interval: barInterval > 0 ? barInterval : null,

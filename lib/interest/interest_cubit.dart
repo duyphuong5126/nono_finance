@@ -77,7 +77,8 @@ class InterestCubit extends NonoCubit<InterestState> {
     for (var bankIndex = 0; bankIndex < interests.length; bankIndex++) {
       final bankInterest = interests.elementAt(bankIndex);
       for (final interest in bankInterest.counterInterestByTermMap.entries) {
-        final term = interest.key > 0 ? '${interest.key} tháng' : 'KKH';
+        final term =
+            interest.key > 0 ? '${interest.key} tháng' : 'Không kỳ hạn';
         if (!result.containsKey(term)) {
           result[term] = {};
         }
@@ -94,7 +95,8 @@ class InterestCubit extends NonoCubit<InterestState> {
     for (var bankIndex = 0; bankIndex < interests.length; bankIndex++) {
       final bankInterest = interests.elementAt(bankIndex);
       for (final interest in bankInterest.onlineInterestByTermMap.entries) {
-        final term = interest.key > 0 ? '${interest.key} tháng' : 'KKH';
+        final term =
+            interest.key > 0 ? '${interest.key} tháng' : 'Không kỳ hạn';
         if (!result.containsKey(term)) {
           result[term] = {};
         }

@@ -88,6 +88,8 @@ class InterestPageIOS extends StatelessWidget {
                                   groupName: group,
                                   barData: rates,
                                   barColor: CupertinoColors.activeBlue,
+                                  maxColor: CupertinoColors.activeGreen,
+                                  minColor: CupertinoColors.destructiveRed,
                                   notApplicableColor:
                                       CupertinoColors.destructiveRed,
                                   axisColor: CupertinoColors.black,
@@ -99,6 +101,10 @@ class InterestPageIOS extends StatelessWidget {
                                   barValueTextStyle:
                                       textTheme.tabLabelTextStyle,
                                   noteTextStyle: textTheme.tabLabelTextStyle,
+                                  valueSegmentTitleTextStyle:
+                                      textTheme.tabLabelTextStyle.copyWith(
+                                    color: CupertinoColors.black,
+                                  ),
                                 )
                               : const SizedBox.shrink(),
                         InterestType.onlineByTerm ||
@@ -108,6 +114,8 @@ class InterestPageIOS extends StatelessWidget {
                                   groupName: group,
                                   barData: rates,
                                   barColor: CupertinoColors.activeBlue,
+                                  maxColor: CupertinoColors.activeGreen,
+                                  minColor: CupertinoColors.destructiveRed,
                                   notApplicableColor:
                                       CupertinoColors.destructiveRed,
                                   axisColor: CupertinoColors.black,

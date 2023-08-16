@@ -22,8 +22,6 @@ class NonoFinanceApp extends StatelessWidget {
   }
 
   Widget _buildBase(Widget child) {
-    return Stack(
-      children: [const FinanceDataCrawler(), child],
-    );
+    return Stack(children: [const FinanceDataCrawler(), child]);
   }
 }
