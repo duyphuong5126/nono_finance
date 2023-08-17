@@ -45,13 +45,14 @@ class NonoHorizontalBarChart extends StatelessWidget {
         .isNotEmpty;
     final values = barData.values.toList()..sort();
     final normalizedValues = values.whereNot((element) => element < 0);
-    final avg = normalizedValues.isNotEmpty ? normalizedValues.average : 0.0;
 
     double min = normalizedValues.minOrNull ?? 0.0;
     double max = normalizedValues.maxOrNull ?? 0.0;
+    double minRange = 0.0;
+    double maxRange = max;
     final barInterval = calculateInterval(
-      min,
-      max + (avg / values.length),
+      minRange,
+      maxRange,
       barValueSteps,
     );
     return Padding(
@@ -70,8 +71,8 @@ class NonoHorizontalBarChart extends StatelessWidget {
               child: SfCartesianChart(
                 primaryXAxis: CategoryAxis(),
                 primaryYAxis: NumericAxis(
-                  minimum: min - 0.5 > 0 ? min - 0.5 : 0,
-                  maximum: max,
+                  minimum: minRange,
+                  maximum: maxRange,
                   interval: barInterval,
                 ),
                 series: <ChartSeries<MapEntry<String, double>, String>>[
