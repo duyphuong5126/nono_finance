@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/widgets.dart';
@@ -55,15 +53,14 @@ class NonoBarChart extends StatelessWidget {
     final hasNABar = barData.values.where((element) => element < 0).isNotEmpty;
     final values = barData.values.toList()..sort();
     final normalizedValues = values.whereNot((element) => element < 0);
-    final avg = normalizedValues.isNotEmpty ? normalizedValues.average : 0.0;
-
-    log('Test>>> groupName=$groupName, hasNABar=$hasNABar');
 
     double min = normalizedValues.minOrNull ?? 0.0;
     double max = normalizedValues.maxOrNull ?? 0.0;
+    double minRange = 0.0;
+    double maxRange = max;
     final barInterval = calculateInterval(
-      min,
-      max + (avg / values.length),
+      minRange,
+      maxRange,
       barValueSteps,
     );
     return Container(
