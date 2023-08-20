@@ -73,68 +73,90 @@ class InterestPageIOS extends StatelessWidget {
                     startColor: CupertinoColors.systemGrey,
                     endColor: CupertinoColors.systemGrey4,
                   ),
-                InterestInitializedState() => ListView.builder(
-                    clipBehavior: Clip.none,
-                    itemCount: state.interestRatesByGroup.keys.length,
-                    padding: const EdgeInsets.symmetric(vertical: space1),
-                    itemBuilder: (context, index) {
-                      final group =
-                          state.interestRatesByGroup.keys.elementAt(index);
-                      final rates = state.interestRatesByGroup[group]!;
-                      final textTheme = CupertinoTheme.of(context).textTheme;
-                      return switch (state.type) {
-                        InterestType.onlineByBank ||
-                        InterestType.counterByBank =>
-                          rates.isNotEmpty
-                              ? NonoBarChart(
-                                  groupName: group,
-                                  barData: rates,
-                                  barColor: CupertinoColors.activeBlue,
-                                  maxColor: CupertinoColors.activeGreen,
-                                  minColor: CupertinoColors.destructiveRed,
-                                  notApplicableColor:
-                                      CupertinoColors.destructiveRed,
-                                  axisGroupPadding: 48,
-                                  groupNameBottomPadding: space1,
-                                  chartBottomPadding: 48,
-                                  minHeight: 340,
-                                  groupNameStyle: textTheme.navTitleTextStyle,
-                                  barValueTextStyle:
-                                      textTheme.tabLabelTextStyle,
-                                  noteTextStyle: textTheme.tabLabelTextStyle,
-                                  valueSegmentTitleTextStyle:
-                                      textTheme.tabLabelTextStyle.copyWith(
-                                    color: CupertinoColors.black,
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                        InterestType.onlineByTerm ||
-                        InterestType.counterByTerm =>
-                          rates.isNotEmpty
-                              ? NonoHorizontalBarChart(
-                                  groupName: group,
-                                  barData: rates,
-                                  barColor: CupertinoColors.activeBlue,
-                                  maxColor: CupertinoColors.activeGreen,
-                                  minColor: CupertinoColors.destructiveRed,
-                                  notApplicableColor:
-                                      CupertinoColors.destructiveRed,
-                                  axisColor: CupertinoColors.black,
-                                  minHeight: 800,
-                                  groupNameStyle: textTheme.navTitleTextStyle,
-                                  barValueTextStyle:
-                                      textTheme.tabLabelTextStyle,
-                                  noteTextStyle: textTheme.tabLabelTextStyle,
-                                )
-                              : const SizedBox.shrink()
-                      };
-                    },
-                  )
+                InterestInitializedState() => _InitializedBody(state)
               };
             },
           ),
         ),
       ),
+    );
+  }
+}
+
+class _InitializedBody extends StatelessWidget {
+  const _InitializedBody(this.state);
+
+  final InterestInitializedState state;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        CupertinoSliverRefreshControl(
+          onRefresh: () {
+            return context
+                .read<InterestCubit>()
+                .changeInterestType(state.type)
+                .then((value) => Future.delayed(const Duration(seconds: 2)));
+          },
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            childCount: state.interestRatesByGroup.keys.length + 1,
+            (context, itemIndex) {
+              if (itemIndex == 0) {
+                return const SizedBox(height: space1);
+              }
+              final index = itemIndex - 1;
+              final group = state.interestRatesByGroup.keys.elementAt(index);
+              final rates = state.interestRatesByGroup[group]!;
+              final textTheme = CupertinoTheme.of(context).textTheme;
+              return switch (state.type) {
+                InterestType.onlineByBank ||
+                InterestType.counterByBank =>
+                  rates.isNotEmpty
+                      ? NonoBarChart(
+                          groupName: group,
+                          barData: rates,
+                          barColor: CupertinoColors.activeBlue,
+                          maxColor: CupertinoColors.activeGreen,
+                          minColor: CupertinoColors.destructiveRed,
+                          notApplicableColor: CupertinoColors.destructiveRed,
+                          axisGroupPadding: 48,
+                          groupNameBottomPadding: space1,
+                          chartBottomPadding: 48,
+                          minHeight: 340,
+                          groupNameStyle: textTheme.navTitleTextStyle,
+                          barValueTextStyle: textTheme.tabLabelTextStyle,
+                          noteTextStyle: textTheme.tabLabelTextStyle,
+                          valueSegmentTitleTextStyle:
+                              textTheme.tabLabelTextStyle.copyWith(
+                            color: CupertinoColors.black,
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                InterestType.onlineByTerm ||
+                InterestType.counterByTerm =>
+                  rates.isNotEmpty
+                      ? NonoHorizontalBarChart(
+                          groupName: group,
+                          barData: rates,
+                          barColor: CupertinoColors.activeBlue,
+                          maxColor: CupertinoColors.activeGreen,
+                          minColor: CupertinoColors.destructiveRed,
+                          notApplicableColor: CupertinoColors.destructiveRed,
+                          axisColor: CupertinoColors.black,
+                          minHeight: 800,
+                          groupNameStyle: textTheme.navTitleTextStyle,
+                          barValueTextStyle: textTheme.tabLabelTextStyle,
+                          noteTextStyle: textTheme.tabLabelTextStyle,
+                        )
+                      : const SizedBox.shrink()
+              };
+            },
+          ),
+        )
+      ],
     );
   }
 }
