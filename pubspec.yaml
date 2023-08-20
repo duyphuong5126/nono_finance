@@ -46,6 +46,7 @@ dependencies:
   adaptive_action_sheet: ^2.0.2
   syncfusion_flutter_charts: ^22.2.7
   collection: ^1.17.1
+  google_fonts: ^5.1.0
 
 dev_dependencies:
   flutter_test:

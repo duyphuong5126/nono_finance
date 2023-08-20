@@ -4,6 +4,7 @@ import 'package:nono_finance/shared/extension/interest_type_ext.dart';
 import 'package:nono_finance/shared/widget/cupertino_widget_util.dart';
 
 import '../shared/dimens.dart';
+import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/nono_icon.dart';
 import '../shared/widget/chart/bar_chart/nono_bar_chart.dart';
@@ -68,8 +69,9 @@ class InterestPageIOS extends StatelessWidget {
           child: BlocBuilder<InterestCubit, InterestState>(
             builder: (context, state) {
               return switch (state) {
-                InterestInitialState() => const Center(
-                    child: Text('Đang tải...'),
+                InterestInitialState() => const BarChartListSkeleton(
+                    startColor: CupertinoColors.systemGrey,
+                    endColor: CupertinoColors.systemGrey4,
                   ),
                 InterestInitializedState() => ListView.builder(
                     clipBehavior: Clip.none,
@@ -92,7 +94,6 @@ class InterestPageIOS extends StatelessWidget {
                                   minColor: CupertinoColors.destructiveRed,
                                   notApplicableColor:
                                       CupertinoColors.destructiveRed,
-                                  axisColor: CupertinoColors.black,
                                   axisGroupPadding: 48,
                                   groupNameBottomPadding: 16,
                                   chartBottomPadding: 48,

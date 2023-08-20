@@ -14,7 +14,6 @@ class NonoBarChart extends StatelessWidget {
     required this.maxColor,
     required this.minColor,
     required this.notApplicableColor,
-    required this.axisColor,
     required this.axisGroupPadding,
     required this.groupNameBottomPadding,
     required this.chartBottomPadding,
@@ -22,6 +21,7 @@ class NonoBarChart extends StatelessWidget {
     this.noteTextStyle,
     this.barValueTextStyle,
     this.valueSegmentTitleTextStyle,
+    this.xAxisTextStyle,
     this.barValueSteps = 5,
   });
 
@@ -33,7 +33,6 @@ class NonoBarChart extends StatelessWidget {
   final Color maxColor;
   final Color minColor;
   final Color notApplicableColor;
-  final Color axisColor;
   final double axisGroupPadding;
   final double minHeight;
   final double groupNameBottomPadding;
@@ -43,6 +42,7 @@ class NonoBarChart extends StatelessWidget {
   final TextStyle? noteTextStyle;
   final TextStyle? barValueTextStyle;
   final TextStyle? valueSegmentTitleTextStyle;
+  final TextStyle? xAxisTextStyle;
 
   final double barWidth = 10;
 
@@ -126,7 +126,10 @@ class NonoBarChart extends StatelessWidget {
                               padding: EdgeInsets.only(
                                 right: axisGroupPadding,
                               ),
-                              child: Text(xAxisGroups.elementAt(value.toInt())),
+                              child: Text(
+                                xAxisGroups.elementAt(value.toInt()),
+                                style: xAxisTextStyle,
+                              ),
                             ),
                           );
                         },

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nono_finance/interest/interest_cubit.dart';
 import 'package:nono_finance/shared/dimens.dart';
 import 'package:nono_finance/shared/extension/interest_type_ext.dart';
+import 'package:nono_finance/shared/widget/bar_chart_list_skeleton.dart';
 import 'package:nono_finance/shared/widget/nono_icon.dart';
 
 import '../shared/widget/material_widget_util.dart';
@@ -31,7 +32,6 @@ class InterestPageAndroid extends StatelessWidget {
                         'assets/icon/ic_swap.svg',
                         width: actionBarIconSize,
                         height: actionBarIconSize,
-                        color: Colors.white,
                       ),
                       onPressed: () {
                         showActionsModalPopup(
@@ -59,7 +59,7 @@ class InterestPageAndroid extends StatelessWidget {
             builder: (context, state) {
               final text = switch (state) {
                 InterestInitialState() => 'Đang tải...',
-                InterestInitializedState() => state.type.label,
+                InterestInitializedState() => 'Lãi suất',
               };
               return Text(text);
             },
@@ -68,8 +68,12 @@ class InterestPageAndroid extends StatelessWidget {
         body: BlocBuilder<InterestCubit, InterestState>(
           builder: (context, state) {
             return switch (state) {
-              InterestInitialState() => const Text('Initializing'),
+              InterestInitialState() => BarChartListSkeleton(
+                  startColor: Colors.grey[800]!,
+                  endColor: Colors.grey[400]!,
+                ),
               InterestInitializedState() => ListView.builder(
+                  physics: const BouncingScrollPhysics(),
                   clipBehavior: Clip.none,
                   itemCount: state.interestRatesByGroup.keys.length,
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -89,7 +93,6 @@ class InterestPageAndroid extends StatelessWidget {
                                 maxColor: Colors.green,
                                 minColor: Colors.red,
                                 notApplicableColor: Colors.red,
-                                axisColor: Colors.black,
                                 axisGroupPadding: 40,
                                 groupNameBottomPadding: 16,
                                 chartBottomPadding: 32,
