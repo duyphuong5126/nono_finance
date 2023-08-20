@@ -1,8 +1,19 @@
+import 'dart:io';
+
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'script/interest_crawling_script.dart';
 
-final interestCrawler = WebViewController();
+WebViewController _generateWebViewController() {
+  return Platform.isAndroid
+      ? (WebViewController()
+        ..setNavigationDelegate(
+          NavigationDelegate(),
+        ))
+      : WebViewController();
+}
+
+final interestCrawler = _generateWebViewController();
 
 final crawlerControllers = [interestCrawler];
 

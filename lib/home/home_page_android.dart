@@ -3,6 +3,8 @@ import 'package:nono_finance/exchange/exchange_page_android.dart';
 import 'package:nono_finance/interest/interest_page_android.dart';
 import 'package:nono_finance/shared/widget/nono_icon.dart';
 
+import '../shared/dimens.dart';
+
 class HomePageAndroid extends StatefulWidget {
   const HomePageAndroid({Key? key}) : super(key: key);
 
@@ -29,8 +31,8 @@ class _HomePageState extends State<HomePageAndroid> {
           BottomNavigationBarItem(
             icon: NonoIcon(
               'assets/icon/ic_savings.svg',
-              width: 32,
-              height: 32,
+              width: space2,
+              height: space2,
               color: _selectedIndex == 0 ? selectedColor : unselectedColor,
             ),
             label: 'Lãi suất',
@@ -39,8 +41,8 @@ class _HomePageState extends State<HomePageAndroid> {
           BottomNavigationBarItem(
             icon: NonoIcon(
               'assets/icon/ic_exchange.svg',
-              width: 32,
-              height: 32,
+              width: space2,
+              height: space2,
               color: _selectedIndex == 1 ? selectedColor : unselectedColor,
             ),
             label: 'Tỉ giá',

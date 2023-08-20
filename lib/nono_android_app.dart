@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nono_finance/home/home_page_android.dart';
 
@@ -11,6 +12,7 @@ class NonoAndroidApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: const Stack(
         children: [
           FinanceDataCrawler(),
@@ -28,6 +30,10 @@ class NonoAndroidApp extends StatelessWidget {
       appBarTheme: const AppBarTheme(
         backgroundColor: appBackground,
         elevation: 0.0,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: appBackground,
+          statusBarIconBrightness: Brightness.dark,
+        ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: appBackground,

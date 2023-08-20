@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../../dimens.dart';
 import 'bar_chart_util.dart';
 
 class NonoBarChart extends StatelessWidget {
@@ -66,9 +67,9 @@ class NonoBarChart extends StatelessWidget {
     return Container(
       constraints: BoxConstraints(minHeight: minHeight),
       padding: EdgeInsets.only(
-        left: 8.0,
-        right: 8.0,
-        top: groupIndex > 0 ? 64.0 : 0.0,
+        left: spaceHalf,
+        right: spaceHalf,
+        top: groupIndex > 0 ? space4 : 0.0,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +82,7 @@ class NonoBarChart extends StatelessWidget {
           AspectRatio(
             aspectRatio: 2,
             child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.only(top: spaceHalf),
               child: BarChart(
                 BarChartData(
                   barGroups: xAxisGroups.map(

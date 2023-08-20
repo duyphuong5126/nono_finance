@@ -76,7 +76,7 @@ class InterestPageIOS extends StatelessWidget {
                 InterestInitializedState() => ListView.builder(
                     clipBehavior: Clip.none,
                     itemCount: state.interestRatesByGroup.keys.length,
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    padding: const EdgeInsets.symmetric(vertical: space1),
                     itemBuilder: (context, index) {
                       final group =
                           state.interestRatesByGroup.keys.elementAt(index);
@@ -95,7 +95,7 @@ class InterestPageIOS extends StatelessWidget {
                                   notApplicableColor:
                                       CupertinoColors.destructiveRed,
                                   axisGroupPadding: 48,
-                                  groupNameBottomPadding: 16,
+                                  groupNameBottomPadding: space1,
                                   chartBottomPadding: 48,
                                   minHeight: 340,
                                   groupNameStyle: textTheme.navTitleTextStyle,

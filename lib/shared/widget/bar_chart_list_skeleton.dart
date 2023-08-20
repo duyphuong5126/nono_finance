@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
+import '../dimens.dart';
+
 class BarChartListSkeleton extends StatefulWidget {
   const BarChartListSkeleton({
     super.key,
@@ -40,21 +42,23 @@ class _BarChartListSkeletonState extends State<BarChartListSkeleton> {
       ),
       onEnd: () async {
         await Future.delayed(const Duration(seconds: 1));
-        setState(() {
-          _reverse = !_reverse;
-        });
+        if (mounted) {
+          setState(() {
+            _reverse = !_reverse;
+          });
+        }
       },
       duration: const Duration(seconds: 5),
       builder: (context, color, child) {
         return ListView.separated(
           separatorBuilder: (context, index) {
-            return const SizedBox(height: 32);
+            return const SizedBox(height: space2);
           },
           itemCount: 5,
           itemBuilder: (context, index) {
             return Container(
               constraints: const BoxConstraints.expand(height: maxHeight),
-              margin: const EdgeInsets.symmetric(horizontal: 16),
+              margin: const EdgeInsets.symmetric(horizontal: space1),
               decoration: BoxDecoration(
                 border: Border(bottom: BorderSide(color: color!)),
               ),

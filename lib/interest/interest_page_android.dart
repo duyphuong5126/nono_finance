@@ -76,7 +76,7 @@ class InterestPageAndroid extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   clipBehavior: Clip.none,
                   itemCount: state.interestRatesByGroup.keys.length,
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  padding: const EdgeInsets.symmetric(vertical: space1),
                   itemBuilder: (context, index) {
                     final group =
                         state.interestRatesByGroup.keys.elementAt(index);
@@ -94,8 +94,8 @@ class InterestPageAndroid extends StatelessWidget {
                                 minColor: Colors.red,
                                 notApplicableColor: Colors.red,
                                 axisGroupPadding: 40,
-                                groupNameBottomPadding: 16,
-                                chartBottomPadding: 32,
+                                groupNameBottomPadding: space1,
+                                chartBottomPadding: space2,
                                 minHeight: 330,
                                 groupNameStyle: theme.textTheme.bodyLarge,
                                 barValueTextStyle: theme.textTheme.bodySmall!,

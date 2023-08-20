@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:nono_finance/exchange/exchange_page_ios.dart';
 import 'package:nono_finance/interest/interest_page_ios.dart';
 
+import '../shared/dimens.dart';
 import '../shared/widget/nono_icon.dart';
 
 class HomePageIOS extends StatefulWidget {
@@ -33,8 +34,8 @@ class _HomePageIOSState extends State<HomePageIOS> {
             BottomNavigationBarItem(
               icon: NonoIcon(
                 'assets/icon/ic_savings.svg',
-                width: 64,
-                height: 64,
+                width: space4,
+                height: space4,
                 color: _selectedIndex == 0 ? selectedColor : unselectedColor,
               ),
               label: 'Lãi suất',
@@ -43,8 +44,8 @@ class _HomePageIOSState extends State<HomePageIOS> {
             BottomNavigationBarItem(
               icon: NonoIcon(
                 'assets/icon/ic_exchange.svg',
-                width: 64,
-                height: 64,
+                width: space4,
+                height: space4,
                 color: _selectedIndex == 1 ? selectedColor : unselectedColor,
               ),
               label: 'Tỉ giá',

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
+import 'package:nono_finance/shared/dimens.dart';
 
 showActionsModalPopup<T extends Object>({
   required BuildContext context,
@@ -9,30 +9,52 @@ showActionsModalPopup<T extends Object>({
   required Map<T, String> actionMap,
   required Function(T) onActionSelected,
 }) {
-  final textTheme = Theme.of(context).textTheme;
-  showAdaptiveActionSheet(
+  const radius = Radius.circular(popUpRadius);
+  showModalBottomSheet(
     context: context,
-    title: Text(
-      title,
-      style: textTheme.headlineSmall,
+    clipBehavior: Clip.antiAlias,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(topLeft: radius, topRight: radius),
     ),
-    actions: actionMap.entries
-        .map(
-          (action) => BottomSheetAction(
-            title: Text(
-              action.value,
-              style: textTheme.bodyLarge,
+    builder: (bottomSheetContext) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+          automaticallyImplyLeading: false,
+        ),
+        body: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: actionMap.keys.length,
+              itemBuilder: (context, index) {
+                final key = actionMap.keys.elementAt(index);
+                return ListTile(
+                  selected: key == selectedAction,
+                  title: Text(actionMap[key]!),
+                  onTap: () {
+                    onActionSelected(key);
+                    Navigator.of(bottomSheetContext).pop();
+                  },
+                );
+              },
             ),
-            onPressed: (context) {
-              onActionSelected(action.key);
-              Navigator.of(context).pop();
-            },
-          ),
-        )
-        .toList(),
-    cancelAction: CancelAction(
-      title: Text(cancelButtonLabel),
-    ),
-    androidBorderRadius: 0.0,
+            ListTile(
+              onTap: () {
+                Navigator.of(bottomSheetContext).pop();
+              },
+              title: TextButton(
+                onPressed: () {
+                  Navigator.of(bottomSheetContext).pop();
+                },
+                child: Text(cancelButtonLabel),
+              ),
+              titleAlignment: ListTileTitleAlignment.center,
+            ),
+          ],
+        ),
+      );
+    },
   );
 }

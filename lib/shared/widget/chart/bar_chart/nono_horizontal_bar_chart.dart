@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:collection/collection.dart';
 
+import '../../../dimens.dart';
 import 'bar_chart_util.dart';
 
 class NonoHorizontalBarChart extends StatelessWidget {
@@ -56,7 +57,7 @@ class NonoHorizontalBarChart extends StatelessWidget {
       barValueSteps,
     );
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: spaceHalf),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -65,7 +66,7 @@ class NonoHorizontalBarChart extends StatelessWidget {
             style: groupNameStyle,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.only(top: spaceHalf),
             child: SizedBox(
               height: minHeight,
               child: SfCartesianChart(
@@ -117,7 +118,7 @@ class NonoHorizontalBarChart extends StatelessWidget {
               textStyle: noteTextStyle,
               notApplicableColor: notApplicableColor,
             ),
-          const SizedBox(height: 32),
+          const SizedBox(height: space2),
         ],
       ),
     );
