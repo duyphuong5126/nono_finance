@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
+import 'package:nono_finance/shared/widget/loading_color_builder.dart';
 
 import '../dimens.dart';
 
@@ -19,8 +20,6 @@ class BarChartListSkeleton extends StatefulWidget {
 }
 
 class _BarChartListSkeletonState extends State<BarChartListSkeleton> {
-  bool _reverse = false;
-
   final List<double> _ratios = [];
 
   @override
@@ -35,20 +34,7 @@ class _BarChartListSkeletonState extends State<BarChartListSkeleton> {
   @override
   Widget build(BuildContext context) {
     const maxHeight = 300.0;
-    return TweenAnimationBuilder(
-      tween: ColorTween(
-        begin: _reverse ? widget.endColor : widget.startColor,
-        end: _reverse ? widget.startColor : widget.endColor,
-      ),
-      onEnd: () async {
-        await Future.delayed(const Duration(seconds: 1));
-        if (mounted) {
-          setState(() {
-            _reverse = !_reverse;
-          });
-        }
-      },
-      duration: const Duration(seconds: 5),
+    return LoadingColorBuilder(
       builder: (context, color, child) {
         return ListView.separated(
           separatorBuilder: (context, index) {
@@ -78,6 +64,8 @@ class _BarChartListSkeletonState extends State<BarChartListSkeleton> {
           },
         );
       },
+      startColor: widget.startColor,
+      endColor: widget.endColor,
     );
   }
 

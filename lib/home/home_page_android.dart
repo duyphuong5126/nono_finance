@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nono_finance/exchange/exchange_page_android.dart';
+import 'package:nono_finance/exchange/currencies_page_android.dart';
 import 'package:nono_finance/interest/interest_page_android.dart';
 import 'package:nono_finance/shared/widget/nono_icon.dart';
 
@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePageAndroid> {
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: const [InterestPageAndroid(), ExchangePageAndroid()],
+        children: const [InterestPageAndroid(), CurrenciesPageAndroid()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

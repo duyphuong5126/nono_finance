@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:nono_finance/exchange/exchange_page_ios.dart';
+import 'package:nono_finance/exchange/currencies_page_ios.dart';
 import 'package:nono_finance/interest/interest_page_ios.dart';
 
 import '../shared/dimens.dart';
@@ -21,7 +21,7 @@ class _HomePageIOSState extends State<HomePageIOS> {
     const unselectedColor = CupertinoColors.systemGrey;
     const List<Widget> tabs = [
       InterestPageIOS(),
-      ExchangePageIOS(),
+      CurrenciesPageIOS(),
     ];
 
     return CupertinoPageScaffold(
