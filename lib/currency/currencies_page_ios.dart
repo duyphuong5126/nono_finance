@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../domain/entity/currency.dart';
+import '../shared/constants.dart';
 import '../shared/dimens.dart';
 import 'currencies_cubit.dart';
 import 'currency_list_skeleton.dart';
@@ -54,7 +55,9 @@ class _CurrencyList extends StatelessWidget {
         final index = itemIndex - 1;
         final currency = currencyList.elementAt(index);
         return CupertinoListTile(
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, exchangeRoute, arguments: currency);
+          },
           padding: const EdgeInsets.symmetric(
             vertical: spaceHalf,
             horizontal: space1,

@@ -12,9 +12,17 @@ class CurrencyListCubit extends NonoCubit<CurrencyListState> {
 
   @override
   init() async {
+    await refresh();
+  }
+
+  Future<void> refresh() async {
     try {
-      final currencies = await _repository.getCurrencyList();
-      emit(CurrencyListState.initialized(currencyList: currencies));
+      final currenciesResult = await _repository.getCurrencyList();
+      emit(
+        CurrencyListState.initialized(
+          currencyList: currenciesResult.currencyList,
+        ),
+      );
     } on Exception catch (e) {
       log('CurrencyListCubit>>> failed to fetch currencies with error $e');
     }

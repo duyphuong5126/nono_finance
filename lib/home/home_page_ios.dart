@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:nono_finance/exchange/currencies_page_ios.dart';
+import 'package:nono_finance/currency/currencies_page_ios.dart';
 import 'package:nono_finance/interest/interest_page_ios.dart';
 
 import '../shared/dimens.dart';

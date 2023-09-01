@@ -7,3 +7,6 @@ const interestCrawlingScriptUrl =
     '$domainBaseUrl/$scriptsUrlPath/$interestScriptPath';
 
 const interestCrawlingScriptKey = 'interest_crawling_script';
+
+// Navigation
+const exchangeRoute = '/exchange';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nono_finance/exchange/currencies_page_android.dart';
+import 'package:nono_finance/currency/currencies_page_android.dart';
 import 'package:nono_finance/interest/interest_page_android.dart';
 import 'package:nono_finance/shared/widget/nono_icon.dart';
 
