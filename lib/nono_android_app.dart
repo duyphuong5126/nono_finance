@@ -70,6 +70,9 @@ class NonoAndroidApp extends StatelessWidget {
         backgroundColor: appBackground,
         elevation: 0.0,
       ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: Colors.transparent,
+      ),
       textTheme: textTheme,
       scaffoldBackgroundColor: appBackground,
       colorScheme: baseTheme.colorScheme.copyWith(
