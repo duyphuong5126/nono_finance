@@ -12,10 +12,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (!kDebugMode) {
     try {
-      final scriptResponse = await get(Uri.parse(interestCrawlingScriptUrl));
+      final scriptResponse = await get(Uri.parse(crawlingScriptUrl));
       if (scriptResponse.statusCode == 200) {
         Map<String, dynamic> body = jsonDecode(scriptResponse.body);
         scriptByCrawlerMap[interestCrawler] = body[interestCrawlingScriptKey];
+        scriptByCrawlerMap[currenciesCrawler] =
+            body[currenciesCrawlingScriptKey];
       }
     } on Exception catch (e) {
       log('Scripts crawling failed with error $e');

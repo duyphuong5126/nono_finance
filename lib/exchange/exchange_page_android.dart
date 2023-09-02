@@ -8,9 +8,13 @@ class ExchangePageAndroid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currency = ModalRoute.of(context)?.settings.arguments as Currency?;
+    String pageTitle = '';
+    if (currency != null) {
+      pageTitle += '${currency.defaultName} (${currency.code.toUpperCase()})';
+    }
     return Scaffold(
       appBar: AppBar(
-        title: Text(currency?.defaultName ?? ''),
+        title: Text(pageTitle, maxLines: 2),
       ),
     );
   }

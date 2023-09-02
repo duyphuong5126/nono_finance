@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nono_finance/crawler/script/currency_crawling_script.dart';
 import 'package:nono_finance/crawler/script/interest_crawling_script.dart';
 import 'package:nono_finance/shared/constants.dart';
 
@@ -20,6 +21,7 @@ void main() {
     }
     final Map<String, dynamic> json = {};
     json[interestCrawlingScriptKey] = getInterestScript;
+    json[currenciesCrawlingScriptKey] = getCurrenciesScript;
     file.writeAsStringSync(jsonEncode(json));
   });
 }
