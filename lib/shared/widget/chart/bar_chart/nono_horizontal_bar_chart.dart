@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:collection/collection.dart';
 
@@ -14,12 +15,12 @@ class NonoHorizontalBarChart extends StatelessWidget {
     required this.barColor,
     required this.maxColor,
     required this.minColor,
-    required this.notApplicableColor,
     required this.axisColor,
+    this.valueFormat,
     this.groupNameStyle,
-    this.noteTextStyle,
     this.barValueTextStyle,
     this.barValueSteps = 5,
+    this.notes = const [],
   });
 
   final String groupName;
@@ -29,21 +30,20 @@ class NonoHorizontalBarChart extends StatelessWidget {
   final Color barColor;
   final Color maxColor;
   final Color minColor;
-  final Color notApplicableColor;
   final Color axisColor;
   final double minHeight;
 
   final TextStyle? groupNameStyle;
-  final TextStyle? noteTextStyle;
   final TextStyle? barValueTextStyle;
+
+  final NumberFormat? valueFormat;
+
+  final Iterable<Widget> notes;
 
   final double barWidth = 10;
 
   @override
   Widget build(BuildContext context) {
-    final hasNABar = barData.values
-        .where((element) => element == double.negativeInfinity)
-        .isNotEmpty;
     final values = barData.values.toList()..sort();
     final normalizedValues = values.whereNot((element) => element < 0);
 
@@ -99,7 +99,10 @@ class NonoHorizontalBarChart extends StatelessWidget {
                       bottomRight: Radius.circular(5.0),
                     ),
                     dataLabelMapper: (MapEntry<String, double> data, _) =>
-                        data.value > 0 ? data.value.toString() : '—',
+                        data.value > 0
+                            ? (valueFormat?.format(data.value) ??
+                                data.value.toString())
+                            : '—',
                     dataLabelSettings: const DataLabelSettings(
                       isVisible: true,
                       labelAlignment: ChartDataLabelAlignment.auto,
@@ -109,48 +112,7 @@ class NonoHorizontalBarChart extends StatelessWidget {
               ),
             ),
           ),
-          Text('* Đơn vị lãi suất: %/năm', style: noteTextStyle),
-          const SizedBox(height: 4),
-          Text('* KKH: Không kỳ hạn', style: noteTextStyle),
-          const SizedBox(height: 4),
-          if (hasNABar)
-            _NotApplicableText(
-              textStyle: noteTextStyle,
-              notApplicableColor: notApplicableColor,
-            ),
-          const SizedBox(height: space2),
-        ],
-      ),
-    );
-  }
-}
-
-class _NotApplicableText extends StatelessWidget {
-  const _NotApplicableText({
-    required this.textStyle,
-    required this.notApplicableColor,
-  });
-
-  final TextStyle? textStyle;
-  final Color notApplicableColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        text: '* ',
-        style: textStyle,
-        children: [
-          TextSpan(
-            text: '—',
-            style: textStyle?.copyWith(
-              color: notApplicableColor,
-            ),
-          ),
-          TextSpan(
-            text: ': Không có thông tin',
-            style: textStyle,
-          )
+          ...notes,
         ],
       ),
     );

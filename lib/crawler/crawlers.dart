@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:nono_finance/crawler/script/exchange_crawling_script.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'script/currency_crawling_script.dart';
@@ -16,18 +17,25 @@ WebViewController _generateWebViewController() {
 
 final interestCrawler = _generateWebViewController();
 final currenciesCrawler = _generateWebViewController();
+final exchangesCrawler = _generateWebViewController();
 
-final crawlerControllers = [interestCrawler, currenciesCrawler];
+final crawlerControllers = [
+  interestCrawler,
+  currenciesCrawler,
+  exchangesCrawler,
+];
 
 final Map<WebViewController, List<Function(Map<String, dynamic>)>>
     callbackByCrawlerMap = {
   interestCrawler: [],
   currenciesCrawler: [],
+  exchangesCrawler: [],
 };
 
 final Map<WebViewController, String> scriptByCrawlerMap = {
   interestCrawler: getInterestScript,
   currenciesCrawler: getCurrenciesScript,
+  exchangesCrawler: getExchangesScript,
 };
 
 final Map<WebViewController, String> urlByCrawlerMap = {

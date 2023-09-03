@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nono_finance/shared/extension/interest_type_ext.dart';
+import 'package:nono_finance/shared/extension/data_ext.dart';
 import 'package:nono_finance/shared/widget/cupertino_widget_util.dart';
 
 import '../shared/dimens.dart';
 import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
+import '../shared/widget/chart/bar_chart/not_applicable_text.dart';
 import '../shared/widget/nono_icon.dart';
 import '../shared/widget/chart/bar_chart/nono_bar_chart.dart';
 import 'interest_cubit.dart';
 import 'interest_state.dart';
-import 'interest_type.dart';
+import '../domain/entity/interest_type.dart';
 
 class InterestPageIOS extends StatelessWidget {
   const InterestPageIOS({super.key});
@@ -109,47 +110,48 @@ class _InitializedBody extends StatelessWidget {
               }
               final index = itemIndex - 1;
               final group = state.interestRatesByGroup.keys.elementAt(index);
-              final rates = state.interestRatesByGroup[group]!;
+              final barData = state.interestRatesByGroup[group]!;
               final textTheme = CupertinoTheme.of(context).textTheme;
               return switch (state.type) {
                 InterestType.onlineByBank ||
                 InterestType.counterByBank =>
-                  rates.isNotEmpty
+                  barData.isNotEmpty
                       ? NonoBarChart(
                           groupName: group,
-                          barData: rates,
+                          barData: barData,
                           barColor: CupertinoColors.activeBlue,
                           maxColor: CupertinoColors.activeGreen,
                           minColor: CupertinoColors.destructiveRed,
                           notApplicableColor: CupertinoColors.destructiveRed,
                           axisGroupPadding: 48,
                           groupNameBottomPadding: space1,
-                          chartBottomPadding: 48,
                           minHeight: 340,
                           groupNameStyle: textTheme.navTitleTextStyle,
                           barValueTextStyle: textTheme.tabLabelTextStyle,
-                          noteTextStyle: textTheme.tabLabelTextStyle,
                           valueSegmentTitleTextStyle:
                               textTheme.tabLabelTextStyle.copyWith(
                             color: CupertinoColors.black,
                           ),
+                          notes: _generateChartNoteWidgets(textTheme, barData),
                         )
                       : const SizedBox.shrink(),
                 InterestType.onlineByTerm ||
                 InterestType.counterByTerm =>
-                  rates.isNotEmpty
+                  barData.isNotEmpty
                       ? NonoHorizontalBarChart(
                           groupName: group,
-                          barData: rates,
+                          barData: barData,
                           barColor: CupertinoColors.activeBlue,
                           maxColor: CupertinoColors.activeGreen,
                           minColor: CupertinoColors.destructiveRed,
-                          notApplicableColor: CupertinoColors.destructiveRed,
                           axisColor: CupertinoColors.black,
                           minHeight: 800,
                           groupNameStyle: textTheme.navTitleTextStyle,
                           barValueTextStyle: textTheme.tabLabelTextStyle,
-                          noteTextStyle: textTheme.tabLabelTextStyle,
+                          notes: _generateHorizontalChartNoteWidgets(
+                            textTheme,
+                            barData,
+                          ),
                         )
                       : const SizedBox.shrink()
               };
@@ -158,5 +160,47 @@ class _InitializedBody extends StatelessWidget {
         )
       ],
     );
+  }
+
+  Iterable<Widget> _generateChartNoteWidgets(
+    CupertinoTextThemeData textTheme,
+    Map<String, double> barData,
+  ) {
+    final hasNABar = barData.values.where((element) => element < 0).isNotEmpty;
+
+    return [
+      const SizedBox(height: 48),
+      Text('* Đơn vị lãi suất: %/năm', style: textTheme.tabLabelTextStyle),
+      const SizedBox(height: 4),
+      Text('* KKH: Không kỳ hạn', style: textTheme.tabLabelTextStyle),
+      const SizedBox(height: 4),
+      if (hasNABar)
+        NotApplicableText(
+          textStyle: textTheme.tabLabelTextStyle,
+          notApplicableColor: CupertinoColors.destructiveRed,
+        ),
+    ];
+  }
+
+  Iterable<Widget> _generateHorizontalChartNoteWidgets(
+    CupertinoTextThemeData textTheme,
+    Map<String, double> barData,
+  ) {
+    final hasNABar = barData.values
+        .where((element) => element == double.negativeInfinity)
+        .isNotEmpty;
+
+    return [
+      Text('* Đơn vị lãi suất: %/năm', style: textTheme.tabLabelTextStyle),
+      const SizedBox(height: spaceQuarter),
+      Text('* KKH: Không kỳ hạn', style: textTheme.tabLabelTextStyle),
+      const SizedBox(height: spaceQuarter),
+      if (hasNABar)
+        NotApplicableText(
+          textStyle: textTheme.tabLabelTextStyle,
+          notApplicableColor: CupertinoColors.destructiveRed,
+        ),
+      const SizedBox(height: space2),
+    ];
   }
 }

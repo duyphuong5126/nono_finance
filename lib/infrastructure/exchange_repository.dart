@@ -1,17 +1,19 @@
 import 'dart:async';
-import 'dart:developer';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
+import 'package:nono_finance/domain/entity/bank.dart';
+import 'package:nono_finance/infrastructure/data_parsing_helper.dart';
 import 'package:nono_finance/util.dart';
 
 import '../crawler/crawlers.dart';
+import '../domain/entity/bank_exchange.dart';
 import '../domain/entity/currency.dart';
 import '../domain/entity/currency_list_result.dart';
 
 abstract class ExchangeRepository {
   Future<CurrencyListResult> getCurrencyList();
+
+  Future<BankExchange> getBankExchangeList(Currency sourceCurrency);
 }
 
 class ExchangeRepositoryImpl implements ExchangeRepository {
@@ -34,28 +36,7 @@ class ExchangeRepositoryImpl implements ExchangeRepository {
   static CurrencyListResult _convertCurrencyData(
     Map<String, dynamic> currencyData,
   ) {
-    log('Datetime>>> ${currencyData['updatedTime']}');
-    final dateTimeFrags = currencyData['updatedTime']
-        .toString()
-        .split(' ')
-        .whereNot((e) => e.isEmpty);
-
-    String dateString = '';
-    String timeString = '';
-    for (final frag in dateTimeFrags) {
-      if (frag.contains(':')) {
-        timeString = frag;
-      } else if (frag.contains('/')) {
-        dateString = frag;
-      }
-    }
-
-    final datetimeFormat = DateFormat("hh:mm:ss dd/MM/yyyy");
-
-    log('Datetime>>> parsed date time =$dateString $timeString');
-    final updatedTime = dateString.isNotEmpty && timeString.isNotEmpty
-        ? datetimeFormat.parse('$timeString $dateString')
-        : DateTime.now();
+    final updatedTime = getUpdatedTime(currencyData) ?? DateTime.now();
 
     final currencies =
         (currencyData['currencies'] as Iterable<dynamic>).map((e) {
@@ -73,4 +54,71 @@ class ExchangeRepositoryImpl implements ExchangeRepository {
       updatedTime: updatedTime,
     );
   }
+
+  @override
+  Future<BankExchange> getBankExchangeList(Currency sourceCurrency) {
+    StreamController<BankExchange> dataStream = StreamController.broadcast();
+    callbackByCrawlerMap[exchangesCrawler]?.add((exchangeData) async {
+      _lastUpdatedTime = DateTime.now().millisecondsSinceEpoch;
+      final dataHolder = _ExchangeDataHolder(sourceCurrency, exchangeData);
+      dataStream.add(await compute(_parseBankExchangeData, dataHolder));
+    });
+    exchangesCrawler.loadUrl(sourceCurrency.url);
+    return dataStream.stream.first;
+  }
+
+  static BankExchange _parseBankExchangeData(_ExchangeDataHolder dataHolder) {
+    final updatedTime =
+        getUpdatedTime(dataHolder.exchangeData) ?? DateTime.now();
+    final averageRate =
+        double.tryParse(dataHolder.exchangeData['averageRate']) ?? -1.0;
+    Map<Bank, double> buyCashMap = {};
+    Map<Bank, double> buyTransferMap = {};
+    Map<Bank, double> sellCashMap = {};
+    Map<Bank, double> sellTransferMap = {};
+    final rates = dataHolder.exchangeData['rates'] as List<dynamic>;
+
+    double? tryParse(String str) {
+      final result = double.tryParse(str);
+      return result?.isNaN == true ? null : result;
+    }
+
+    for (final e in rates) {
+      final rate = e as Map<String, dynamic>;
+      final bankUrl = rate['bankUrl'].toString();
+      final frags = bankUrl.split('/');
+      String bankCode = '';
+      for (var index = frags.length - 1; index >= 0; index--) {
+        if (frags[index].isNotEmpty) {
+          bankCode = frags[index];
+          break;
+        }
+      }
+
+      final bank = Bank(name: rate['bankName'], code: bankCode);
+
+      const defaultValue = double.negativeInfinity;
+      buyCashMap[bank] = tryParse(rate['buyCash']) ?? defaultValue;
+      buyTransferMap[bank] = tryParse(rate['buyTransfer']) ?? defaultValue;
+      sellCashMap[bank] = tryParse(rate['sellCash']) ?? defaultValue;
+      sellTransferMap[bank] = tryParse(rate['sellTransfer']) ?? defaultValue;
+    }
+
+    return BankExchange(
+      sourceCurrency: dataHolder.sourceCurrency,
+      updatedTime: updatedTime,
+      averageRate: averageRate,
+      buyCashMap: buyCashMap,
+      buyTransferMap: buyTransferMap,
+      sellCashMap: sellCashMap,
+      sellTransferMap: sellTransferMap,
+    );
+  }
+}
+
+class _ExchangeDataHolder {
+  final Currency sourceCurrency;
+  final Map<String, dynamic> exchangeData;
+
+  const _ExchangeDataHolder(this.sourceCurrency, this.exchangeData);
 }

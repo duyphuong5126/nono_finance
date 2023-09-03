@@ -17,13 +17,12 @@ class NonoBarChart extends StatelessWidget {
     required this.notApplicableColor,
     required this.axisGroupPadding,
     required this.groupNameBottomPadding,
-    required this.chartBottomPadding,
     this.groupNameStyle,
-    this.noteTextStyle,
     this.barValueTextStyle,
     this.valueSegmentTitleTextStyle,
     this.xAxisTextStyle,
     this.barValueSteps = 5,
+    this.notes = const [],
   });
 
   final String groupName;
@@ -37,13 +36,13 @@ class NonoBarChart extends StatelessWidget {
   final double axisGroupPadding;
   final double minHeight;
   final double groupNameBottomPadding;
-  final double chartBottomPadding;
 
   final TextStyle? groupNameStyle;
-  final TextStyle? noteTextStyle;
   final TextStyle? barValueTextStyle;
   final TextStyle? valueSegmentTitleTextStyle;
   final TextStyle? xAxisTextStyle;
+
+  final Iterable<Widget> notes;
 
   final double barWidth = 10;
 
@@ -51,7 +50,6 @@ class NonoBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     int groupIndex = 0;
     final xAxisGroups = barData.keys;
-    final hasNABar = barData.values.where((element) => element < 0).isNotEmpty;
     final values = barData.values.toList()..sort();
     final normalizedValues = values.whereNot((element) => element < 0);
 
@@ -176,48 +174,7 @@ class NonoBarChart extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: chartBottomPadding),
-          Text('* Đơn vị lãi suất: %/năm', style: noteTextStyle),
-          const SizedBox(height: 4),
-          Text('* KKH: Không kỳ hạn', style: noteTextStyle),
-          const SizedBox(height: 4),
-          if (hasNABar)
-            _NotApplicableText(
-              textStyle: noteTextStyle,
-              notApplicableColor: notApplicableColor,
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _NotApplicableText extends StatelessWidget {
-  const _NotApplicableText({
-    required this.textStyle,
-    required this.notApplicableColor,
-  });
-
-  final TextStyle? textStyle;
-  final Color notApplicableColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        text: '* ',
-        style: textStyle,
-        children: [
-          TextSpan(
-            text: '—',
-            style: textStyle?.copyWith(
-              color: notApplicableColor,
-            ),
-          ),
-          TextSpan(
-            text: ': Không có thông tin',
-            style: textStyle,
-          )
+          ...notes,
         ],
       ),
     );

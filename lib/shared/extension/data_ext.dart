@@ -1,4 +1,6 @@
-import '../../interest/interest_type.dart';
+import 'package:nono_finance/domain/entity/exchange_type.dart';
+
+import '../../domain/entity/interest_type.dart';
 
 extension InterestTypeExt on InterestType {
   String get label => switch (this) {
@@ -6,5 +8,12 @@ extension InterestTypeExt on InterestType {
         InterestType.counterByTerm => 'Lãi suất tại quầy theo kỳ hạn',
         InterestType.onlineByBank => 'Lãi suất online theo ngân hàng',
         InterestType.onlineByTerm => 'Lãi suất online theo kỳ hạn'
+      };
+}
+
+extension ExchangeTypeExt on ExchangeType {
+  String get label => switch (this) {
+        ExchangeType.bank => 'Theo ngân hàng',
+        ExchangeType.transactionType => 'Theo hình thức giao dịch',
       };
 }
