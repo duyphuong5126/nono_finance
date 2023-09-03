@@ -32,6 +32,13 @@ final Map<WebViewController, List<Function(Map<String, dynamic>)>>
   exchangesCrawler: [],
 };
 
+final Map<WebViewController, List<Function(Exception exception)>>
+    errorCallbackByCrawlerMap = {
+  interestCrawler: [],
+  currenciesCrawler: [],
+  exchangesCrawler: [],
+};
+
 final Map<WebViewController, String> scriptByCrawlerMap = {
   interestCrawler: getInterestScript,
   currenciesCrawler: getCurrenciesScript,

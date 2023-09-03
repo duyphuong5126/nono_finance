@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:nono_finance/domain/entity/exchange_type.dart';
 import 'package:nono_finance/exchange/exchange_page_cubit.dart';
 import 'package:nono_finance/shared/extension/data_ext.dart';
+import 'package:nono_finance/shared/widget/error_body.dart';
 
 import '../domain/entity/currency.dart';
 import '../shared/dimens.dart';
@@ -31,7 +32,9 @@ class ExchangePageAndroid extends StatelessWidget {
             BlocBuilder<ExchangePageCubit, ExchangePageState>(
               builder: (context, state) {
                 return switch (state) {
-                  ExchangePageInitialState() => const SizedBox.shrink(),
+                  ExchangePageInitialState() ||
+                  ExchangePageFailureState() =>
+                    const SizedBox.shrink(),
                   ExchangePageInitializedState() => IconButton(
                       padding: EdgeInsets.zero,
                       icon: const NonoIcon(
@@ -68,6 +71,7 @@ class ExchangePageAndroid extends StatelessWidget {
                   endColor: Colors.grey[400]!,
                 ),
               ExchangePageInitializedState() => _InitializedBody(state),
+              ExchangePageFailureState() => _ErrorBody(currency),
             };
           },
         ),
@@ -141,5 +145,37 @@ class _InitializedBody extends StatelessWidget {
         ),
       const SizedBox(height: space2),
     ];
+  }
+}
+
+class _ErrorBody extends StatelessWidget {
+  const _ErrorBody(this.currency);
+
+  final Currency currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return RefreshIndicator(
+      triggerMode: RefreshIndicatorTriggerMode.onEdge,
+      edgeOffset: 0.0,
+      onRefresh: () async {
+        return context
+            .read<ExchangePageCubit>()
+            .refresh()
+            .then((value) => Future.delayed(const Duration(seconds: 2)));
+      },
+      child: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            child: ErrorBody(
+              errorMessage:
+                  'Không tìm thấy thông tin tỉ giá của\n${currency.defaultName} - ${currency.code.toUpperCase()}',
+              errorTextStyle: textTheme.titleMedium,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

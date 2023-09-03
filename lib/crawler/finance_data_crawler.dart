@@ -39,23 +39,45 @@ class _FinanceDataCrawlerState extends State<FinanceDataCrawler> {
                       .replaceAll('</html>', '');
                   log('Crawler>>> parsed data from url $url:\n$data');
                   final jsonData = jsonDecode(data);
-                  for (final callback in entry.value) {
-                    callback(jsonData);
+                  if (jsonData != null) {
+                    for (final callback in entry.value) {
+                      callback(jsonData);
+                    }
+                  } else {
+                    _respondWithError(
+                      controller,
+                      Exception('Could not parse data from $url'),
+                    );
                   }
                 } on Exception catch (e) {
                   log('Crawler>>> error parsing data from url $url:', error: e);
+                  _respondWithError(controller, e);
                 }
               } else {
                 log('Crawler>>> no script found for url $url');
+                _respondWithError(
+                  controller,
+                  Exception('No script found for url $url'),
+                );
               }
             },
             onWebResourceError: (error) {
               _updateLoadingStatus(false);
               log('Crawler>>> onWebResourceError', error: error);
+              _respondWithError(
+                controller,
+                Exception('onWebResourceError - $error'),
+              );
             },
           ),
         );
     }
+  }
+
+  _respondWithError(WebViewController controller, Exception exception) {
+    errorCallbackByCrawlerMap[controller]?.forEach((callback) {
+      callback(exception);
+    });
   }
 
   _updateLoadingStatus(bool loading) {

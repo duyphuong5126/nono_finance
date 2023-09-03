@@ -63,6 +63,9 @@ class ExchangeRepositoryImpl implements ExchangeRepository {
       final dataHolder = _ExchangeDataHolder(sourceCurrency, exchangeData);
       dataStream.add(await compute(_parseBankExchangeData, dataHolder));
     });
+    errorCallbackByCrawlerMap[exchangesCrawler]?.add((exception) {
+      dataStream.addError(exception);
+    });
     exchangesCrawler.loadUrl(sourceCurrency.url);
     return dataStream.stream.first;
   }

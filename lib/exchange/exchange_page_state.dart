@@ -15,6 +15,11 @@ sealed class ExchangePageState with _$ExchangePageState {
     required Currency fromCurrency,
     required ExchangeType type,
   }) = Initialized;
+
+  @Implements<ExchangePageFailureState>()
+  const factory ExchangePageState.failure({
+    required ExchangeType type,
+  }) = Failure;
 }
 
 abstract class ExchangePageInitialState implements ExchangePageState {}
@@ -24,5 +29,9 @@ abstract class ExchangePageInitializedState implements ExchangePageState {
 
   Currency get fromCurrency;
 
+  ExchangeType get type;
+}
+
+abstract class ExchangePageFailureState implements ExchangePageState {
   ExchangeType get type;
 }

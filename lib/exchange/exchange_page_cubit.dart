@@ -22,11 +22,32 @@ class ExchangePageCubit extends NonoCubit<ExchangePageState> {
 
   @override
   init() async {
+    const exchangeType = ExchangeType.bank; //Todo: load from storage
     try {
       _bankExchange = await _repository.getBankExchangeList(sourceCurrency);
-      changeType(ExchangeType.bank);
+      changeType(exchangeType);
     } on Exception catch (e) {
       log('Exchange>>> failed to load exchange data with error', error: e);
+      emit(const ExchangePageState.failure(type: exchangeType));
+    }
+  }
+
+  refresh() async {
+    ExchangeType? exchangeType;
+    final currentState = state;
+    if (currentState is ExchangePageInitializedState) {
+      exchangeType = currentState.type;
+    } else if (currentState is ExchangePageFailureState) {
+      exchangeType = currentState.type;
+    }
+    if (exchangeType != null) {
+      try {
+        _bankExchange = await _repository.getBankExchangeList(sourceCurrency);
+        changeType(exchangeType);
+      } on Exception catch (e) {
+        log('Exchange>>> failed to load exchange data with error', error: e);
+        emit(ExchangePageState.failure(type: exchangeType));
+      }
     }
   }
 

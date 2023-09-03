@@ -10,6 +10,7 @@ import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/chart/bar_chart/not_applicable_text.dart';
 import '../shared/widget/cupertino_widget_util.dart';
+import '../shared/widget/error_body.dart';
 import '../shared/widget/nono_icon.dart';
 import 'exchange_page_cubit.dart';
 import 'exchange_page_state.dart';
@@ -40,11 +41,15 @@ class _ExchangePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = pageState;
+    String pageTitle =
+        '${currency.defaultName} (${currency.code.toUpperCase()})';
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(currency.defaultName),
+        middle: Text(pageTitle),
         trailing: switch (state) {
-          ExchangePageInitialState() => const SizedBox.shrink(),
+          ExchangePageInitialState() ||
+          ExchangePageFailureState() =>
+            const SizedBox.shrink(),
           ExchangePageInitializedState() => CupertinoButton(
               padding: EdgeInsets.zero,
               child: const NonoIcon(
@@ -78,6 +83,7 @@ class _ExchangePage extends StatelessWidget {
               endColor: CupertinoColors.systemGrey4,
             ),
           ExchangePageInitializedState() => _InitializedBody(state),
+          ExchangePageFailureState() => _ErrorBody(currency),
         },
       ),
     );
@@ -154,5 +160,35 @@ class _InitializedBody extends StatelessWidget {
         ),
       const SizedBox(height: space2),
     ];
+  }
+}
+
+class _ErrorBody extends StatelessWidget {
+  const _ErrorBody(this.currency);
+
+  final Currency currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = CupertinoTheme.of(context).textTheme;
+    return CustomScrollView(
+      slivers: [
+        CupertinoSliverRefreshControl(
+          onRefresh: () {
+            return context
+                .read<ExchangePageCubit>()
+                .refresh()
+                .then((value) => Future.delayed(const Duration(seconds: 2)));
+          },
+        ),
+        SliverFillRemaining(
+          child: ErrorBody(
+            errorMessage:
+                'Không tìm thấy thông tin tỉ giá của\n${currency.defaultName} - ${currency.code.toUpperCase()}',
+            errorTextStyle: textTheme.navTitleTextStyle,
+          ),
+        )
+      ],
+    );
   }
 }
