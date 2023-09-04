@@ -57,11 +57,7 @@ class NonoBarChart extends StatelessWidget {
     double max = normalizedValues.maxOrNull ?? 0.0;
     double minRange = 0.0;
     double maxRange = max;
-    final barInterval = calculateInterval(
-      minRange,
-      maxRange,
-      barValueSteps,
-    );
+    final barInterval = calculateInterval(minRange, maxRange, barValueSteps);
     return Container(
       height: height,
       padding: EdgeInsets.only(
@@ -83,6 +79,7 @@ class NonoBarChart extends StatelessWidget {
               padding: const EdgeInsets.only(top: spaceHalf),
               child: BarChart(
                 BarChartData(
+                  alignment: BarChartAlignment.spaceAround,
                   barGroups: xAxisGroups.map(
                     (group) {
                       final rate = barData[group] ?? 0.0;

@@ -239,7 +239,6 @@ class _InitializedBody extends StatelessWidget {
       if (hasNABar) ...[
         NotApplicableText(
           textStyle: textTheme.tabLabelTextStyle,
-          notApplicableColor: CupertinoColors.label,
         ),
         const SizedBox(height: spaceQuarter),
       ],

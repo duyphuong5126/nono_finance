@@ -4,11 +4,11 @@ class NotApplicableText extends StatelessWidget {
   const NotApplicableText({
     super.key,
     required this.textStyle,
-    required this.notApplicableColor,
+    this.notApplicableColor,
   });
 
   final TextStyle? textStyle;
-  final Color notApplicableColor;
+  final Color? notApplicableColor;
 
   @override
   Widget build(BuildContext context) {

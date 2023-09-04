@@ -141,7 +141,6 @@ class _InitializedBody extends StatelessWidget {
       if (hasNABar)
         NotApplicableText(
           textStyle: textTheme.bodySmall,
-          notApplicableColor: Colors.red,
         ),
       const SizedBox(height: space2),
     ];
