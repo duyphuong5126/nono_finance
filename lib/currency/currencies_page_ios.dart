@@ -15,32 +15,40 @@ class CurrenciesPageIOS extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CurrencyListCubit()..init(),
-      child: CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: BlocBuilder<CurrencyListCubit, CurrencyListState>(
-            builder: (context, state) {
-              final text = switch (state) {
-                CurrencyListInitialState() => 'Đang tải...',
-                CurrencyListInitializedState() => 'Tỉ giá',
-              };
-              return Text(text);
-            },
-          ),
-        ),
-        child: BlocBuilder<CurrencyListCubit, CurrencyListState>(
-          builder: (context, state) {
-            return switch (state) {
-              CurrencyListInitialState() => const CurrencyListSkeleton(
-                  startColor: CupertinoColors.systemGrey,
-                  endColor: CupertinoColors.systemGrey3,
-                ),
-              CurrencyListInitializedState() => _CurrencyList(
-                  currencyList: state.currencyList,
-                ),
-            };
-          },
-        ),
+      child: BlocBuilder<CurrencyListCubit, CurrencyListState>(
+        builder: (context, state) {
+          return _CurrencyListPage(state);
+        },
       ),
+    );
+  }
+}
+
+class _CurrencyListPage extends StatelessWidget {
+  const _CurrencyListPage(this.state);
+
+  final CurrencyListState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final currentState = state;
+    final text = switch (state) {
+      CurrencyListInitialState() => 'Đang tải...',
+      CurrencyListInitializedState() => 'Tỉ giá',
+    };
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(text),
+      ),
+      child: switch (currentState) {
+        CurrencyListInitialState() => const CurrencyListSkeleton(
+            startColor: CupertinoColors.systemGrey,
+            endColor: CupertinoColors.systemGrey3,
+          ),
+        CurrencyListInitializedState() => _CurrencyList(
+            currencyList: currentState.currencyList,
+          ),
+      },
     );
   }
 }
