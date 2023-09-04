@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nono_finance/interest/interest_cubit.dart';
+import 'package:nono_finance/interest/interest_data_descriptions.dart';
 import 'package:nono_finance/shared/dimens.dart';
 import 'package:nono_finance/shared/extension/data_ext.dart';
 import 'package:nono_finance/shared/widget/bar_chart_list_skeleton.dart';
@@ -82,6 +83,10 @@ class InterestPageAndroid extends StatelessWidget {
   }
 }
 
+const _barChartBaseHeight = 300.0;
+const _horizontalBarBaseHeight = 30.0;
+const _noteItemHeight = 10.0;
+
 class _InitializedBody extends StatelessWidget {
   const _InitializedBody(this.state);
 
@@ -106,29 +111,46 @@ class _InitializedBody extends StatelessWidget {
         itemBuilder: (context, index) {
           final group = state.interestRatesByGroup.keys.elementAt(index);
           final barData = state.interestRatesByGroup[group]!;
+          final description = state.descriptionsByGroup[group]!;
           final theme = Theme.of(context);
+          final notes = switch (state.type) {
+            InterestType.onlineByBank ||
+            InterestType.counterByBank =>
+              _generateChartNoteWidgets(
+                theme.textTheme,
+                barData,
+                description,
+              ),
+            InterestType.onlineByTerm ||
+            InterestType.counterByTerm =>
+              _generateHorizontalChartNoteWidgets(
+                theme.textTheme,
+                barData,
+                description,
+              ),
+          };
+          final totalNoteHeight = notes.length * _noteItemHeight;
           return switch (state.type) {
-            InterestType.onlineByBank || InterestType.counterByBank => barData
-                    .isNotEmpty
-                ? NonoBarChart(
-                    groupName: group,
-                    barData: barData,
-                    barColor: Colors.blue,
-                    maxColor: Colors.green,
-                    minColor: Colors.red,
-                    notApplicableColor: Colors.red,
-                    axisGroupPadding: 40,
-                    groupNameBottomPadding: space1,
-                    minHeight: 330,
-                    groupNameStyle: theme.textTheme.bodyLarge,
-                    barValueTextStyle: theme.textTheme.bodySmall!,
-                    valueSegmentTitleTextStyle:
-                        theme.textTheme.bodySmall?.copyWith(
-                      color: Colors.black,
-                    ),
-                    notes: _generateChartNoteWidgets(theme.textTheme, barData),
-                  )
-                : const SizedBox.shrink(),
+            InterestType.onlineByBank ||
+            InterestType.counterByBank =>
+              barData.isNotEmpty
+                  ? NonoBarChart(
+                      groupName: group,
+                      barData: barData,
+                      barColor: Colors.blue,
+                      maxColor: Colors.green,
+                      minColor: Colors.red,
+                      notApplicableColor: Colors.red,
+                      axisGroupPadding: 40,
+                      groupNameBottomPadding: space1,
+                      height: _barChartBaseHeight + totalNoteHeight,
+                      groupNameStyle: theme.textTheme.titleLarge,
+                      barValueTextStyle: theme.textTheme.bodySmall!,
+                      valueSegmentTitleTextStyle: theme.textTheme.bodySmall
+                          ?.copyWith(color: Colors.black),
+                      notes: notes,
+                    )
+                  : const SizedBox.shrink(),
             InterestType.onlineByTerm ||
             InterestType.counterByTerm =>
               barData.isNotEmpty
@@ -139,13 +161,11 @@ class _InitializedBody extends StatelessWidget {
                       maxColor: Colors.green,
                       minColor: Colors.red,
                       axisColor: Colors.black,
-                      minHeight: 800,
+                      height: barData.length * _horizontalBarBaseHeight +
+                          totalNoteHeight,
                       groupNameStyle: theme.textTheme.bodyLarge,
                       barValueTextStyle: theme.textTheme.bodySmall!,
-                      notes: _generateHorizontalChartNoteWidgets(
-                        theme.textTheme,
-                        barData,
-                      ),
+                      notes: notes,
                     )
                   : const SizedBox.shrink(),
           };
@@ -157,26 +177,40 @@ class _InitializedBody extends StatelessWidget {
   Iterable<Widget> _generateChartNoteWidgets(
     TextTheme textTheme,
     Map<String, double> barData,
+    InterestDataDescriptions descriptions,
   ) {
-    final hasNABar = barData.values.where((element) => element < 0).isNotEmpty;
-
     return [
       const SizedBox(height: space2),
       Text('* Đơn vị lãi suất: %/năm', style: textTheme.bodySmall),
-      const SizedBox(height: 4),
+      const SizedBox(height: spaceQuarter),
       Text('* KKH: Không kỳ hạn', style: textTheme.bodySmall),
-      const SizedBox(height: 4),
-      if (hasNABar)
+      const SizedBox(height: spaceQuarter),
+      if (descriptions.hasNA) ...[
         NotApplicableText(
           textStyle: textTheme.bodySmall,
           notApplicableColor: Colors.red,
         ),
+        const SizedBox(height: spaceQuarter),
+      ],
+      if (descriptions.hasMinMax) ...[
+        Text(
+          '* Lãi suất cao nhất',
+          style: textTheme.bodySmall?.copyWith(color: Colors.green),
+        ),
+        const SizedBox(height: spaceQuarter),
+        Text(
+          '* Lãi suất thấp nhất',
+          style: textTheme.bodySmall?.copyWith(color: Colors.red),
+        ),
+        const SizedBox(height: spaceQuarter),
+      ]
     ];
   }
 
   Iterable<Widget> _generateHorizontalChartNoteWidgets(
     TextTheme textTheme,
     Map<String, double> barData,
+    InterestDataDescriptions descriptions,
   ) {
     final hasNABar = barData.values
         .where((element) => element == double.negativeInfinity)
@@ -187,11 +221,25 @@ class _InitializedBody extends StatelessWidget {
       const SizedBox(height: spaceQuarter),
       Text('* KKH: Không kỳ hạn', style: textTheme.bodySmall),
       const SizedBox(height: spaceQuarter),
-      if (hasNABar)
+      if (hasNABar) ...[
         NotApplicableText(
           textStyle: textTheme.bodySmall,
           notApplicableColor: Colors.red,
         ),
+        const SizedBox(height: spaceQuarter),
+      ],
+      if (descriptions.hasMinMax) ...[
+        Text(
+          '* Lãi suất cao nhất',
+          style: textTheme.bodySmall?.copyWith(color: Colors.green),
+        ),
+        const SizedBox(height: spaceQuarter),
+        Text(
+          '* Lãi suất thấp nhất',
+          style: textTheme.bodySmall?.copyWith(color: Colors.red),
+        ),
+        const SizedBox(height: spaceQuarter),
+      ],
       const SizedBox(height: space2),
     ];
   }

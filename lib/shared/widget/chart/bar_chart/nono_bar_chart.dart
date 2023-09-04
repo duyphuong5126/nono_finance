@@ -10,7 +10,7 @@ class NonoBarChart extends StatelessWidget {
     super.key,
     required this.groupName,
     required this.barData,
-    required this.minHeight,
+    required this.height,
     required this.barColor,
     required this.maxColor,
     required this.minColor,
@@ -34,7 +34,7 @@ class NonoBarChart extends StatelessWidget {
   final Color minColor;
   final Color notApplicableColor;
   final double axisGroupPadding;
-  final double minHeight;
+  final double height;
   final double groupNameBottomPadding;
 
   final TextStyle? groupNameStyle;
@@ -63,7 +63,7 @@ class NonoBarChart extends StatelessWidget {
       barValueSteps,
     );
     return Container(
-      constraints: BoxConstraints(minHeight: minHeight),
+      height: height,
       padding: EdgeInsets.only(
         left: spaceHalf,
         right: spaceHalf,

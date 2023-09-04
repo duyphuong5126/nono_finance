@@ -10,6 +10,7 @@ import '../shared/widget/chart/bar_chart/not_applicable_text.dart';
 import '../shared/widget/nono_icon.dart';
 import '../shared/widget/chart/bar_chart/nono_bar_chart.dart';
 import 'interest_cubit.dart';
+import 'interest_data_descriptions.dart';
 import 'interest_state.dart';
 import '../domain/entity/interest_type.dart';
 
@@ -84,6 +85,10 @@ class InterestPageIOS extends StatelessWidget {
   }
 }
 
+const _barChartBaseHeight = 300.0;
+const _horizontalBarBaseHeight = 30.0;
+const _noteItemHeight = 10.0;
+
 class _InitializedBody extends StatelessWidget {
   const _InitializedBody(this.state);
 
@@ -111,7 +116,25 @@ class _InitializedBody extends StatelessWidget {
               final index = itemIndex - 1;
               final group = state.interestRatesByGroup.keys.elementAt(index);
               final barData = state.interestRatesByGroup[group]!;
+              final description = state.descriptionsByGroup[group]!;
               final textTheme = CupertinoTheme.of(context).textTheme;
+              final notes = switch (state.type) {
+                InterestType.onlineByBank ||
+                InterestType.counterByBank =>
+                  _generateChartNoteWidgets(
+                    textTheme,
+                    barData,
+                    description,
+                  ),
+                InterestType.onlineByTerm ||
+                InterestType.counterByTerm =>
+                  _generateHorizontalChartNoteWidgets(
+                    textTheme,
+                    barData,
+                    description,
+                  ),
+              };
+              final totalNoteHeight = notes.length * _noteItemHeight;
               return switch (state.type) {
                 InterestType.onlineByBank ||
                 InterestType.counterByBank =>
@@ -125,14 +148,14 @@ class _InitializedBody extends StatelessWidget {
                           notApplicableColor: CupertinoColors.destructiveRed,
                           axisGroupPadding: 48,
                           groupNameBottomPadding: space1,
-                          minHeight: 340,
+                          height: _barChartBaseHeight + totalNoteHeight,
                           groupNameStyle: textTheme.navTitleTextStyle,
                           barValueTextStyle: textTheme.tabLabelTextStyle,
                           valueSegmentTitleTextStyle:
                               textTheme.tabLabelTextStyle.copyWith(
                             color: CupertinoColors.black,
                           ),
-                          notes: _generateChartNoteWidgets(textTheme, barData),
+                          notes: notes,
                         )
                       : const SizedBox.shrink(),
                 InterestType.onlineByTerm ||
@@ -145,13 +168,11 @@ class _InitializedBody extends StatelessWidget {
                           maxColor: CupertinoColors.activeGreen,
                           minColor: CupertinoColors.destructiveRed,
                           axisColor: CupertinoColors.black,
-                          minHeight: 800,
+                          height: barData.length * _horizontalBarBaseHeight +
+                              totalNoteHeight,
                           groupNameStyle: textTheme.navTitleTextStyle,
                           barValueTextStyle: textTheme.tabLabelTextStyle,
-                          notes: _generateHorizontalChartNoteWidgets(
-                            textTheme,
-                            barData,
-                          ),
+                          notes: notes,
                         )
                       : const SizedBox.shrink()
               };
@@ -165,26 +186,46 @@ class _InitializedBody extends StatelessWidget {
   Iterable<Widget> _generateChartNoteWidgets(
     CupertinoTextThemeData textTheme,
     Map<String, double> barData,
+    InterestDataDescriptions descriptions,
   ) {
     final hasNABar = barData.values.where((element) => element < 0).isNotEmpty;
 
     return [
       const SizedBox(height: 48),
       Text('* Đơn vị lãi suất: %/năm', style: textTheme.tabLabelTextStyle),
-      const SizedBox(height: 4),
+      const SizedBox(height: spaceQuarter),
       Text('* KKH: Không kỳ hạn', style: textTheme.tabLabelTextStyle),
-      const SizedBox(height: 4),
-      if (hasNABar)
+      const SizedBox(height: spaceQuarter),
+      if (hasNABar) ...[
         NotApplicableText(
           textStyle: textTheme.tabLabelTextStyle,
           notApplicableColor: CupertinoColors.destructiveRed,
         ),
+        const SizedBox(height: spaceQuarter),
+      ],
+      if (descriptions.hasMinMax) ...[
+        Text(
+          '* Lãi suất cao nhất',
+          style: textTheme.tabLabelTextStyle.copyWith(
+            color: CupertinoColors.activeGreen,
+          ),
+        ),
+        const SizedBox(height: spaceQuarter),
+        Text(
+          '* Lãi suất thấp nhất',
+          style: textTheme.tabLabelTextStyle.copyWith(
+            color: CupertinoColors.destructiveRed,
+          ),
+        ),
+        const SizedBox(height: spaceQuarter),
+      ]
     ];
   }
 
   Iterable<Widget> _generateHorizontalChartNoteWidgets(
     CupertinoTextThemeData textTheme,
     Map<String, double> barData,
+    InterestDataDescriptions descriptions,
   ) {
     final hasNABar = barData.values
         .where((element) => element == double.negativeInfinity)
@@ -195,11 +236,29 @@ class _InitializedBody extends StatelessWidget {
       const SizedBox(height: spaceQuarter),
       Text('* KKH: Không kỳ hạn', style: textTheme.tabLabelTextStyle),
       const SizedBox(height: spaceQuarter),
-      if (hasNABar)
+      if (hasNABar) ...[
         NotApplicableText(
           textStyle: textTheme.tabLabelTextStyle,
-          notApplicableColor: CupertinoColors.destructiveRed,
+          notApplicableColor: CupertinoColors.label,
         ),
+        const SizedBox(height: spaceQuarter),
+      ],
+      if (descriptions.hasMinMax) ...[
+        Text(
+          '* Lãi suất cao nhất',
+          style: textTheme.tabLabelTextStyle.copyWith(
+            color: CupertinoColors.activeGreen,
+          ),
+        ),
+        const SizedBox(height: spaceQuarter),
+        Text(
+          '* Lãi suất thấp nhất',
+          style: textTheme.tabLabelTextStyle.copyWith(
+            color: CupertinoColors.destructiveRed,
+          ),
+        ),
+        const SizedBox(height: spaceQuarter),
+      ],
       const SizedBox(height: space2),
     ];
   }

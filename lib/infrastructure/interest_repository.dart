@@ -78,13 +78,13 @@ class InterestRepositoryImpl implements InterestRepository {
         bankName: name,
         counterInterestByTermMap: {
           for (int i = 0; i < counterTerms.length; i++)
-            counterTerms.elementAt(i):
-                counterInterestMap[name]?.elementAt(i) ?? -1.0
+            counterTerms.elementAt(i): counterInterestMap[name]?.elementAt(i) ??
+                double.negativeInfinity
         },
         onlineInterestByTermMap: {
           for (int i = 0; i < onlineTerms.length; i++)
             onlineTerms.elementAt(i):
-                onlineInterestMap[name]?.elementAt(i) ?? -1.0
+                onlineInterestMap[name]?.elementAt(i) ?? double.negativeInfinity
         },
       ),
     );

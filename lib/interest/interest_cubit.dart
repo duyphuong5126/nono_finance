@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nono_finance/infrastructure/interest_repository.dart';
 import 'package:nono_finance/interest/interest_state.dart';
@@ -7,6 +8,7 @@ import 'package:nono_finance/domain/entity/interest_type.dart';
 import 'package:nono_finance/shared/nono_cubit.dart';
 
 import '../domain/entity/bank_interest.dart';
+import 'interest_data_descriptions.dart';
 
 class InterestCubit extends NonoCubit<InterestState> {
   InterestCubit() : super(const InterestState.initial());
@@ -19,6 +21,7 @@ class InterestCubit extends NonoCubit<InterestState> {
   }
 
   Future<void> changeInterestType(InterestType interestType) async {
+    emit(const InterestState.initial());
     try {
       final result = await _repository.getBankInterestList();
       final interestRatesByGroup = switch (interestType) {
@@ -31,10 +34,16 @@ class InterestCubit extends NonoCubit<InterestState> {
         InterestType.onlineByTerm =>
           await (compute(_onlineInterestsByTerm, result))
       };
+      final Map<String, InterestDataDescriptions> descriptionsByGroup = {};
+      for (final mapEntry in interestRatesByGroup.entries) {
+        descriptionsByGroup[mapEntry.key] =
+            await compute(_generateDescriptions, mapEntry.value);
+      }
       emit(
         InterestState.initialized(
           type: interestType,
           interestRatesByGroup: interestRatesByGroup,
+          descriptionsByGroup: descriptionsByGroup,
         ),
       );
     } on Exception catch (e) {
@@ -104,5 +113,17 @@ class InterestCubit extends NonoCubit<InterestState> {
       }
     }
     return result;
+  }
+
+  static InterestDataDescriptions _generateDescriptions(
+    Map<String, double> data,
+  ) {
+    final valueSet = data.values.toSet();
+    final nonNAValueSet = valueSet
+        .whereNot((value) => value == double.negativeInfinity)
+        .sorted((a, b) => b.compareTo(a));
+    final hasNA = valueSet.contains(double.negativeInfinity);
+    final hasMinMax = nonNAValueSet.length >= 2;
+    return InterestDataDescriptions(hasMinMax: hasMinMax, hasNA: hasNA);
   }
 }

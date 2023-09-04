@@ -87,7 +87,7 @@ class _InitializedBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final minHeight = state.type == ExchangeType.bank ? 300.0 : 1200.0;
+    final height = state.type == ExchangeType.bank ? 300.0 : 1200.0;
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 0.0,
@@ -116,8 +116,8 @@ class _InitializedBody extends StatelessWidget {
             maxColor: Colors.green,
             minColor: Colors.red,
             axisColor: Colors.black,
-            minHeight: minHeight,
-            valueFormat: NumberFormat.currency(locale: 'vi_VI'),
+            height: height,
+            valueFormat: NumberFormat("#,##0.00", "en_US"),
             groupNameStyle: theme.textTheme.bodyLarge,
             barValueTextStyle: theme.textTheme.bodySmall!,
             notes: _generateNoteWidgets(theme.textTheme, barData),

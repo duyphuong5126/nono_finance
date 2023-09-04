@@ -90,6 +90,9 @@ class _ExchangePage extends StatelessWidget {
   }
 }
 
+const _horizontalBarHeight = 50.0;
+const _verticalBarChartHeight = 300.0;
+
 class _InitializedBody extends StatelessWidget {
   const _InitializedBody(this.state);
 
@@ -97,7 +100,6 @@ class _InitializedBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final minHeight = state.type == ExchangeType.bank ? 300.0 : 1200.0;
     return CustomScrollView(
       slivers: [
         CupertinoSliverRefreshControl(
@@ -119,8 +121,11 @@ class _InitializedBody extends StatelessWidget {
               final group = state.exchangesByGroup.keys.elementAt(index);
               final barData = state.exchangesByGroup[group]!;
               final textTheme = CupertinoTheme.of(context).textTheme;
+              final height = state.type == ExchangeType.bank
+                  ? _verticalBarChartHeight
+                  : barData.length * _horizontalBarHeight;
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: spaceHalf),
+                padding: const EdgeInsets.only(right: spaceHalf),
                 child: NonoHorizontalBarChart(
                   groupName: group,
                   barData: barData,
@@ -128,8 +133,8 @@ class _InitializedBody extends StatelessWidget {
                   maxColor: CupertinoColors.activeGreen,
                   minColor: CupertinoColors.destructiveRed,
                   axisColor: CupertinoColors.black,
-                  minHeight: minHeight,
-                  valueFormat: NumberFormat.currency(locale: 'vi_VI'),
+                  height: height,
+                  valueFormat: NumberFormat("#,##0.00", "en_US"),
                   groupNameStyle: textTheme.navTitleTextStyle,
                   barValueTextStyle: textTheme.tabLabelTextStyle,
                   notes: _generateNoteWidgets(textTheme, barData),

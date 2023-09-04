@@ -11,7 +11,7 @@ class NonoHorizontalBarChart extends StatelessWidget {
     super.key,
     required this.groupName,
     required this.barData,
-    required this.minHeight,
+    required this.height,
     required this.barColor,
     required this.maxColor,
     required this.minColor,
@@ -31,7 +31,7 @@ class NonoHorizontalBarChart extends StatelessWidget {
   final Color maxColor;
   final Color minColor;
   final Color axisColor;
-  final double minHeight;
+  final double height;
 
   final TextStyle? groupNameStyle;
   final TextStyle? barValueTextStyle;
@@ -68,7 +68,7 @@ class NonoHorizontalBarChart extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: spaceHalf),
             child: SizedBox(
-              height: minHeight,
+              height: height,
               child: SfCartesianChart(
                 primaryXAxis: CategoryAxis(),
                 primaryYAxis: NumericAxis(
@@ -100,7 +100,9 @@ class NonoHorizontalBarChart extends StatelessWidget {
                     ),
                     dataLabelMapper: (MapEntry<String, double> data, _) =>
                         data.value > 0
-                            ? (valueFormat?.format(data.value) ??
+                            ? (valueFormat
+                                    ?.format(data.value)
+                                    .replaceAll('.00', '') ??
                                 data.value.toString())
                             : '—',
                     dataLabelSettings: const DataLabelSettings(
