@@ -135,6 +135,7 @@ class _InitializedBody extends StatelessWidget {
                   axisColor: CupertinoColors.black,
                   height: height,
                   valueFormat: NumberFormat("#,##0.00", "en_US"),
+                  yValueFormat: NumberFormat("#,###", "en_US"),
                   groupNameStyle: textTheme.navTitleTextStyle,
                   barValueTextStyle: textTheme.tabLabelTextStyle,
                   notes: _generateNoteWidgets(textTheme, barData),

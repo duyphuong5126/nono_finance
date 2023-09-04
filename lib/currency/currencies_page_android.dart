@@ -17,7 +17,15 @@ class CurrenciesPageAndroid extends StatelessWidget {
       create: (context) => CurrencyListCubit()..init(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Tỉ giá'),
+          title: BlocBuilder<CurrencyListCubit, CurrencyListState>(
+            builder: (context, state) {
+              final text = switch (state) {
+                CurrencyListInitialState() => 'Đang tải...',
+                CurrencyListInitializedState() => 'Tỉ giá',
+              };
+              return Text(text);
+            },
+          ),
         ),
         body: BlocBuilder<CurrencyListCubit, CurrencyListState>(
           builder: (context, state) {

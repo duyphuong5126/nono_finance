@@ -17,6 +17,7 @@ class NonoHorizontalBarChart extends StatelessWidget {
     required this.minColor,
     required this.axisColor,
     this.valueFormat,
+    this.yValueFormat,
     this.groupNameStyle,
     this.barValueTextStyle,
     this.barValueSteps = 5,
@@ -37,6 +38,7 @@ class NonoHorizontalBarChart extends StatelessWidget {
   final TextStyle? barValueTextStyle;
 
   final NumberFormat? valueFormat;
+  final NumberFormat? yValueFormat;
 
   final Iterable<Widget> notes;
 
@@ -75,6 +77,7 @@ class NonoHorizontalBarChart extends StatelessWidget {
                   minimum: minRange,
                   maximum: maxRange,
                   interval: barInterval,
+                  numberFormat: yValueFormat,
                 ),
                 series: <ChartSeries<MapEntry<String, double>, String>>[
                   BarSeries<MapEntry<String, double>, String>(

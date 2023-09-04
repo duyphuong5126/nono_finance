@@ -16,8 +16,16 @@ class CurrenciesPageIOS extends StatelessWidget {
     return BlocProvider(
       create: (context) => CurrencyListCubit()..init(),
       child: CupertinoPageScaffold(
-        navigationBar: const CupertinoNavigationBar(
-          middle: Text('Tỉ giá'),
+        navigationBar: CupertinoNavigationBar(
+          middle: BlocBuilder<CurrencyListCubit, CurrencyListState>(
+            builder: (context, state) {
+              final text = switch (state) {
+                CurrencyListInitialState() => 'Đang tải...',
+                CurrencyListInitializedState() => 'Tỉ giá',
+              };
+              return Text(text);
+            },
+          ),
         ),
         child: BlocBuilder<CurrencyListCubit, CurrencyListState>(
           builder: (context, state) {

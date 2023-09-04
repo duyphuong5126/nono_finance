@@ -118,7 +118,8 @@ class _InitializedBody extends StatelessWidget {
             axisColor: Colors.black,
             height: height,
             valueFormat: NumberFormat("#,##0.00", "en_US"),
-            groupNameStyle: theme.textTheme.bodyLarge,
+            yValueFormat: NumberFormat("#,###", "en_US"),
+            groupNameStyle: theme.textTheme.titleLarge,
             barValueTextStyle: theme.textTheme.bodySmall!,
             notes: _generateNoteWidgets(theme.textTheme, barData),
           );
