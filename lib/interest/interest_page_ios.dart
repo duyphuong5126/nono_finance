@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/extension/data_ext.dart';
 import 'package:nono_finance/shared/widget/cupertino_widget_util.dart';
 
@@ -142,10 +143,10 @@ class _InitializedBody extends StatelessWidget {
                       ? NonoBarChart(
                           groupName: group,
                           barData: barData,
-                          barColor: CupertinoColors.activeBlue,
-                          maxColor: CupertinoColors.activeGreen,
-                          minColor: CupertinoColors.destructiveRed,
-                          notApplicableColor: CupertinoColors.destructiveRed,
+                          barColor: brandNormalColor,
+                          maxColor: brandPositiveColor,
+                          minColor: brandNegativeColor,
+                          notApplicableColor: brandNegativeColor,
                           axisGroupPadding: 48,
                           groupNameBottomPadding: space1,
                           height: _barChartBaseHeight + totalNoteHeight,
@@ -164,9 +165,9 @@ class _InitializedBody extends StatelessWidget {
                       ? NonoHorizontalBarChart(
                           groupName: group,
                           barData: barData,
-                          barColor: CupertinoColors.activeBlue,
-                          maxColor: CupertinoColors.activeGreen,
-                          minColor: CupertinoColors.destructiveRed,
+                          barColor: brandNormalColor,
+                          maxColor: brandPositiveColor,
+                          minColor: brandNegativeColor,
                           axisColor: CupertinoColors.black,
                           height: barData.length * _horizontalBarBaseHeight +
                               totalNoteHeight,
@@ -199,7 +200,7 @@ class _InitializedBody extends StatelessWidget {
       if (hasNABar) ...[
         NotApplicableText(
           textStyle: textTheme.tabLabelTextStyle,
-          notApplicableColor: CupertinoColors.destructiveRed,
+          notApplicableColor: brandNegativeColor,
         ),
         const SizedBox(height: spaceQuarter),
       ],
@@ -207,14 +208,14 @@ class _InitializedBody extends StatelessWidget {
         Text(
           '* Lãi suất cao nhất',
           style: textTheme.tabLabelTextStyle.copyWith(
-            color: CupertinoColors.activeGreen,
+            color: brandPositiveColor,
           ),
         ),
         const SizedBox(height: spaceQuarter),
         Text(
           '* Lãi suất thấp nhất',
           style: textTheme.tabLabelTextStyle.copyWith(
-            color: CupertinoColors.destructiveRed,
+            color: brandNegativeColor,
           ),
         ),
         const SizedBox(height: spaceQuarter),
@@ -246,14 +247,14 @@ class _InitializedBody extends StatelessWidget {
         Text(
           '* Lãi suất cao nhất',
           style: textTheme.tabLabelTextStyle.copyWith(
-            color: CupertinoColors.activeGreen,
+            color: brandPositiveColor,
           ),
         ),
         const SizedBox(height: spaceQuarter),
         Text(
           '* Lãi suất thấp nhất',
           style: textTheme.tabLabelTextStyle.copyWith(
-            color: CupertinoColors.destructiveRed,
+            color: brandNegativeColor,
           ),
         ),
         const SizedBox(height: spaceQuarter),

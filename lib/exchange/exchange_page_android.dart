@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nono_finance/domain/entity/exchange_type.dart';
 import 'package:nono_finance/exchange/exchange_page_cubit.dart';
+import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/extension/data_ext.dart';
 import 'package:nono_finance/shared/widget/error_body.dart';
 
@@ -112,9 +113,9 @@ class _InitializedBody extends StatelessWidget {
           return NonoHorizontalBarChart(
             groupName: group,
             barData: barData,
-            barColor: Colors.blue,
-            maxColor: Colors.green,
-            minColor: Colors.red,
+            barColor: brandNormalColor,
+            maxColor: brandPositiveColor,
+            minColor: brandNegativeColor,
             axisColor: Colors.black,
             height: height,
             valueFormat: NumberFormat("#,##0.00", "en_US"),

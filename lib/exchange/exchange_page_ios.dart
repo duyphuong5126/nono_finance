@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nono_finance/domain/entity/currency.dart';
+import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/extension/data_ext.dart';
 
 import '../domain/entity/exchange_type.dart';
@@ -129,9 +130,9 @@ class _InitializedBody extends StatelessWidget {
                 child: NonoHorizontalBarChart(
                   groupName: group,
                   barData: barData,
-                  barColor: CupertinoColors.activeBlue,
-                  maxColor: CupertinoColors.activeGreen,
-                  minColor: CupertinoColors.destructiveRed,
+                  barColor: brandNormalColor,
+                  maxColor: brandPositiveColor,
+                  minColor: brandNegativeColor,
                   axisColor: CupertinoColors.black,
                   height: height,
                   valueFormat: NumberFormat("#,##0.00", "en_US"),

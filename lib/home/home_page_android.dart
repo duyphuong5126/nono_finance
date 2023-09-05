@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nono_finance/currency/currencies_page_android.dart';
 import 'package:nono_finance/interest/interest_page_android.dart';
+import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/widget/nono_icon.dart';
 
 import '../shared/dimens.dart';
@@ -18,7 +19,6 @@ class _HomePageState extends State<HomePageAndroid> {
 
   @override
   Widget build(BuildContext context) {
-    const selectedColor = Colors.black;
     final unselectedColor = Colors.grey[500];
     return Scaffold(
       body: IndexedStack(
@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePageAndroid> {
               'assets/icon/ic_savings.svg',
               width: space2,
               height: space2,
-              color: _selectedIndex == 0 ? selectedColor : unselectedColor,
+              color: _selectedIndex == 0 ? primaryColor : unselectedColor,
             ),
             label: 'Lãi suất',
             tooltip: 'Lãi suất',
@@ -43,15 +43,15 @@ class _HomePageState extends State<HomePageAndroid> {
               'assets/icon/ic_exchange.svg',
               width: space2,
               height: space2,
-              color: _selectedIndex == 1 ? selectedColor : unselectedColor,
+              color: _selectedIndex == 1 ? primaryColor : unselectedColor,
             ),
             label: 'Tỉ giá',
             tooltip: 'Tỉ giá',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey[500],
+        selectedItemColor: primaryColor,
+        unselectedItemColor: unselectedColor,
         showSelectedLabels: true,
         showUnselectedLabels: true,
         selectedFontSize: 14.0,

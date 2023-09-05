@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:nono_finance/currency/currencies_page_ios.dart';
 import 'package:nono_finance/interest/interest_page_ios.dart';
 
+import '../shared/colors.dart';
 import '../shared/dimens.dart';
 import '../shared/widget/nono_icon.dart';
 
@@ -17,8 +18,7 @@ class _HomePageIOSState extends State<HomePageIOS> {
 
   @override
   Widget build(BuildContext context) {
-    const selectedColor = CupertinoColors.black;
-    const unselectedColor = CupertinoColors.systemGrey;
+    const unselectedColor = CupertinoColors.inactiveGray;
     const List<Widget> tabs = [
       InterestPageIOS(),
       CurrenciesPageIOS(),
@@ -28,7 +28,7 @@ class _HomePageIOSState extends State<HomePageIOS> {
       resizeToAvoidBottomInset: false,
       child: CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
-          activeColor: selectedColor,
+          activeColor: primaryColor,
           inactiveColor: unselectedColor,
           items: [
             BottomNavigationBarItem(
@@ -36,7 +36,7 @@ class _HomePageIOSState extends State<HomePageIOS> {
                 'assets/icon/ic_savings.svg',
                 width: space4,
                 height: space4,
-                color: _selectedIndex == 0 ? selectedColor : unselectedColor,
+                color: _selectedIndex == 0 ? primaryColor : unselectedColor,
               ),
               label: 'Lãi suất',
               tooltip: 'Lãi suất',
@@ -46,7 +46,7 @@ class _HomePageIOSState extends State<HomePageIOS> {
                 'assets/icon/ic_exchange.svg',
                 width: space4,
                 height: space4,
-                color: _selectedIndex == 1 ? selectedColor : unselectedColor,
+                color: _selectedIndex == 1 ? primaryColor : unselectedColor,
               ),
               label: 'Tỉ giá',
               tooltip: 'Tỉ giá',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nono_finance/interest/interest_cubit.dart';
 import 'package:nono_finance/interest/interest_data_descriptions.dart';
+import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/dimens.dart';
 import 'package:nono_finance/shared/extension/data_ext.dart';
 import 'package:nono_finance/shared/widget/bar_chart_list_skeleton.dart';
@@ -137,10 +138,10 @@ class _InitializedBody extends StatelessWidget {
                   ? NonoBarChart(
                       groupName: group,
                       barData: barData,
-                      barColor: Colors.blue,
-                      maxColor: Colors.green,
-                      minColor: Colors.red,
-                      notApplicableColor: Colors.red,
+                      barColor: brandNormalColor,
+                      maxColor: brandPositiveColor,
+                      minColor: brandNegativeColor,
+                      notApplicableColor: brandNegativeColor,
                       axisGroupPadding: 40,
                       groupNameBottomPadding: space1,
                       height: _barChartBaseHeight + totalNoteHeight,
@@ -157,9 +158,9 @@ class _InitializedBody extends StatelessWidget {
                   ? NonoHorizontalBarChart(
                       groupName: group,
                       barData: barData,
-                      barColor: Colors.blue,
-                      maxColor: Colors.green,
-                      minColor: Colors.red,
+                      barColor: brandNormalColor,
+                      maxColor: brandPositiveColor,
+                      minColor: brandNegativeColor,
                       axisColor: Colors.black,
                       height: barData.length * _horizontalBarBaseHeight +
                           totalNoteHeight,
@@ -188,19 +189,19 @@ class _InitializedBody extends StatelessWidget {
       if (descriptions.hasNA) ...[
         NotApplicableText(
           textStyle: textTheme.bodySmall,
-          notApplicableColor: Colors.red,
+          notApplicableColor: brandNegativeColor,
         ),
         const SizedBox(height: spaceQuarter),
       ],
       if (descriptions.hasMinMax) ...[
         Text(
           '* Lãi suất cao nhất',
-          style: textTheme.bodySmall?.copyWith(color: Colors.green),
+          style: textTheme.bodySmall?.copyWith(color: brandPositiveColor),
         ),
         const SizedBox(height: spaceQuarter),
         Text(
           '* Lãi suất thấp nhất',
-          style: textTheme.bodySmall?.copyWith(color: Colors.red),
+          style: textTheme.bodySmall?.copyWith(color: brandNegativeColor),
         ),
         const SizedBox(height: spaceQuarter),
       ]
@@ -230,12 +231,12 @@ class _InitializedBody extends StatelessWidget {
       if (descriptions.hasMinMax) ...[
         Text(
           '* Lãi suất cao nhất',
-          style: textTheme.bodySmall?.copyWith(color: Colors.green),
+          style: textTheme.bodySmall?.copyWith(color: brandPositiveColor),
         ),
         const SizedBox(height: spaceQuarter),
         Text(
           '* Lãi suất thấp nhất',
-          style: textTheme.bodySmall?.copyWith(color: Colors.red),
+          style: textTheme.bodySmall?.copyWith(color: brandNegativeColor),
         ),
         const SizedBox(height: spaceQuarter),
       ],
