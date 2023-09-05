@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nono_finance/currency/currencies_page_android.dart';
 import 'package:nono_finance/interest/interest_page_android.dart';
+import 'package:nono_finance/prices/prices_page_android.dart';
 import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/widget/nono_icon.dart';
 
@@ -23,30 +24,29 @@ class _HomePageState extends State<HomePageAndroid> {
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: const [InterestPageAndroid(), CurrenciesPageAndroid()],
+        children: const [
+          InterestPageAndroid(),
+          CurrenciesPageAndroid(),
+          PricesPageAndroid(),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: [
-          BottomNavigationBarItem(
-            icon: NonoIcon(
-              'assets/icon/ic_savings.svg',
-              width: space2,
-              height: space2,
-              color: _selectedIndex == 0 ? primaryColor : unselectedColor,
-            ),
+          _generateBarItem(
+            index: 0,
             label: 'Lãi suất',
-            tooltip: 'Lãi suất',
+            icon: 'assets/icon/ic_savings.svg',
           ),
-          BottomNavigationBarItem(
-            icon: NonoIcon(
-              'assets/icon/ic_exchange.svg',
-              width: space2,
-              height: space2,
-              color: _selectedIndex == 1 ? primaryColor : unselectedColor,
-            ),
+          _generateBarItem(
+            index: 1,
             label: 'Tỉ giá',
-            tooltip: 'Tỉ giá',
+            icon: 'assets/icon/ic_exchange.svg',
+          ),
+          _generateBarItem(
+            index: 2,
+            label: 'Giá cả',
+            icon: 'assets/icon/ic_coins.svg',
           ),
         ],
         currentIndex: _selectedIndex,
@@ -65,5 +65,22 @@ class _HomePageState extends State<HomePageAndroid> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  BottomNavigationBarItem _generateBarItem({
+    required String label,
+    required String icon,
+    required int index,
+  }) {
+    final unselectedColor = Colors.grey[500];
+    return BottomNavigationBarItem(
+      icon: NonoIcon(
+        icon,
+        width: space2,
+        height: space2,
+        color: _selectedIndex == index ? primaryColor : unselectedColor,
+      ),
+      label: label,
+    );
   }
 }
