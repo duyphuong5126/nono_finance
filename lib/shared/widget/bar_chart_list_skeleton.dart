@@ -37,6 +37,7 @@ class _BarChartListSkeletonState extends State<BarChartListSkeleton> {
     return LoadingColorBuilder(
       builder: (context, color, child) {
         return ListView.separated(
+          physics: const BouncingScrollPhysics(),
           separatorBuilder: (context, index) {
             return const SizedBox(height: space2);
           },

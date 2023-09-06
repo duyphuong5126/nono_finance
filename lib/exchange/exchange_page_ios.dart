@@ -102,6 +102,7 @@ class _InitializedBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
       slivers: [
         CupertinoSliverRefreshControl(
           onRefresh: () {
@@ -178,6 +179,7 @@ class _ErrorBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = CupertinoTheme.of(context).textTheme;
     return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
       slivers: [
         CupertinoSliverRefreshControl(
           onRefresh: () {

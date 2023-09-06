@@ -166,9 +166,13 @@ class _ErrorBody extends StatelessWidget {
             .refresh()
             .then((value) => Future.delayed(const Duration(seconds: 2)));
       },
-      child: CustomScrollView(
-        slivers: [
-          SliverFillRemaining(
+      child: ListView(
+        physics: const BouncingScrollPhysics(),
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(bottom: space4),
             child: ErrorBody(
               errorMessage:
                   'Không tìm thấy thông tin tỉ giá của\n${currency.defaultName} - ${currency.code.toUpperCase()}',
