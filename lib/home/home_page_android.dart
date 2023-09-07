@@ -4,7 +4,7 @@ import 'package:nono_finance/interest/interest_page_android.dart';
 import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/widget/nono_icon.dart';
 
-import '../gold/gold_prices_page_android.dart';
+import '../products/products_page_android.dart';
 import '../shared/dimens.dart';
 
 class HomePageAndroid extends StatefulWidget {
@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePageAndroid> {
         children: const [
           InterestPageAndroid(),
           CurrenciesPageAndroid(),
-          GoldPricesPageAndroid(),
+          ProductPageAndroid(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

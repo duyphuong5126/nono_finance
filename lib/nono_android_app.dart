@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nono_finance/exchange/exchange_page_android.dart';
+import 'package:nono_finance/gold/gold_prices_page_android.dart';
 import 'package:nono_finance/home/home_page_android.dart';
 
 import 'crawler/finance_data_crawler.dart';
@@ -20,6 +21,8 @@ class NonoAndroidApp extends StatelessWidget {
           switch (settings.name) {
             case exchangeRoute:
               return const ExchangePageAndroid();
+            case goldPricesRoute:
+              return const GoldPricesPageAndroid();
             default:
               throw Exception('No route found for ${settings.name}');
           }
