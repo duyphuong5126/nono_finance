@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:nono_finance/crawler/script/exchange_crawling_script.dart';
+import 'package:nono_finance/crawler/script/gold_prices_crawling_script.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'script/currency_crawling_script.dart';
@@ -18,11 +19,13 @@ WebViewController _generateWebViewController() {
 final interestCrawler = _generateWebViewController();
 final currenciesCrawler = _generateWebViewController();
 final exchangesCrawler = _generateWebViewController();
+final goldPricesCrawler = _generateWebViewController();
 
 final crawlerControllers = [
   interestCrawler,
   currenciesCrawler,
   exchangesCrawler,
+  goldPricesCrawler,
 ];
 
 final Map<WebViewController, List<Function(Map<String, dynamic>)>>
@@ -30,6 +33,7 @@ final Map<WebViewController, List<Function(Map<String, dynamic>)>>
   interestCrawler: [],
   currenciesCrawler: [],
   exchangesCrawler: [],
+  goldPricesCrawler: [],
 };
 
 final Map<WebViewController, List<Function(Exception exception)>>
@@ -37,15 +41,18 @@ final Map<WebViewController, List<Function(Exception exception)>>
   interestCrawler: [],
   currenciesCrawler: [],
   exchangesCrawler: [],
+  goldPricesCrawler: [],
 };
 
 final Map<WebViewController, String> scriptByCrawlerMap = {
   interestCrawler: getInterestScript,
   currenciesCrawler: getCurrenciesScript,
   exchangesCrawler: getExchangesScript,
+  goldPricesCrawler: getGoldPricesScript,
 };
 
 final Map<WebViewController, String> urlByCrawlerMap = {
   interestCrawler: 'https://webgia.com/lai-suat/',
-  currenciesCrawler: 'https://webgia.com/ngoai-te/usd/'
+  currenciesCrawler: 'https://webgia.com/ngoai-te/usd/',
+  goldPricesCrawler: 'https://webgia.com/gia-vang/',
 };

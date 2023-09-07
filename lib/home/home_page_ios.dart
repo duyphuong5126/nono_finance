@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:nono_finance/currency/currencies_page_ios.dart';
 import 'package:nono_finance/interest/interest_page_ios.dart';
-import 'package:nono_finance/prices/prices_page_ios.dart';
 
+import '../gold/gold_prices_page_ios.dart';
 import '../shared/colors.dart';
 import '../shared/dimens.dart';
 import '../shared/widget/nono_icon.dart';
@@ -22,7 +22,7 @@ class _HomePageIOSState extends State<HomePageIOS> {
     const List<Widget> tabs = [
       InterestPageIOS(),
       CurrenciesPageIOS(),
-      PricesPageIOS(),
+      GoldPricesPageIOS(),
     ];
 
     return CupertinoPageScaffold(

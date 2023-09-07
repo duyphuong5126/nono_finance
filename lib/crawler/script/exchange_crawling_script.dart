@@ -42,8 +42,6 @@ const getExchangesScript = "(function() { "
     "return rateObj;"
     "});"
     ""
-
-// Serialize interest data
     "var jsonString= JSON.stringify(exchangesResultObj);"
     ""
     "return ('<html>'+jsonString+'</html>'); })();";

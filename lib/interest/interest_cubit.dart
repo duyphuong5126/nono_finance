@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nono_finance/infrastructure/interest_repository.dart';
 import 'package:nono_finance/interest/interest_state.dart';
-import 'package:nono_finance/domain/entity/interest_type.dart';
+import 'package:nono_finance/interest/interest_type.dart';
 import 'package:nono_finance/shared/nono_cubit.dart';
 
 import '../domain/entity/bank_interest.dart';

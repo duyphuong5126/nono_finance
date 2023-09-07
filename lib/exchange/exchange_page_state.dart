@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nono_finance/domain/entity/currency.dart';
-import 'package:nono_finance/domain/entity/exchange_type.dart';
+import 'package:nono_finance/exchange/exchange_type.dart';
 
 part 'exchange_page_state.freezed.dart';
 

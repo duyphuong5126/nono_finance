@@ -12,7 +12,7 @@ import '../shared/widget/chart/bar_chart/not_applicable_text.dart';
 import '../shared/widget/material_widget_util.dart';
 import '../shared/widget/chart/bar_chart/nono_bar_chart.dart';
 import 'interest_state.dart';
-import '../domain/entity/interest_type.dart';
+import 'interest_type.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 
 class InterestPageAndroid extends StatelessWidget {

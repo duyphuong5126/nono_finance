@@ -1,6 +1,6 @@
-import 'package:nono_finance/domain/entity/exchange_type.dart';
+import 'package:nono_finance/exchange/exchange_type.dart';
 
-import '../../domain/entity/interest_type.dart';
+import '../../interest/interest_type.dart';
 
 extension InterestTypeExt on InterestType {
   String get label => switch (this) {

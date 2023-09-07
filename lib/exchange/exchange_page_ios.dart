@@ -5,7 +5,7 @@ import 'package:nono_finance/domain/entity/currency.dart';
 import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/extension/data_ext.dart';
 
-import '../domain/entity/exchange_type.dart';
+import 'exchange_type.dart';
 import '../shared/dimens.dart';
 import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';

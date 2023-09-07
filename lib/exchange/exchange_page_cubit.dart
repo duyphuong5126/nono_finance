@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:nono_finance/domain/entity/bank.dart';
 import 'package:nono_finance/domain/entity/bank_exchange.dart';
 import 'package:nono_finance/domain/entity/currency.dart';
-import 'package:nono_finance/domain/entity/exchange_type.dart';
+import 'package:nono_finance/exchange/exchange_type.dart';
 import 'package:nono_finance/exchange/exchange_page_state.dart';
 import 'package:nono_finance/infrastructure/exchange_repository.dart';
 import 'package:nono_finance/shared/nono_cubit.dart';

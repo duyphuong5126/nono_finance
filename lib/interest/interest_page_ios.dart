@@ -13,7 +13,7 @@ import '../shared/widget/chart/bar_chart/nono_bar_chart.dart';
 import 'interest_cubit.dart';
 import 'interest_data_descriptions.dart';
 import 'interest_state.dart';
-import '../domain/entity/interest_type.dart';
+import 'interest_type.dart';
 
 class InterestPageIOS extends StatelessWidget {
   const InterestPageIOS({super.key});

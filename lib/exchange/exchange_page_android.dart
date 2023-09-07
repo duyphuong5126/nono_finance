@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:nono_finance/domain/entity/exchange_type.dart';
+import 'package:nono_finance/exchange/exchange_type.dart';
 import 'package:nono_finance/exchange/exchange_page_cubit.dart';
 import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/extension/data_ext.dart';
