@@ -36,15 +36,17 @@ class GoldPricesPageIOS extends StatelessWidget {
                 GoldPricesPartialState() => _ChangeTypeButton(state.type),
               },
             ),
-            child: switch (state) {
-              GoldPricesInitialState() => const BarChartListSkeleton(
-                  startColor: CupertinoColors.systemGrey,
-                  endColor: CupertinoColors.systemGrey4,
-                ),
-              GoldPricesFullState() => _InitializedBody(state),
-              GoldPricesPartialState() => _PartialDataBody(state),
-              GoldPricesFailureState() => _ErrorBody(state),
-            },
+            child: SafeArea(
+              child: switch (state) {
+                GoldPricesInitialState() => const BarChartListSkeleton(
+                    startColor: CupertinoColors.systemGrey,
+                    endColor: CupertinoColors.systemGrey4,
+                  ),
+                GoldPricesFullState() => _InitializedBody(state),
+                GoldPricesPartialState() => _PartialDataBody(state),
+                GoldPricesFailureState() => _ErrorBody(state),
+              },
+            ),
           );
         },
       ),
@@ -86,7 +88,7 @@ class _InitializedBody extends StatelessWidget {
             (context, itemIndex) {
               if (itemIndex == 0) {
                 return Padding(
-                  padding: const EdgeInsets.only(left: space1, top: space8),
+                  padding: const EdgeInsets.only(left: space1, top: space1),
                   child: Text(
                     'Đơn vị: triệu đồng',
                     style: textTheme.navTitleTextStyle,
@@ -94,7 +96,7 @@ class _InitializedBody extends StatelessWidget {
                 );
               } else {
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: space6),
+                  padding: const EdgeInsets.only(bottom: space2),
                   child: NonoHorizontalMultiBarChart(
                     height: MediaQuery.of(context).size.height * 3,
                     axisColor: CupertinoColors.black,
@@ -178,7 +180,6 @@ class _PartialDataBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = CupertinoTheme.of(context).textTheme;
     return CustomScrollView(
-      physics: const BouncingScrollPhysics(),
       slivers: [
         CupertinoSliverRefreshControl(
           onRefresh: () {
