@@ -42,7 +42,7 @@ class GoldPricesPageIOS extends StatelessWidget {
                     startColor: CupertinoColors.systemGrey,
                     endColor: CupertinoColors.systemGrey4,
                   ),
-                GoldPricesFullState() => _InitializedBody(state),
+                GoldPricesFullState() => _FullDataBody(state),
                 GoldPricesPartialState() => _PartialDataBody(state),
                 GoldPricesFailureState() => _ErrorBody(state),
               },
@@ -63,8 +63,8 @@ class GoldPricesPageIOS extends StatelessWidget {
   }
 }
 
-class _InitializedBody extends StatelessWidget {
-  const _InitializedBody(this.state);
+class _FullDataBody extends StatelessWidget {
+  const _FullDataBody(this.state);
 
   final GoldPricesFullState state;
 
@@ -87,12 +87,61 @@ class _InitializedBody extends StatelessWidget {
             childCount: 2,
             (context, itemIndex) {
               if (itemIndex == 0) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: space1, top: space1),
-                  child: Text(
-                    'Đơn vị: triệu đồng',
-                    style: textTheme.navTitleTextStyle,
-                  ),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: space1,
+                        bottom: space1,
+                        top: space1,
+                      ),
+                      child: Text(
+                        'Nổi bật',
+                        style: textTheme.navTitleTextStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: space1,
+                        bottom: spaceQuarter,
+                      ),
+                      child: Text(
+                        state.highlightData.highestPriceTag,
+                        style: textTheme.textStyle.copyWith(
+                          color: brandPositiveColor,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: space1,
+                        bottom: spaceQuarter,
+                      ),
+                      child: Text(
+                        state.highlightData.lowestPriceTag,
+                        style: textTheme.textStyle
+                            .copyWith(color: brandNegativeColor),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: space1,
+                        bottom: spaceQuarter,
+                      ),
+                      child: Text(
+                        state.highlightData.globalPriceChange,
+                        style: textTheme.textStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: space1, top: space1),
+                      child: Text(
+                        'Giá vàng chi tiết (Đơn vị: triệu đồng)',
+                        style: textTheme.navTitleTextStyle,
+                      ),
+                    ),
+                  ],
                 );
               } else {
                 return Padding(
@@ -194,7 +243,62 @@ class _PartialDataBody extends StatelessWidget {
             childCount: 2,
             (context, itemIndex) {
               if (itemIndex == 0) {
-                return const SizedBox(height: space1);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: space1,
+                        bottom: space1,
+                        top: space1,
+                      ),
+                      child: Text(
+                        'Nổi bật',
+                        style: textTheme.navTitleTextStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: space1,
+                        bottom: spaceQuarter,
+                      ),
+                      child: Text(
+                        state.highlightData.highestPriceTag,
+                        style: textTheme.textStyle.copyWith(
+                          color: brandPositiveColor,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: space1,
+                        bottom: spaceQuarter,
+                      ),
+                      child: Text(
+                        state.highlightData.lowestPriceTag,
+                        style: textTheme.textStyle
+                            .copyWith(color: brandNegativeColor),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: space1,
+                        bottom: spaceQuarter,
+                      ),
+                      child: Text(
+                        state.highlightData.globalPriceChange,
+                        style: textTheme.textStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: space1, top: space1),
+                      child: Text(
+                        'Giá vàng chi tiết (Đơn vị: triệu đồng)',
+                        style: textTheme.navTitleTextStyle,
+                      ),
+                    ),
+                  ],
+                );
               }
               return NonoHorizontalBarChart(
                 groupName: '',

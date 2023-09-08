@@ -47,7 +47,7 @@ extension GoldPriceTypeExt on GoldPriceType {
 
   String get title => switch (this) {
         GoldPriceType.full => 'Giá vàng',
-        GoldPriceType.buying => 'Giá mua vàng',
-        GoldPriceType.selling => 'Giá bán vàng',
+        GoldPriceType.buying => 'Giá vàng (mua vào)',
+        GoldPriceType.selling => 'Giá vàng (bán ra)',
       };
 }

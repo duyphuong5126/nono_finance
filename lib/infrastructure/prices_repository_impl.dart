@@ -56,7 +56,9 @@ class PricesRepositoryImpl implements PricesRepository {
       priceChangeInDollar: numberFormat
           .parse(globalGoldPriceData['priceChange'].toString()) as double,
       priceChangeInPercent: numberFormat.parse(
-        globalGoldPriceData['priceChange'].toString().replaceAll('%', ''),
+        globalGoldPriceData['priceChangePercent']
+            .toString()
+            .replaceAll('%', ''),
       ) as double,
     );
     return GoldPrices(

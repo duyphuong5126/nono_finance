@@ -88,8 +88,36 @@ class _FullDataBody extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         children: [
           Padding(
+            padding: const EdgeInsets.only(left: space1, bottom: space1),
+            child: Text('Nổi bật', style: textTheme.titleMedium),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: space1, bottom: spaceQuarter),
+            child: Text(
+              state.highlightData.highestPriceTag,
+              style: textTheme.bodyLarge?.copyWith(color: brandPositiveColor),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: space1, bottom: spaceQuarter),
+            child: Text(
+              state.highlightData.lowestPriceTag,
+              style: textTheme.bodyLarge?.copyWith(color: brandNegativeColor),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: space1, bottom: spaceQuarter),
+            child: Text(
+              state.highlightData.globalPriceChange,
+              style: textTheme.bodyLarge,
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.only(left: space1),
-            child: Text('Đơn vị: triệu đồng', style: textTheme.titleMedium),
+            child: Text(
+              'Giá vàng chi tiết (Đơn vị: triệu đồng)',
+              style: textTheme.titleMedium,
+            ),
           ),
           NonoHorizontalMultiBarChart(
             height: MediaQuery.of(context).size.height * 3,
@@ -136,8 +164,36 @@ class _PartialDataBody extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         children: [
           Padding(
+            padding: const EdgeInsets.only(left: space1, bottom: space1),
+            child: Text('Nổi bật', style: textTheme.titleMedium),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: space1, bottom: spaceQuarter),
+            child: Text(
+              state.highlightData.highestPriceTag,
+              style: textTheme.bodyLarge?.copyWith(color: brandPositiveColor),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: space1, bottom: spaceQuarter),
+            child: Text(
+              state.highlightData.lowestPriceTag,
+              style: textTheme.bodyLarge?.copyWith(color: brandNegativeColor),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: space1, bottom: spaceQuarter),
+            child: Text(
+              state.highlightData.globalPriceChange,
+              style: textTheme.bodyLarge,
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.only(left: space1),
-            child: Text('Đơn vị: triệu đồng', style: textTheme.titleMedium),
+            child: Text(
+              'Giá vàng chi tiết (Đơn vị: triệu đồng)',
+              style: textTheme.titleMedium,
+            ),
           ),
           NonoHorizontalBarChart(
             groupName: '',

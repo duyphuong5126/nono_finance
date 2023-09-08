@@ -13,12 +13,14 @@ sealed class GoldPricesState with _$GoldPricesState {
   const factory GoldPricesState.full({
     required Map<String, double> buyingPricesMap,
     required Map<String, double> sellingPricesMap,
+    required GoldHighlightData highlightData,
     required GoldPriceType type,
   }) = Full;
 
   @Implements<GoldPricesPartialState>()
   const factory GoldPricesState.partial({
     required Map<String, double> pricesMap,
+    required GoldHighlightData highlightData,
     required GoldPriceType type,
   }) = Partial;
 
@@ -35,15 +37,31 @@ abstract class GoldPricesFullState implements GoldPricesState {
 
   Map<String, double> get sellingPricesMap;
 
+  GoldHighlightData get highlightData;
+
   GoldPriceType get type;
 }
 
 abstract class GoldPricesPartialState implements GoldPricesState {
   Map<String, double> get pricesMap;
 
+  GoldHighlightData get highlightData;
+
   GoldPriceType get type;
 }
 
 abstract class GoldPricesFailureState implements GoldPricesState {
   GoldPriceType get type;
+}
+
+class GoldHighlightData {
+  final String highestPriceTag;
+  final String lowestPriceTag;
+  final String globalPriceChange;
+
+  GoldHighlightData({
+    required this.highestPriceTag,
+    required this.lowestPriceTag,
+    required this.globalPriceChange,
+  });
 }
