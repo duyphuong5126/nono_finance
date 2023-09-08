@@ -4,6 +4,7 @@ import 'package:nono_finance/shared/extension/data_ext.dart';
 import '../domain/entity/product_type.dart';
 import '../shared/constants.dart';
 import '../shared/dimens.dart';
+import '../shared/widget/nono_icon.dart';
 
 class ProductsPageIOS extends StatelessWidget {
   const ProductsPageIOS({super.key});
@@ -39,6 +40,8 @@ class _ProductList extends StatelessWidget {
                 break;
             }
           },
+          leading:
+              NonoIcon(productType.iconPath, width: space2, height: space2),
           title: Text(
             productType.label.capitalize(),
             style: textTheme.navTitleTextStyle,

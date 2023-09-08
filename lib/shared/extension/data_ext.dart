@@ -31,6 +31,11 @@ extension ProductTypeExt on ProductType {
         ProductType.gold => 'Giá vàng',
         ProductType.gas => 'Giá xăng',
       };
+
+  String get iconPath => switch (this) {
+        ProductType.gold => 'assets/icon/ic_gold.svg',
+        ProductType.gas => 'assets/icon/ic_gas.svg',
+      };
 }
 
 extension GoldPriceTypeExt on GoldPriceType {
