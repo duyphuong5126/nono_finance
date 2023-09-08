@@ -1,4 +1,5 @@
 enum GoldPriceType {
-  seller,
-  transactionType,
+  full,
+  buying,
+  selling,
 }

@@ -1,5 +1,6 @@
 import 'package:nono_finance/domain/entity/product_type.dart';
 import 'package:nono_finance/exchange/exchange_type.dart';
+import 'package:nono_finance/gold/gold_price_type.dart';
 
 import '../../interest/interest_type.dart';
 
@@ -29,5 +30,19 @@ extension ProductTypeExt on ProductType {
   String get label => switch (this) {
         ProductType.gold => 'Giá vàng',
         ProductType.gas => 'Giá xăng',
+      };
+}
+
+extension GoldPriceTypeExt on GoldPriceType {
+  String get label => switch (this) {
+        GoldPriceType.full => 'Giá đầy đủ',
+        GoldPriceType.buying => 'Giá mua',
+        GoldPriceType.selling => 'Giá bán',
+      };
+
+  String get title => switch (this) {
+        GoldPriceType.full => 'Giá vàng',
+        GoldPriceType.buying => 'Giá mua vàng',
+        GoldPriceType.selling => 'Giá bán vàng',
       };
 }
