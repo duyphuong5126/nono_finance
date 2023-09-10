@@ -56,10 +56,10 @@ class GoldPricesPageCubit extends NonoCubit<GoldPricesState> {
     Map<String, double> buyingPricesMap = {};
     Map<String, double> sellingPricesMap = {};
 
-    double highestPrice = 0.0;
-    double lowestPrice = double.maxFinite;
-    String highestPriceTag = '';
-    String lowestPriceTag = '';
+    double highestBuyingPrice = 0.0;
+    double lowestBuyingPrice = double.maxFinite;
+    double highestSellingPrice = 0.0;
+    double lowestSellingPrice = double.maxFinite;
 
     for (final goldSeller
         in goldPrices.domesticPrices.sortedBy((e) => e.areaName)) {
@@ -69,39 +69,33 @@ class GoldPricesPageCubit extends NonoCubit<GoldPricesState> {
       buyingPricesMap[seller] = buyingPrice;
       sellingPricesMap[seller] = sellingPrice;
 
-      if (buyingPrice >= highestPrice) {
-        highestPrice = buyingPrice;
-        highestPriceTag =
-            'Giá cao nhất (mua vào): ${priceFormat.format(buyingPrice)}tr';
-      } else if (sellingPrice >= highestPrice) {
-        highestPrice = sellingPrice;
-        highestPriceTag =
-            'Giá cao nhất (bán ra): ${priceFormat.format(sellingPrice)}tr';
+      if (buyingPrice >= highestBuyingPrice) {
+        highestBuyingPrice =
+            buyingPrice; //'Giá cao nhất (mua vào): ${priceFormat.format(buyingPrice)}tr';
+      } else if (sellingPrice >= highestSellingPrice) {
+        highestSellingPrice =
+            sellingPrice; //'Giá cao nhất (bán ra): ${priceFormat.format(sellingPrice)}tr';
       }
 
-      if (buyingPrice <= lowestPrice) {
-        lowestPrice = buyingPrice;
-        lowestPriceTag =
-            'Giá thấp nhất (mua vào): ${priceFormat.format(buyingPrice)}tr';
-      } else if (sellingPrice <= lowestPrice) {
-        lowestPrice = sellingPrice;
-        lowestPriceTag =
-            'Giá thấp nhất (bán ra): ${priceFormat.format(sellingPrice)}tr';
+      if (buyingPrice <= lowestBuyingPrice) {
+        lowestBuyingPrice =
+            buyingPrice; //'Giá thấp nhất (mua vào): ${priceFormat.format(buyingPrice)}tr';
+      } else if (sellingPrice <= lowestSellingPrice) {
+        lowestSellingPrice =
+            sellingPrice; //'Giá thấp nhất (bán ra): ${priceFormat.format(sellingPrice)}tr';
       }
     }
-
-    final highlightData = GoldHighlightData(
-      highestPriceTag: highestPriceTag,
-      lowestPriceTag: lowestPriceTag,
-      globalPriceChange: _getGlobalPriceChange(goldPrices),
-    );
 
     emit(
       GoldPricesState.full(
         buyingPricesMap: buyingPricesMap,
         sellingPricesMap: sellingPricesMap,
         type: GoldPriceType.full,
-        highlightData: highlightData,
+        highestBuyingPrice: highestBuyingPrice,
+        highestSellingPrice: highestSellingPrice,
+        lowestBuyingPrice: lowestBuyingPrice,
+        lowestSellingPrice: lowestSellingPrice,
+        globalPrice: goldPrices.globalPriceHistory,
       ),
     );
   }
@@ -111,8 +105,6 @@ class GoldPricesPageCubit extends NonoCubit<GoldPricesState> {
 
     double highestPrice = 0.0;
     double lowestPrice = double.maxFinite;
-    String highestPriceTag = '';
-    String lowestPriceTag = '';
     for (final goldSeller
         in goldPrices.domesticPrices.sortedBy((e) => e.areaName)) {
       final seller = '${goldSeller.seller}\n${goldSeller.areaName}';
@@ -121,56 +113,30 @@ class GoldPricesPageCubit extends NonoCubit<GoldPricesState> {
         pricesMap[seller] = buyingPrice;
         if (buyingPrice >= highestPrice) {
           highestPrice = buyingPrice;
-          highestPriceTag = 'Giá cao nhất: ${priceFormat.format(buyingPrice)}';
         }
         if (buyingPrice <= lowestPrice) {
           lowestPrice = buyingPrice;
-          lowestPriceTag = 'Giá thấp nhất: ${priceFormat.format(buyingPrice)}';
         }
       } else if (type == GoldPriceType.selling) {
         final sellingPrice = goldSeller.sellingPrice / 1000000;
         pricesMap[seller] = sellingPrice;
         if (sellingPrice >= highestPrice) {
           highestPrice = sellingPrice;
-          highestPriceTag = 'Giá cao nhất: ${priceFormat.format(sellingPrice)}';
         }
         if (sellingPrice <= lowestPrice) {
           lowestPrice = sellingPrice;
-          lowestPriceTag = 'Giá thấp nhất: ${priceFormat.format(sellingPrice)}';
         }
       }
     }
-
-    final highlightData = GoldHighlightData(
-      highestPriceTag: highestPriceTag,
-      lowestPriceTag: lowestPriceTag,
-      globalPriceChange: _getGlobalPriceChange(goldPrices),
-    );
 
     emit(
       GoldPricesState.partial(
         pricesMap: pricesMap,
         type: type,
-        highlightData: highlightData,
+        highestPrice: highestPrice,
+        lowestPrice: lowestPrice,
+        globalPrice: goldPrices.globalPriceHistory,
       ),
     );
-  }
-
-  String _getGlobalPriceChange(GoldPrices goldPrices) {
-    double priceChangeInDollar =
-        goldPrices.globalPriceHistory.priceChangeInDollar;
-    double priceChangeInPercent =
-        goldPrices.globalPriceHistory.priceChangeInPercent;
-    String changeLabel = priceChangeInDollar > 0
-        ? 'Tăng: '
-        : priceChangeInDollar < 0
-            ? 'Giảm: '
-            : '';
-    String change = priceChangeInDollar != 0
-        ? '\$${priceFormat.format(priceChangeInDollar.abs())}, ${priceFormat.format(priceChangeInPercent.abs())}%'
-        : '';
-
-    return 'Giá vàng thế giới: \$${priceFormat.format(goldPrices.globalPriceHistory.priceInDollar)}\n'
-        '${change.isNotEmpty && changeLabel.isNotEmpty ? '$changeLabel$change\n' : ''}';
   }
 }

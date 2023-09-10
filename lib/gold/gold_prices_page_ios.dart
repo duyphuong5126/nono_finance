@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:nono_finance/shared/extension/data_ext.dart';
 import 'package:nono_finance/shared/widget/cupertino_widget_util.dart';
 
+import '../domain/entity/gold_prices.dart';
 import '../shared/colors.dart';
 import '../shared/dimens.dart';
 import '../shared/widget/bar_chart_list_skeleton.dart';
@@ -12,6 +13,7 @@ import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_multi_bar_chart.dart';
 import '../shared/widget/error_body.dart';
 import '../shared/widget/nono_icon.dart';
+import 'gold_price_data_formatter.dart';
 import 'gold_price_type.dart';
 import 'gold_prices_cubit.dart';
 import 'gold_prices_state.dart';
@@ -63,10 +65,27 @@ class GoldPricesPageIOS extends StatelessWidget {
   }
 }
 
+const leftMargin = EdgeInsets.only(
+  left: spaceHalf,
+  right: spaceQuarter,
+  bottom: spaceHalf,
+);
+const rightMargin = EdgeInsets.only(
+  left: spaceQuarter,
+  right: spaceHalf,
+  bottom: spaceHalf,
+);
+const highlightPadding = EdgeInsets.symmetric(
+  vertical: spaceHalf,
+  horizontal: spaceQuarter,
+);
+
 class _FullDataBody extends StatelessWidget {
-  const _FullDataBody(this.state);
+  _FullDataBody(this.state);
 
   final GoldPricesFullState state;
+
+  final GoldPricesFormatter _pricesFormatter = GoldPricesFormatter();
 
   @override
   Widget build(BuildContext context) {
@@ -101,39 +120,23 @@ class _FullDataBody extends StatelessWidget {
                         style: textTheme.navTitleTextStyle,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: space1,
-                        bottom: spaceQuarter,
-                      ),
-                      child: Text(
-                        state.highlightData.highestPriceTag,
-                        style: textTheme.textStyle.copyWith(
-                          color: brandPositiveColor,
-                        ),
-                      ),
+                    _HighLightRow(
+                      firstData: _pricesFormatter
+                          .formatHighestBuyingPrice(state.highestBuyingPrice),
+                      secondData: _pricesFormatter
+                          .formatHighestSellingPrice(state.highestSellingPrice),
+                      firstColor: brandPositiveColor,
+                      secondColor: brandPositiveColor,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: space1,
-                        bottom: spaceQuarter,
-                      ),
-                      child: Text(
-                        state.highlightData.lowestPriceTag,
-                        style: textTheme.textStyle
-                            .copyWith(color: brandNegativeColor),
-                      ),
+                    _HighLightRow(
+                      firstData: _pricesFormatter
+                          .formatLowestBuyingPrice(state.lowestBuyingPrice),
+                      secondData: _pricesFormatter
+                          .formatLowestSellingPrice(state.lowestSellingPrice),
+                      firstColor: brandNegativeColor,
+                      secondColor: brandNegativeColor,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: space1,
-                        bottom: spaceQuarter,
-                      ),
-                      child: Text(
-                        state.highlightData.globalPriceChange,
-                        style: textTheme.textStyle,
-                      ),
-                    ),
+                    _GlobalGoldPrice(state.globalPrice),
                     Padding(
                       padding: const EdgeInsets.only(left: space1, top: space1),
                       child: Text(
@@ -221,9 +224,11 @@ class _ErrorBody extends StatelessWidget {
 const _horizontalBarBaseHeight = 60.0;
 
 class _PartialDataBody extends StatelessWidget {
-  const _PartialDataBody(this.state);
+  _PartialDataBody(this.state);
 
   final GoldPricesPartialState state;
+
+  final GoldPricesFormatter _pricesFormatter = GoldPricesFormatter();
 
   @override
   Widget build(BuildContext context) {
@@ -257,39 +262,15 @@ class _PartialDataBody extends StatelessWidget {
                         style: textTheme.navTitleTextStyle,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: space1,
-                        bottom: spaceQuarter,
-                      ),
-                      child: Text(
-                        state.highlightData.highestPriceTag,
-                        style: textTheme.textStyle.copyWith(
-                          color: brandPositiveColor,
-                        ),
-                      ),
+                    _HighLightRow(
+                      firstData: _pricesFormatter
+                          .formatHighestPrice(state.highestPrice),
+                      secondData:
+                          _pricesFormatter.formatLowestPrice(state.lowestPrice),
+                      firstColor: brandPositiveColor,
+                      secondColor: brandNegativeColor,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: space1,
-                        bottom: spaceQuarter,
-                      ),
-                      child: Text(
-                        state.highlightData.lowestPriceTag,
-                        style: textTheme.textStyle
-                            .copyWith(color: brandNegativeColor),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: space1,
-                        bottom: spaceQuarter,
-                      ),
-                      child: Text(
-                        state.highlightData.globalPriceChange,
-                        style: textTheme.textStyle,
-                      ),
-                    ),
+                    _GlobalGoldPrice(state.globalPrice),
                     Padding(
                       padding: const EdgeInsets.only(left: space1, top: space1),
                       child: Text(
@@ -349,6 +330,139 @@ class _ChangeTypeButton extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class _HighLightRow extends StatelessWidget {
+  const _HighLightRow({
+    required this.firstData,
+    required this.secondData,
+    required this.firstColor,
+    required this.secondColor,
+  });
+
+  final String firstData;
+  final String secondData;
+  final Color firstColor;
+  final Color secondColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = CupertinoTheme.of(context).textTheme;
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: firstColor),
+              borderRadius: const BorderRadius.all(Radius.circular(spaceHalf)),
+            ),
+            margin: leftMargin,
+            padding: highlightPadding,
+            child: Text(
+              firstData,
+              style: textTheme.textStyle.copyWith(color: firstColor),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: secondColor),
+              borderRadius: const BorderRadius.all(Radius.circular(spaceHalf)),
+            ),
+            margin: rightMargin,
+            padding: highlightPadding,
+            child: Text(
+              secondData,
+              style: textTheme.textStyle.copyWith(color: secondColor),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _GlobalGoldPrice extends StatelessWidget {
+  _GlobalGoldPrice(this._globalPriceHistory);
+
+  final GoldPricesFormatter _pricesFormatter = GoldPricesFormatter();
+
+  final GoldPriceHistory _globalPriceHistory;
+
+  @override
+  Widget build(BuildContext context) {
+    final priceChangeInDollar = _globalPriceHistory.priceChangeInDollar;
+    final priceChangeInPercent = _globalPriceHistory.priceChangeInPercent;
+    final textTheme = CupertinoTheme.of(context).textTheme;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: brandNormalColor),
+            borderRadius: const BorderRadius.all(Radius.circular(spaceHalf)),
+          ),
+          margin: const EdgeInsets.only(
+            left: spaceHalf,
+            right: spaceHalf,
+            bottom: spaceHalf,
+          ),
+          padding: const EdgeInsets.all(space1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Giá vàng thế giới: ${_pricesFormatter.formatGlobalPrice(
+                  _globalPriceHistory.priceInDollar,
+                )}',
+                style: textTheme.textStyle,
+              ),
+              const SizedBox(
+                height: spaceHalf,
+              ),
+              Row(
+                children: [
+                  Text(
+                    '${_pricesFormatter.formatGlobalPriceChangeLabel(priceChangeInDollar)} ',
+                    style: textTheme.textStyle,
+                  ),
+                  Text(
+                    _pricesFormatter.formatGlobalPriceChange(
+                      priceChangeInDollar,
+                    ),
+                    style: textTheme.textStyle.copyWith(
+                      color: priceChangeInDollar > 0
+                          ? brandPositiveColor
+                          : priceChangeInDollar < 0
+                              ? brandNegativeColor
+                              : CupertinoColors.systemGrey,
+                    ),
+                  ),
+                  Text(
+                    '(${_pricesFormatter.formatGlobalPriceChangeInPercent(
+                      priceChangeInPercent,
+                    )})',
+                    style: textTheme.textStyle.copyWith(
+                      color: priceChangeInPercent > 0
+                          ? brandPositiveColor
+                          : priceChangeInPercent < 0
+                              ? brandNegativeColor
+                              : CupertinoColors.systemGrey,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
