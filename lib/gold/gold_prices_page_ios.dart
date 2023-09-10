@@ -12,6 +12,7 @@ import '../shared/widget/chart/bar_chart/double_bar_configs.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_multi_bar_chart.dart';
 import '../shared/widget/error_body.dart';
+import '../shared/widget/highlight_row.dart';
 import '../shared/widget/nono_icon.dart';
 import 'gold_price_data_formatter.dart';
 import 'gold_price_type.dart';
@@ -120,21 +121,23 @@ class _FullDataBody extends StatelessWidget {
                         style: textTheme.navTitleTextStyle,
                       ),
                     ),
-                    _HighLightRow(
+                    HighLightRow(
                       firstData: _pricesFormatter
                           .formatHighestBuyingPrice(state.highestBuyingPrice),
                       secondData: _pricesFormatter
                           .formatHighestSellingPrice(state.highestSellingPrice),
                       firstColor: brandPositiveColor,
                       secondColor: brandPositiveColor,
+                      textStyle: textTheme.textStyle,
                     ),
-                    _HighLightRow(
+                    HighLightRow(
                       firstData: _pricesFormatter
                           .formatLowestBuyingPrice(state.lowestBuyingPrice),
                       secondData: _pricesFormatter
                           .formatLowestSellingPrice(state.lowestSellingPrice),
                       firstColor: brandNegativeColor,
                       secondColor: brandNegativeColor,
+                      textStyle: textTheme.textStyle,
                     ),
                     _GlobalGoldPrice(state.globalPrice),
                     Padding(
@@ -262,13 +265,14 @@ class _PartialDataBody extends StatelessWidget {
                         style: textTheme.navTitleTextStyle,
                       ),
                     ),
-                    _HighLightRow(
+                    HighLightRow(
                       firstData: _pricesFormatter
                           .formatHighestPrice(state.highestPrice),
                       secondData:
                           _pricesFormatter.formatLowestPrice(state.lowestPrice),
                       firstColor: brandPositiveColor,
                       secondColor: brandNegativeColor,
+                      textStyle: textTheme.textStyle,
                     ),
                     _GlobalGoldPrice(state.globalPrice),
                     Padding(
@@ -330,61 +334,6 @@ class _ChangeTypeButton extends StatelessWidget {
           },
         );
       },
-    );
-  }
-}
-
-class _HighLightRow extends StatelessWidget {
-  const _HighLightRow({
-    required this.firstData,
-    required this.secondData,
-    required this.firstColor,
-    required this.secondColor,
-  });
-
-  final String firstData;
-  final String secondData;
-  final Color firstColor;
-  final Color secondColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = CupertinoTheme.of(context).textTheme;
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: firstColor),
-              borderRadius: const BorderRadius.all(Radius.circular(spaceHalf)),
-            ),
-            margin: leftMargin,
-            padding: highlightPadding,
-            child: Text(
-              firstData,
-              style: textTheme.textStyle.copyWith(color: firstColor),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: secondColor),
-              borderRadius: const BorderRadius.all(Radius.circular(spaceHalf)),
-            ),
-            margin: rightMargin,
-            padding: highlightPadding,
-            child: Text(
-              secondData,
-              style: textTheme.textStyle.copyWith(color: secondColor),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

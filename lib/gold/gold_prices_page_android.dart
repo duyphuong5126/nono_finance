@@ -12,6 +12,7 @@ import '../shared/dimens.dart';
 import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/error_body.dart';
+import '../shared/widget/highlight_row.dart';
 import '../shared/widget/material_widget_util.dart';
 import '../shared/widget/nono_icon.dart';
 import 'gold_price_data_formatter.dart';
@@ -69,21 +70,6 @@ class GoldPricesPageAndroid extends StatelessWidget {
   }
 }
 
-const leftMargin = EdgeInsets.only(
-  left: spaceHalf,
-  right: spaceQuarter,
-  bottom: spaceHalf,
-);
-const rightMargin = EdgeInsets.only(
-  left: spaceQuarter,
-  right: spaceHalf,
-  bottom: spaceHalf,
-);
-const highlightPadding = EdgeInsets.symmetric(
-  vertical: spaceHalf,
-  horizontal: spaceQuarter,
-);
-
 class _FullDataBody extends StatelessWidget {
   _FullDataBody(this.state);
 
@@ -110,21 +96,23 @@ class _FullDataBody extends StatelessWidget {
             padding: const EdgeInsets.only(left: space1, bottom: space1),
             child: Text('Nổi bật', style: textTheme.titleMedium),
           ),
-          _HighLightRow(
+          HighLightRow(
             firstData: _pricesFormatter
                 .formatHighestBuyingPrice(state.highestBuyingPrice),
             secondData: _pricesFormatter
                 .formatHighestSellingPrice(state.highestSellingPrice),
             firstColor: brandPositiveColor,
             secondColor: brandPositiveColor,
+            textStyle: textTheme.bodyLarge,
           ),
-          _HighLightRow(
+          HighLightRow(
             firstData: _pricesFormatter
                 .formatLowestBuyingPrice(state.lowestBuyingPrice),
             secondData: _pricesFormatter
                 .formatLowestSellingPrice(state.lowestSellingPrice),
             firstColor: brandNegativeColor,
             secondColor: brandNegativeColor,
+            textStyle: textTheme.bodyLarge,
           ),
           _GlobalGoldPrice(state.globalPrice),
           Padding(
@@ -184,11 +172,12 @@ class _PartialDataBody extends StatelessWidget {
             padding: const EdgeInsets.only(left: space1, bottom: space1),
             child: Text('Nổi bật', style: textTheme.titleMedium),
           ),
-          _HighLightRow(
+          HighLightRow(
             firstData: _pricesFormatter.formatHighestPrice(state.highestPrice),
             secondData: _pricesFormatter.formatLowestPrice(state.lowestPrice),
             firstColor: brandPositiveColor,
             secondColor: brandNegativeColor,
+            textStyle: textTheme.bodyLarge,
           ),
           _GlobalGoldPrice(state.globalPrice),
           Padding(
@@ -278,61 +267,6 @@ class _ChangeTypeButton extends StatelessWidget {
           },
         );
       },
-    );
-  }
-}
-
-class _HighLightRow extends StatelessWidget {
-  const _HighLightRow({
-    required this.firstData,
-    required this.secondData,
-    required this.firstColor,
-    required this.secondColor,
-  });
-
-  final String firstData;
-  final String secondData;
-  final Color firstColor;
-  final Color secondColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: firstColor),
-              borderRadius: const BorderRadius.all(Radius.circular(spaceHalf)),
-            ),
-            margin: leftMargin,
-            padding: highlightPadding,
-            child: Text(
-              firstData,
-              style: textTheme.bodyLarge?.copyWith(color: firstColor),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: secondColor),
-              borderRadius: const BorderRadius.all(Radius.circular(spaceHalf)),
-            ),
-            margin: rightMargin,
-            padding: highlightPadding,
-            child: Text(
-              secondData,
-              style: textTheme.bodyLarge?.copyWith(color: secondColor),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
