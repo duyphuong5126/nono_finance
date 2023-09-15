@@ -6,11 +6,8 @@ import 'package:nono_finance/util.dart';
 
 import '../crawler/crawlers.dart';
 import '../domain/entity/bank_interest.dart';
+import '../domain/repository/interest_repository.dart';
 import 'model/interest_model.dart';
-
-abstract class InterestRepository {
-  Future<Iterable<BankInterest>> getBankInterestList();
-}
 
 const _monthSuffix = ' tháng';
 const _cacheTime = 60 * 60 * 1000;

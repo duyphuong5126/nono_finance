@@ -9,12 +9,7 @@ import '../crawler/crawlers.dart';
 import '../domain/entity/bank_exchange.dart';
 import '../domain/entity/currency.dart';
 import '../domain/entity/currency_list_result.dart';
-
-abstract class ExchangeRepository {
-  Future<CurrencyListResult> getCurrencyList();
-
-  Future<BankExchange> getBankExchangeList(Currency sourceCurrency);
-}
+import '../domain/repository/exchange_repository.dart';
 
 class ExchangeRepositoryImpl implements ExchangeRepository {
   late CurrencyListResult _currencyListResult;

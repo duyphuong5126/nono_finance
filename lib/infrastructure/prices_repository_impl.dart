@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:nono_finance/util.dart';
 
 import '../crawler/crawlers.dart';
+import '../domain/entity/gas_prices.dart';
 import '../domain/entity/gold_prices.dart';
 import '../domain/repository/prices_repository.dart';
 
@@ -22,6 +23,40 @@ class PricesRepositoryImpl implements PricesRepository {
     });
     goldPricesCrawler.loadUrl(urlByCrawlerMap[goldPricesCrawler]!);
     return dataStream.stream.first;
+  }
+
+  @override
+  Future<GasPrices> getGasPrices() {
+    StreamController<GasPrices> dataStream = StreamController.broadcast();
+    callbackByCrawlerMap[gasPricesCrawler]?.add((data) async {
+      final result = await compute(_convertGasPricesData, data);
+      _lastUpdatedTime = DateTime.now().millisecondsSinceEpoch;
+      dataStream.add(result);
+    });
+    gasPricesCrawler.loadUrl(urlByCrawlerMap[gasPricesCrawler]!);
+    return dataStream.stream.first;
+  }
+
+  static GasPrices _convertGasPricesData(Map<String, dynamic> gasPricesData) {
+    final List<dynamic> domesticPricesData = gasPricesData['domesticPrices'];
+    final domesticPrices = domesticPricesData.map((data) {
+      final pricesData = data as Map<String, dynamic>;
+      final sellerName = pricesData['sellerName'].toString();
+      if (sellerName.isNotEmpty) {
+        return GasPrice(
+          sellerName: pricesData['sellerName'],
+          area1Price: double.parse(pricesData['area1Price'].toString()),
+          area2Price: double.parse(pricesData['area2Price'].toString()),
+        );
+      } else {
+        return const GasPrice(
+          sellerName: 'Unknown',
+          area1Price: -1,
+          area2Price: -1,
+        );
+      }
+    });
+    return GasPrices(domesticPrices: domesticPrices);
   }
 
   static GoldPrices _convertGoldPricesData(

@@ -1,8 +1,9 @@
 import 'dart:developer';
 
-import 'package:nono_finance/infrastructure/exchange_repository.dart';
+import 'package:nono_finance/infrastructure/exchange_repository_impl.dart';
 import 'package:nono_finance/shared/nono_cubit.dart';
 
+import '../domain/repository/exchange_repository.dart';
 import 'currency_list_state.dart';
 
 class CurrencyListCubit extends NonoCubit<CurrencyListState> {
