@@ -6,6 +6,7 @@ import 'package:nono_finance/gold/gold_prices_page_android.dart';
 import 'package:nono_finance/home/home_page_android.dart';
 
 import 'crawler/finance_data_crawler.dart';
+import 'gasoline/gas_prices_page_android.dart';
 import 'shared/colors.dart';
 import 'shared/constants.dart';
 
@@ -23,6 +24,8 @@ class NonoAndroidApp extends StatelessWidget {
               return const ExchangePageAndroid();
             case goldPricesRoute:
               return const GoldPricesPageAndroid();
+            case gasPricesRoute:
+              return const GasPricesPageAndroid();
             default:
               throw Exception('No route found for ${settings.name}');
           }

@@ -37,6 +37,7 @@ class _ProductList extends StatelessWidget {
                 Navigator.pushNamed(context, goldPricesRoute);
                 break;
               case ProductType.gas:
+                Navigator.pushNamed(context, gasPricesRoute);
                 break;
             }
           },

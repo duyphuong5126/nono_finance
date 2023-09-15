@@ -11,3 +11,4 @@ const currenciesCrawlingScriptKey = 'currencies_crawling_script';
 // Navigation
 const exchangeRoute = '/exchange';
 const goldPricesRoute = '/goldPrices';
+const gasPricesRoute = '/gasPrices';
