@@ -32,11 +32,9 @@ class GoldPricesPageIOS extends StatelessWidget {
             navigationBar: CupertinoNavigationBar(
               middle: Text(_getTitle(state)),
               trailing: switch (state) {
-                GoldPricesInitialState() ||
-                GoldPricesFailureState() =>
-                  const SizedBox.shrink(),
                 GoldPricesFullState() => _ChangeTypeButton(state.type),
                 GoldPricesPartialState() => _ChangeTypeButton(state.type),
+                _ => const SizedBox.shrink(),
               },
             ),
             child: SafeArea(
@@ -355,7 +353,7 @@ class _GlobalGoldPrice extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: brandNormalColor),
+            border: Border.all(color: CupertinoColors.darkBackgroundGray),
             borderRadius: const BorderRadius.all(Radius.circular(spaceHalf)),
           ),
           margin: const EdgeInsets.only(

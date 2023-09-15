@@ -28,7 +28,7 @@ class InterestPageIOS extends StatelessWidget {
             builder: (context, state) {
               final text = switch (state) {
                 InterestInitialState() => 'Đang tải...',
-                InterestInitializedState() => state.type.label,
+                InterestInitializedState() => state.type.title,
               };
               return Text(text);
             },

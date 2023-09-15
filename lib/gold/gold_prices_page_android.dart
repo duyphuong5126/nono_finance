@@ -35,11 +35,9 @@ class GoldPricesPageAndroid extends StatelessWidget {
                 BlocBuilder<GoldPricesPageCubit, GoldPricesState>(
                   builder: (context, state) {
                     return switch (state) {
-                      GoldPricesInitialState() ||
-                      GoldPricesFailureState() =>
-                        const SizedBox.shrink(),
                       GoldPricesFullState() => _ChangeTypeButton(state.type),
                       GoldPricesPartialState() => _ChangeTypeButton(state.type),
+                      _ => const SizedBox.shrink(),
                     };
                   },
                 )
@@ -288,7 +286,7 @@ class _GlobalGoldPrice extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: brandNormalColor),
+            border: Border.all(color: Colors.grey[900]!),
             borderRadius: const BorderRadius.all(Radius.circular(spaceHalf)),
           ),
           margin: const EdgeInsets.only(

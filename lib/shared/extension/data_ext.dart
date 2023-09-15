@@ -17,6 +17,15 @@ extension InterestTypeExt on InterestType {
         InterestType.onlineByBank => 'Lãi suất online theo ngân hàng',
         InterestType.onlineByTerm => 'Lãi suất online theo kỳ hạn'
       };
+
+  String get title => switch (this) {
+        InterestType.counterByBank ||
+        InterestType.counterByTerm =>
+          'Lãi suất tại quầy',
+        InterestType.onlineByBank ||
+        InterestType.onlineByTerm =>
+          'Lãi suất online',
+      };
 }
 
 extension ExchangeTypeExt on ExchangeType {
