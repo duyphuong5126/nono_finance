@@ -55,7 +55,7 @@ class PricesRepositoryImpl implements PricesRepository {
           area2Price: -1,
         );
       }
-    });
+    }).where((gasPrice) => gasPrice.area1Price > 0 && gasPrice.area2Price > 0);
     return GasPrices(domesticPrices: domesticPrices);
   }
 

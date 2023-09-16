@@ -203,7 +203,7 @@ class _ErrorBody extends StatelessWidget {
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
-            childCount: 3,
+            childCount: 1,
             (context, itemIndex) {
               return Container(
                 height: MediaQuery.of(context).size.height,

@@ -9,14 +9,11 @@ class GasPrices with _$GasPrices {
   }) = _GasPrices;
 }
 
-class GasPrice {
-  final String sellerName;
-  final double area1Price;
-  final double area2Price;
-
-  const GasPrice({
-    required this.sellerName,
-    required this.area1Price,
-    required this.area2Price,
-  });
+@freezed
+class GasPrice with _$GasPrice {
+  const factory GasPrice({
+    required String sellerName,
+    required double area1Price,
+    required double area2Price,
+  }) = _GasPrice;
 }
