@@ -5,6 +5,8 @@ import 'package:nono_finance/domain/entity/currency.dart';
 import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/extension/data_ext.dart';
 
+import '../shared/formatter/date_time_formatter.dart';
+import '../shared/widget/info_banner.dart';
 import 'exchange_type.dart';
 import '../shared/dimens.dart';
 import '../shared/widget/bar_chart_list_skeleton.dart';
@@ -101,6 +103,7 @@ class _InitializedBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = CupertinoTheme.of(context).textTheme;
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -117,12 +120,18 @@ class _InitializedBody extends StatelessWidget {
             childCount: state.exchangesByGroup.keys.length + 1,
             (context, itemIndex) {
               if (itemIndex == 0) {
-                return const SizedBox(height: space1);
+                final updatedAtString = formatUpdatedTime(state.updatedAt);
+                return Container(
+                  padding: const EdgeInsets.only(top: space2, left: space1),
+                  child: InfoBanner(
+                    message: 'Cập nhật lúc: $updatedAtString',
+                    textStyle: textTheme.textStyle,
+                  ),
+                );
               }
               final index = itemIndex - 1;
               final group = state.exchangesByGroup.keys.elementAt(index);
               final barData = state.exchangesByGroup[group]!;
-              final textTheme = CupertinoTheme.of(context).textTheme;
               final height = state.type == ExchangeType.bank
                   ? _verticalBarChartHeight
                   : barData.length * _horizontalBarHeight;

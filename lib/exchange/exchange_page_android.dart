@@ -6,9 +6,11 @@ import 'package:nono_finance/exchange/exchange_page_cubit.dart';
 import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/extension/data_ext.dart';
 import 'package:nono_finance/shared/widget/error_body.dart';
+import 'package:nono_finance/shared/widget/info_banner.dart';
 
 import '../domain/entity/currency.dart';
 import '../shared/dimens.dart';
+import '../shared/formatter/date_time_formatter.dart';
 import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/chart/bar_chart/not_applicable_text.dart';
@@ -88,6 +90,7 @@ class _InitializedBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     final height = state.type == ExchangeType.bank ? 300.0 : 1200.0;
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
@@ -101,12 +104,27 @@ class _InitializedBody extends StatelessWidget {
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
         clipBehavior: Clip.none,
-        itemCount: state.exchangesByGroup.keys.length,
+        itemCount: state.exchangesByGroup.keys.length + 1,
         padding: const EdgeInsets.symmetric(
-          vertical: space1,
+          vertical: spaceQuarter,
           horizontal: spaceHalf,
         ),
-        itemBuilder: (context, index) {
+        itemBuilder: (context, itemIndex) {
+          if (itemIndex == 0) {
+            final updatedAtString = formatUpdatedTime(state.updatedAt);
+            return Container(
+              padding: const EdgeInsets.only(
+                left: spaceHalf,
+                right: spaceHalf,
+                bottom: space1,
+              ),
+              child: InfoBanner(
+                message: 'Cập nhật lúc: $updatedAtString',
+                textStyle: textTheme.bodyMedium,
+              ),
+            );
+          }
+          final index = itemIndex - 1;
           final group = state.exchangesByGroup.keys.elementAt(index);
           final barData = state.exchangesByGroup[group]!;
           final theme = Theme.of(context);

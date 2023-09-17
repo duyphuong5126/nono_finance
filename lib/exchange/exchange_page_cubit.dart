@@ -76,6 +76,7 @@ class ExchangePageCubit extends NonoCubit<ExchangePageState> {
           exchangesByGroup: exchangesByGroup,
           fromCurrency: sourceCurrency,
           type: type,
+          updatedAt: bankExchange.updatedTime,
         ),
       );
     }

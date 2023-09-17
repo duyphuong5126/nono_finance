@@ -14,6 +14,7 @@ sealed class ExchangePageState with _$ExchangePageState {
     required Map<String, Map<String, double>> exchangesByGroup,
     required Currency fromCurrency,
     required ExchangeType type,
+    required DateTime updatedAt,
   }) = Initialized;
 
   @Implements<ExchangePageFailureState>()
@@ -30,6 +31,8 @@ abstract class ExchangePageInitializedState implements ExchangePageState {
   Currency get fromCurrency;
 
   ExchangeType get type;
+
+  DateTime get updatedAt;
 }
 
 abstract class ExchangePageFailureState implements ExchangePageState {
