@@ -86,7 +86,7 @@ class InterestPageIOS extends StatelessWidget {
   }
 }
 
-const _barChartBaseHeight = 300.0;
+const _barChartBaseHeight = 350.0;
 const _horizontalBarBaseHeight = 30.0;
 const _noteItemHeight = 10.0;
 
@@ -193,13 +193,15 @@ class _InitializedBody extends StatelessWidget {
 
     return [
       const SizedBox(height: 48),
-      Text('* Đơn vị lãi suất: %/năm', style: textTheme.tabLabelTextStyle),
+      Text('* Đơn vị lãi suất: %/năm', style: textTheme.actionTextStyle),
       const SizedBox(height: spaceQuarter),
-      Text('* KKH: Không kỳ hạn', style: textTheme.tabLabelTextStyle),
+      Text('* KKH: Không kỳ hạn', style: textTheme.actionTextStyle),
       const SizedBox(height: spaceQuarter),
       if (hasNABar) ...[
         NotApplicableText(
-          textStyle: textTheme.tabLabelTextStyle,
+          textStyle: textTheme.actionTextStyle.copyWith(
+            color: brandNegativeColor,
+          ),
           notApplicableColor: brandNegativeColor,
         ),
         const SizedBox(height: spaceQuarter),
@@ -207,14 +209,14 @@ class _InitializedBody extends StatelessWidget {
       if (descriptions.hasMinMax) ...[
         Text(
           '* Lãi suất cao nhất',
-          style: textTheme.tabLabelTextStyle.copyWith(
+          style: textTheme.actionTextStyle.copyWith(
             color: brandPositiveColor,
           ),
         ),
         const SizedBox(height: spaceQuarter),
         Text(
           '* Lãi suất thấp nhất',
-          style: textTheme.tabLabelTextStyle.copyWith(
+          style: textTheme.actionTextStyle.copyWith(
             color: brandNegativeColor,
           ),
         ),
@@ -233,27 +235,30 @@ class _InitializedBody extends StatelessWidget {
         .isNotEmpty;
 
     return [
-      Text('* Đơn vị lãi suất: %/năm', style: textTheme.tabLabelTextStyle),
+      Text('* Đơn vị lãi suất: %/năm', style: textTheme.actionTextStyle),
       const SizedBox(height: spaceQuarter),
-      Text('* KKH: Không kỳ hạn', style: textTheme.tabLabelTextStyle),
+      Text('* KKH: Không kỳ hạn', style: textTheme.actionTextStyle),
       const SizedBox(height: spaceQuarter),
       if (hasNABar) ...[
         NotApplicableText(
-          textStyle: textTheme.tabLabelTextStyle,
+          textStyle: textTheme.actionTextStyle.copyWith(
+            color: CupertinoColors.black,
+          ),
+          notApplicableColor: CupertinoColors.black,
         ),
         const SizedBox(height: spaceQuarter),
       ],
       if (descriptions.hasMinMax) ...[
         Text(
           '* Lãi suất cao nhất',
-          style: textTheme.tabLabelTextStyle.copyWith(
+          style: textTheme.actionTextStyle.copyWith(
             color: brandPositiveColor,
           ),
         ),
         const SizedBox(height: spaceQuarter),
         Text(
           '* Lãi suất thấp nhất',
-          style: textTheme.tabLabelTextStyle.copyWith(
+          style: textTheme.actionTextStyle.copyWith(
             color: brandNegativeColor,
           ),
         ),

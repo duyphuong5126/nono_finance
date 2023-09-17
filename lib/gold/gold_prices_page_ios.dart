@@ -145,6 +145,29 @@ class _FullDataBody extends StatelessWidget {
                         style: textTheme.navTitleTextStyle,
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: space1,
+                        top: spaceQuarter,
+                        bottom: spaceQuarter,
+                      ),
+                      child: Text(
+                        '* Giá bán ra',
+                        style: textTheme.navTitleTextStyle
+                            .copyWith(color: brandPositiveColor),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: space1,
+                        bottom: spaceQuarter,
+                      ),
+                      child: Text(
+                        '* Giá mua vào',
+                        style: textTheme.navTitleTextStyle
+                            .copyWith(color: brandNegativeColor),
+                      ),
+                    ),
                   ],
                 );
               } else {
@@ -165,7 +188,7 @@ class _FullDataBody extends StatelessWidget {
                               SingleBarConfigs(xLabel: e.key, yValue: e.value),
                         )
                         .toList(),
-                    firstBarColor: brandNormalColor,
+                    firstBarColor: brandNegativeColor,
                     secondBarColor: brandPositiveColor,
                     firstBarLabel: 'Giá mua',
                     secondBarLabel: 'Giá bán',

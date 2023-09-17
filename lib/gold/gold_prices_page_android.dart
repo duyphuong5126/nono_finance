@@ -120,6 +120,24 @@ class _FullDataBody extends StatelessWidget {
               style: textTheme.titleMedium,
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: space1,
+              top: spaceQuarter,
+              bottom: spaceQuarter,
+            ),
+            child: Text(
+              '* Giá bán ra',
+              style: textTheme.bodyMedium?.copyWith(color: brandPositiveColor),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: space1, bottom: spaceQuarter),
+            child: Text(
+              '* Giá mua vào',
+              style: textTheme.bodyMedium?.copyWith(color: brandNegativeColor),
+            ),
+          ),
           NonoHorizontalMultiBarChart(
             height: MediaQuery.of(context).size.height * 3,
             axisColor: Colors.black,
@@ -129,7 +147,7 @@ class _FullDataBody extends StatelessWidget {
             secondBarConfigsList: state.sellingPricesMap.entries
                 .map((e) => SingleBarConfigs(xLabel: e.key, yValue: e.value))
                 .toList(),
-            firstBarColor: brandNormalColor,
+            firstBarColor: brandNegativeColor,
             secondBarColor: brandPositiveColor,
             firstBarLabel: 'Giá mua',
             secondBarLabel: 'Giá bán',

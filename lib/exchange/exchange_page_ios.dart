@@ -122,14 +122,11 @@ class _InitializedBody extends StatelessWidget {
               if (itemIndex == 0) {
                 final updatedAtString = formatUpdatedTime(state.updatedAt);
                 return Container(
-                  padding: const EdgeInsets.only(
-                    top: space1,
-                    left: spaceHalf,
-                    bottom: space1,
-                  ),
+                  padding: const EdgeInsets.all(space1),
                   child: InfoBanner(
                     message: 'Cập nhật lúc: $updatedAtString',
                     textStyle: textTheme.textStyle,
+                    backgroundColor: CupertinoColors.systemGrey5,
                   ),
                 );
               }
@@ -140,7 +137,7 @@ class _InitializedBody extends StatelessWidget {
                   ? _verticalBarChartHeight
                   : barData.length * _horizontalBarHeight;
               return Padding(
-                padding: const EdgeInsets.only(right: spaceHalf),
+                padding: const EdgeInsets.symmetric(horizontal: spaceHalf),
                 child: NonoHorizontalBarChart(
                   groupName: group,
                   barData: barData,

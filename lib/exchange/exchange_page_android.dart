@@ -121,6 +121,7 @@ class _InitializedBody extends StatelessWidget {
               child: InfoBanner(
                 message: 'Cập nhật lúc: $updatedAtString',
                 textStyle: textTheme.bodyMedium,
+                backgroundColor: Colors.grey[400]!,
               ),
             );
           }
