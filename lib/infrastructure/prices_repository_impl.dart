@@ -56,7 +56,10 @@ class PricesRepositoryImpl implements PricesRepository {
         );
       }
     }).where((gasPrice) => gasPrice.area1Price > 0 && gasPrice.area2Price > 0);
-    return GasPrices(domesticPrices: domesticPrices);
+    return GasPrices(
+      domesticPrices: domesticPrices,
+      updatedAt: getUpdatedTime(gasPricesData) ?? DateTime.now(),
+    );
   }
 
   static GoldPrices _convertGoldPricesData(

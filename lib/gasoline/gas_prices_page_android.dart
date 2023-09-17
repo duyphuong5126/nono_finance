@@ -5,10 +5,12 @@ import 'package:nono_finance/gasoline/gas_prices_cubit.dart';
 
 import '../shared/colors.dart';
 import '../shared/dimens.dart';
+import '../shared/formatter/date_time_formatter.dart';
 import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/double_bar_configs.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_multi_bar_chart.dart';
 import '../shared/widget/error_body.dart';
+import '../shared/widget/info_banner.dart';
 import 'gas_prices_state.dart';
 
 class GasPricesPageAndroid extends StatelessWidget {
@@ -57,6 +59,7 @@ class _InitializedBody extends StatelessWidget {
       return const _ErrorBody();
     }
     final textTheme = Theme.of(context).textTheme;
+    final updatedAtString = formatUpdatedTime(_state.updatedAt);
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 0.0,
@@ -69,6 +72,18 @@ class _InitializedBody extends StatelessWidget {
       child: ListView(
         physics: const BouncingScrollPhysics(),
         children: [
+          Container(
+            padding: const EdgeInsets.only(
+              left: spaceHalf,
+              right: spaceHalf,
+              bottom: space1,
+            ),
+            child: InfoBanner(
+              message: 'Cập nhật lúc: $updatedAtString',
+              textStyle: textTheme.bodyMedium,
+              backgroundColor: Colors.grey[400]!,
+            ),
+          ),
           NonoHorizontalMultiBarChart(
             height: _state.prices.length * _horizontalBarBaseHeight,
             axisColor: Colors.black,

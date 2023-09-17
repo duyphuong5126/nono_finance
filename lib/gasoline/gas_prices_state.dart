@@ -12,6 +12,7 @@ sealed class GasPricesState with _$GasPricesState {
   @Implements<GoldPricesInitializedState>()
   const factory GasPricesState.initialized({
     required Iterable<GasPrice> prices,
+    required DateTime updatedAt,
   }) = Initialized;
 
   @Implements<GoldPricesFailureState>()
@@ -22,6 +23,8 @@ abstract class GoldPricesInitialState implements GasPricesState {}
 
 abstract class GoldPricesInitializedState implements GasPricesState {
   Iterable<GasPrice> get prices;
+
+  DateTime get updatedAt;
 }
 
 abstract class GoldPricesFailureState implements GasPricesState {}

@@ -17,8 +17,12 @@ class GasPricesCubit extends NonoCubit<GasPricesState> {
   init() async {
     try {
       final gasPrices = await _repository.getGasPrices();
-      log('GasPricesCubit>>> domesticPrices ${gasPrices.domesticPrices}');
-      emit(GasPricesState.initialized(prices: gasPrices.domesticPrices));
+      emit(
+        GasPricesState.initialized(
+          prices: gasPrices.domesticPrices,
+          updatedAt: gasPrices.updatedAt,
+        ),
+      );
     } on Exception catch (error) {
       log('GasPricesCubit>>> failed to get gas prices with error $error');
       emit(const GasPricesState.failure());

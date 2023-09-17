@@ -4,10 +4,12 @@ import 'package:intl/intl.dart';
 
 import '../shared/colors.dart';
 import '../shared/dimens.dart';
+import '../shared/formatter/date_time_formatter.dart';
 import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/double_bar_configs.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_multi_bar_chart.dart';
 import '../shared/widget/error_body.dart';
+import '../shared/widget/info_banner.dart';
 import 'gas_prices_cubit.dart';
 import 'gas_prices_state.dart';
 
@@ -57,6 +59,7 @@ class _InitializedBody extends StatelessWidget {
       return const _ErrorBody();
     }
     final textTheme = CupertinoTheme.of(context).textTheme;
+    final updatedAtString = formatUpdatedTime(_state.updatedAt);
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -75,6 +78,20 @@ class _InitializedBody extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(
+                      left: spaceHalf,
+                      right: spaceHalf,
+                      top: spaceHalf,
+                      bottom: space1,
+                    ),
+                    child: InfoBanner(
+                      message: 'Cập nhật lúc: $updatedAtString',
+                      textStyle: textTheme.textStyle,
+                      backgroundColor: CupertinoColors.systemGrey5,
+                    ),
+                  ),
                   NonoHorizontalMultiBarChart(
                     height: _state.prices.length * _horizontalBarBaseHeight,
                     axisColor: CupertinoColors.black,

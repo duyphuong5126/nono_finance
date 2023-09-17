@@ -6,6 +6,7 @@ part 'gas_prices.freezed.dart';
 class GasPrices with _$GasPrices {
   const factory GasPrices({
     required Iterable<GasPrice> domesticPrices,
+    required DateTime updatedAt,
   }) = _GasPrices;
 }
 

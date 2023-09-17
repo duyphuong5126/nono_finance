@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
 String formatUpdatedTime(DateTime dateTime) {
-  final formatter = DateFormat.Hms('en_US').add_yMd();
+  final formatter = DateFormat('hh:mm:ss - dd/MM/yyyy');
   return formatter.format(dateTime);
 }
