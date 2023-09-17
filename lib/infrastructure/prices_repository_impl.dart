@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +8,7 @@ import '../crawler/crawlers.dart';
 import '../domain/entity/gas_prices.dart';
 import '../domain/entity/gold_prices.dart';
 import '../domain/repository/prices_repository.dart';
+import 'data_parsing_helper.dart';
 
 class PricesRepositoryImpl implements PricesRepository {
   int _lastUpdatedTime = -1;
@@ -74,7 +74,6 @@ class PricesRepositoryImpl implements PricesRepository {
           pricesData['buyingPrice'].toString().replaceAll(".", "");
       final sellingPrice =
           pricesData['sellingPrice'].toString().replaceAll(".", "");
-      log('Gold>>> buyingPrice=$buyingPrice, sellingPrice=$sellingPrice');
       return GoldSeller(
         areaName: pricesData['areaName'],
         seller: pricesData['seller'],
@@ -99,6 +98,7 @@ class PricesRepositoryImpl implements PricesRepository {
     return GoldPrices(
       domesticPrices: domesticPrices,
       globalPriceHistory: globalGoldPrice,
+      updatedTime: getUpdatedTime(goldPricesData) ?? DateTime.now(),
     );
   }
 }

@@ -96,6 +96,7 @@ class GoldPricesPageCubit extends NonoCubit<GoldPricesState> {
         lowestBuyingPrice: lowestBuyingPrice,
         lowestSellingPrice: lowestSellingPrice,
         globalPrice: goldPrices.globalPriceHistory,
+        updatedAt: goldPrices.updatedTime,
       ),
     );
   }
@@ -136,6 +137,7 @@ class GoldPricesPageCubit extends NonoCubit<GoldPricesState> {
         highestPrice: highestPrice,
         lowestPrice: lowestPrice,
         globalPrice: goldPrices.globalPriceHistory,
+        updatedAt: goldPrices.updatedTime,
       ),
     );
   }

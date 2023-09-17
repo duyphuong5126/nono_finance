@@ -7,12 +7,14 @@ import 'package:nono_finance/shared/widget/cupertino_widget_util.dart';
 import '../domain/entity/gold_prices.dart';
 import '../shared/colors.dart';
 import '../shared/dimens.dart';
+import '../shared/formatter/date_time_formatter.dart';
 import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/double_bar_configs.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_multi_bar_chart.dart';
 import '../shared/widget/error_body.dart';
 import '../shared/widget/highlight_row.dart';
+import '../shared/widget/info_banner.dart';
 import '../shared/widget/nono_icon.dart';
 import 'gold_price_data_formatter.dart';
 import 'gold_price_type.dart';
@@ -89,6 +91,7 @@ class _FullDataBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = CupertinoTheme.of(context).textTheme;
+    final updatedAtString = formatUpdatedTime(state.updatedAt);
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -108,11 +111,24 @@ class _FullDataBody extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(
+                        left: spaceHalf,
+                        right: spaceHalf,
+                        top: spaceHalf,
+                        bottom: space1,
+                      ),
+                      child: InfoBanner(
+                        message: 'Cập nhật lúc: $updatedAtString',
+                        textStyle: textTheme.textStyle,
+                        backgroundColor: CupertinoColors.systemGrey5,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                         left: space1,
                         bottom: space1,
-                        top: space1,
                       ),
                       child: Text(
                         'Nổi bật',

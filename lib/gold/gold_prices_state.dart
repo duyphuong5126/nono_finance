@@ -20,6 +20,7 @@ sealed class GoldPricesState with _$GoldPricesState {
     required double lowestSellingPrice,
     required GoldPriceHistory globalPrice,
     required GoldPriceType type,
+    required DateTime updatedAt,
   }) = Full;
 
   @Implements<GoldPricesPartialState>()
@@ -29,6 +30,7 @@ sealed class GoldPricesState with _$GoldPricesState {
     required double lowestPrice,
     required GoldPriceHistory globalPrice,
     required GoldPriceType type,
+    required DateTime updatedAt,
   }) = Partial;
 
   @Implements<GoldPricesFailureState>()
@@ -55,6 +57,8 @@ abstract class GoldPricesFullState implements GoldPricesState {
   GoldPriceHistory get globalPrice;
 
   GoldPriceType get type;
+
+  DateTime get updatedAt;
 }
 
 abstract class GoldPricesPartialState implements GoldPricesState {
@@ -67,6 +71,8 @@ abstract class GoldPricesPartialState implements GoldPricesState {
   GoldPriceHistory get globalPrice;
 
   GoldPriceType get type;
+
+  DateTime get updatedAt;
 }
 
 abstract class GoldPricesFailureState implements GoldPricesState {

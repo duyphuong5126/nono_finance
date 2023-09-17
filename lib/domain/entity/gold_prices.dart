@@ -7,6 +7,7 @@ class GoldPrices with _$GoldPrices {
   const factory GoldPrices({
     required Iterable<GoldSeller> domesticPrices,
     required GoldPriceHistory globalPriceHistory,
+    required DateTime updatedTime,
   }) = _GoldPrices;
 }
 
