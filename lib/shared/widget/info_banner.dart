@@ -11,6 +11,7 @@ class InfoBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         const NonoIcon(
           'assets/icon/ic_info.svg',

@@ -122,7 +122,11 @@ class _InitializedBody extends StatelessWidget {
               if (itemIndex == 0) {
                 final updatedAtString = formatUpdatedTime(state.updatedAt);
                 return Container(
-                  padding: const EdgeInsets.only(top: space2, left: space1),
+                  padding: const EdgeInsets.only(
+                    top: space1,
+                    left: spaceHalf,
+                    bottom: space1,
+                  ),
                   child: InfoBanner(
                     message: 'Cập nhật lúc: $updatedAtString',
                     textStyle: textTheme.textStyle,

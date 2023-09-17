@@ -93,7 +93,11 @@ class ExchangeRepositoryImpl implements ExchangeRepository {
         }
       }
 
-      final bank = Bank(name: rate['bankName'], code: bankCode);
+      final bankName = rate['bankName'].toString();
+      final bank = Bank(
+        name: bankName.isNotEmpty ? bankName : bankCode,
+        code: bankCode,
+      );
 
       const defaultValue = double.negativeInfinity;
       buyCashMap[bank] = tryParse(rate['buyCash']) ?? defaultValue;

@@ -8,6 +8,7 @@ import 'package:nono_finance/domain/entity/currency.dart';
 import 'package:nono_finance/exchange/exchange_type.dart';
 import 'package:nono_finance/exchange/exchange_page_state.dart';
 import 'package:nono_finance/infrastructure/exchange_repository_impl.dart';
+import 'package:nono_finance/shared/extension/data_ext.dart';
 import 'package:nono_finance/shared/nono_cubit.dart';
 
 import '../domain/repository/exchange_repository.dart';
@@ -97,7 +98,7 @@ class ExchangePageCubit extends NonoCubit<ExchangePageState> {
       exchanges['Mua chuyển khoản'] = data.buyTransferMap[bank] ?? -1.0;
       exchanges['Bán tiền mặt'] = data.sellCashMap[bank] ?? -1.0;
       exchanges['Bán chuyển khoản'] = data.sellTransferMap[bank] ?? -1.0;
-      exchangesByGroup[bank.name] = exchanges;
+      exchangesByGroup[bank.name.capitalize()] = exchanges;
     }
     return exchangesByGroup;
   }
@@ -106,14 +107,30 @@ class ExchangePageCubit extends NonoCubit<ExchangePageState> {
     BankExchange data,
   ) {
     Map<String, Map<String, double>> exchangesByGroup = {};
-    exchangesByGroup['Mua tiền mặt'] =
-        data.buyCashMap.map((key, value) => MapEntry(key.name, value));
-    exchangesByGroup['Mua chuyển khoản'] =
-        data.buyTransferMap.map((key, value) => MapEntry(key.name, value));
-    exchangesByGroup['Bán tiền mặt'] =
-        data.sellCashMap.map((key, value) => MapEntry(key.name, value));
-    exchangesByGroup['Bán chuyển khoản'] =
-        data.sellTransferMap.map((key, value) => MapEntry(key.name, value));
+    exchangesByGroup['Mua tiền mặt'] = data.buyCashMap.map(
+      (key, value) => MapEntry(
+        key.name.capitalize(),
+        value,
+      ),
+    );
+    exchangesByGroup['Mua chuyển khoản'] = data.buyTransferMap.map(
+      (key, value) => MapEntry(
+        key.name.capitalize(),
+        value,
+      ),
+    );
+    exchangesByGroup['Bán tiền mặt'] = data.sellCashMap.map(
+      (key, value) => MapEntry(
+        key.name.capitalize(),
+        value,
+      ),
+    );
+    exchangesByGroup['Bán chuyển khoản'] = data.sellTransferMap.map(
+      (key, value) => MapEntry(
+        key.name.capitalize(),
+        value,
+      ),
+    );
     return exchangesByGroup;
   }
 }

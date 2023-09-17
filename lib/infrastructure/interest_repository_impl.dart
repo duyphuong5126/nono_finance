@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:nono_finance/infrastructure/model/bank_interest_model.dart';
@@ -34,15 +35,26 @@ class InterestRepositoryImpl implements InterestRepository {
     return dataStream.stream.first;
   }
 
+  static int _parseMonthSuffix(String month) {
+    try {
+      return int.parse(month);
+    } on Exception catch (e) {
+      log('Month>>> Failed to parse month=$month with error $e');
+      return -1;
+    }
+  }
+
   static Iterable<BankInterest> _convertBankInterestData(
     Map<String, dynamic> interestData,
   ) {
     final interestModel = InterestModel.fromJson(interestData);
     final counterTerms = interestModel.counterTerms.map(
-      (e) => e == 'KKH' ? -1 : int.parse(e.replaceAll(_monthSuffix, '')),
+      (e) =>
+          e == 'KKH' ? -1 : _parseMonthSuffix(e.replaceAll(_monthSuffix, '')),
     );
     final onlineTerms = interestModel.onlineTerms.map(
-      (e) => e == 'KKH' ? -1 : int.parse(e.replaceAll(_monthSuffix, '')),
+      (e) =>
+          e == 'KKH' ? -1 : _parseMonthSuffix(e.replaceAll(_monthSuffix, '')),
     );
 
     final bankNames =
