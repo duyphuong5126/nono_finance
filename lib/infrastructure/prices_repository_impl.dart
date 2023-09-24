@@ -44,7 +44,7 @@ class PricesRepositoryImpl implements PricesRepository {
       final sellerName = pricesData['sellerName'].toString();
       if (sellerName.isNotEmpty) {
         return GasPrice(
-          sellerName: pricesData['sellerName'],
+          sellerName: sellerName,
           area1Price: double.parse(pricesData['area1Price'].toString()),
           area2Price: double.parse(pricesData['area2Price'].toString()),
         );
