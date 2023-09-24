@@ -8,7 +8,9 @@ import 'package:nono_finance/shared/extension/data_ext.dart';
 import 'package:nono_finance/shared/widget/bar_chart_list_skeleton.dart';
 import 'package:nono_finance/shared/widget/nono_icon.dart';
 
+import '../shared/formatter/date_time_formatter.dart';
 import '../shared/widget/chart/bar_chart/not_applicable_text.dart';
+import '../shared/widget/info_banner.dart';
 import '../shared/widget/material_widget_util.dart';
 import '../shared/widget/chart/bar_chart/nono_bar_chart.dart';
 import 'interest_state.dart';
@@ -95,6 +97,7 @@ class _InitializedBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return RefreshIndicator(
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       edgeOffset: 0.0,
@@ -107,25 +110,36 @@ class _InitializedBody extends StatelessWidget {
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
         clipBehavior: Clip.none,
-        itemCount: state.interestRatesByGroup.keys.length,
+        itemCount: state.interestRatesByGroup.keys.length + 1,
         padding: const EdgeInsets.symmetric(vertical: space1),
-        itemBuilder: (context, index) {
+        itemBuilder: (context, itemIndex) {
+          if (itemIndex == 0) {
+            final updatedAtString = formatUpdatedTime(state.updatedAt);
+            return Container(
+              padding: const EdgeInsets.only(
+                left: spaceHalf,
+                right: spaceHalf,
+                bottom: space1,
+              ),
+              child: InfoBanner(
+                message: 'Cập nhật lúc: $updatedAtString',
+                textStyle: textTheme.bodyMedium,
+                backgroundColor: Colors.grey[400]!,
+              ),
+            );
+          }
+          final index = itemIndex - 1;
           final group = state.interestRatesByGroup.keys.elementAt(index);
           final barData = state.interestRatesByGroup[group]!;
           final description = state.descriptionsByGroup[group]!;
-          final theme = Theme.of(context);
           final notes = switch (state.type) {
             InterestType.onlineByBank ||
             InterestType.counterByBank =>
-              _generateChartNoteWidgets(
-                theme.textTheme,
-                barData,
-                description,
-              ),
+              _generateChartNoteWidgets(textTheme, barData, description),
             InterestType.onlineByTerm ||
             InterestType.counterByTerm =>
               _generateHorizontalChartNoteWidgets(
-                theme.textTheme,
+                textTheme,
                 barData,
                 description,
               ),
@@ -145,10 +159,10 @@ class _InitializedBody extends StatelessWidget {
                       axisGroupPadding: 40,
                       groupNameBottomPadding: space1,
                       height: _barChartBaseHeight + totalNoteHeight,
-                      groupNameStyle: theme.textTheme.titleLarge,
-                      barValueTextStyle: theme.textTheme.bodySmall!,
-                      valueSegmentTitleTextStyle: theme.textTheme.bodySmall
-                          ?.copyWith(color: Colors.black),
+                      groupNameStyle: textTheme.titleLarge,
+                      barValueTextStyle: textTheme.bodySmall!,
+                      valueSegmentTitleTextStyle:
+                          textTheme.bodySmall?.copyWith(color: Colors.black),
                       notes: notes,
                     )
                   : const SizedBox.shrink(),
@@ -164,8 +178,8 @@ class _InitializedBody extends StatelessWidget {
                       axisColor: Colors.black,
                       height: barData.length * _horizontalBarBaseHeight +
                           totalNoteHeight,
-                      groupNameStyle: theme.textTheme.bodyLarge,
-                      barValueTextStyle: theme.textTheme.bodySmall!,
+                      groupNameStyle: textTheme.bodyLarge,
+                      barValueTextStyle: textTheme.bodySmall!,
                       notes: notes,
                     )
                   : const SizedBox.shrink(),

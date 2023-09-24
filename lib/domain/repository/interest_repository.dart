@@ -1,5 +1,5 @@
-import '../entity/bank_interest.dart';
+import '../entity/bank_interests.dart';
 
 abstract class InterestRepository {
-  Future<Iterable<BankInterest>> getBankInterestList();
+  Future<BankInterests> getBankInterestList();
 }

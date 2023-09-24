@@ -5,9 +5,11 @@ import 'package:nono_finance/shared/extension/data_ext.dart';
 import 'package:nono_finance/shared/widget/cupertino_widget_util.dart';
 
 import '../shared/dimens.dart';
+import '../shared/formatter/date_time_formatter.dart';
 import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/chart/bar_chart/not_applicable_text.dart';
+import '../shared/widget/info_banner.dart';
 import '../shared/widget/nono_icon.dart';
 import '../shared/widget/chart/bar_chart/nono_bar_chart.dart';
 import 'interest_cubit.dart';
@@ -97,6 +99,8 @@ class _InitializedBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = CupertinoTheme.of(context).textTheme;
+    final updatedAtString = formatUpdatedTime(state.updatedAt);
     return CustomScrollView(
       slivers: [
         CupertinoSliverRefreshControl(
@@ -112,13 +116,25 @@ class _InitializedBody extends StatelessWidget {
             childCount: state.interestRatesByGroup.keys.length + 1,
             (context, itemIndex) {
               if (itemIndex == 0) {
-                return const SizedBox(height: space1);
+                return Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.only(
+                    left: spaceHalf,
+                    right: spaceHalf,
+                    top: spaceHalf,
+                    bottom: space1,
+                  ),
+                  child: InfoBanner(
+                    message: 'Cập nhật lúc: $updatedAtString',
+                    textStyle: textTheme.textStyle,
+                    backgroundColor: CupertinoColors.systemGrey5,
+                  ),
+                );
               }
               final index = itemIndex - 1;
               final group = state.interestRatesByGroup.keys.elementAt(index);
               final barData = state.interestRatesByGroup[group]!;
               final description = state.descriptionsByGroup[group]!;
-              final textTheme = CupertinoTheme.of(context).textTheme;
               final notes = switch (state.type) {
                 InterestType.onlineByBank ||
                 InterestType.counterByBank =>

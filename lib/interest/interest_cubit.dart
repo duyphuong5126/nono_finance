@@ -27,13 +27,13 @@ class InterestCubit extends NonoCubit<InterestState> {
       final result = await _repository.getBankInterestList();
       final interestRatesByGroup = switch (interestType) {
         InterestType.counterByBank =>
-          await (compute(_counterInterestsByBank, result)),
+          await (compute(_counterInterestsByBank, result.interestList)),
         InterestType.onlineByBank =>
-          await (compute(_onlineInterestsByBank, result)),
+          await (compute(_onlineInterestsByBank, result.interestList)),
         InterestType.counterByTerm =>
-          await (compute(_counterInterestsByTerm, result)),
+          await (compute(_counterInterestsByTerm, result.interestList)),
         InterestType.onlineByTerm =>
-          await (compute(_onlineInterestsByTerm, result))
+          await (compute(_onlineInterestsByTerm, result.interestList))
       };
       final Map<String, InterestDataDescriptions> descriptionsByGroup = {};
       for (final mapEntry in interestRatesByGroup.entries) {
@@ -45,6 +45,7 @@ class InterestCubit extends NonoCubit<InterestState> {
           type: interestType,
           interestRatesByGroup: interestRatesByGroup,
           descriptionsByGroup: descriptionsByGroup,
+          updatedAt: result.updatedTime,
         ),
       );
     } on Exception catch (e) {

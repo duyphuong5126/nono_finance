@@ -8,6 +8,9 @@ const getInterestScript = "(function() { "
     ".getElementsByClassName('row')[0]"
     ".getElementsByTagName('article')[0];"
     ""
+    "interestObj.updatedTime = interestArea.getElementsByTagName('h1')[0]"
+    ".getElementsByTagName('small')[0].innerText;"
+    ""
 // Start getting counter interest data
 // id: lai_suat_tiet_kiem_tai_quay
     "var counterInterestTable = interestArea.getElementsByTagName('section')[0]"

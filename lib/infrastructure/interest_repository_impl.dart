@@ -7,29 +7,22 @@ import 'package:nono_finance/util.dart';
 
 import '../crawler/crawlers.dart';
 import '../domain/entity/bank_interest.dart';
+import '../domain/entity/bank_interests.dart';
 import '../domain/repository/interest_repository.dart';
+import 'data_parsing_helper.dart';
 import 'model/interest_model.dart';
 
 const _monthSuffix = ' tháng';
-const _cacheTime = 60 * 60 * 1000;
 
 class InterestRepositoryImpl implements InterestRepository {
-  final List<BankInterest> _bankInterests = [];
   int _lastUpdatedTime = -1;
 
   @override
-  Future<Iterable<BankInterest>> getBankInterestList() {
-    if (_bankInterests.isNotEmpty && _lastUpdatedTime != -1 ||
-        DateTime.now().millisecondsSinceEpoch - _lastUpdatedTime < _cacheTime) {
-      return Future.value(_bankInterests);
-    }
-    StreamController<Iterable<BankInterest>> dataStream =
-        StreamController.broadcast();
+  Future<BankInterests> getBankInterestList() {
+    StreamController<BankInterests> dataStream = StreamController.broadcast();
     callbackByCrawlerMap[interestCrawler]!.add((data) async {
-      _bankInterests.clear();
-      _bankInterests.addAll(await compute(_convertBankInterestData, data));
       _lastUpdatedTime = DateTime.now().millisecondsSinceEpoch;
-      dataStream.add(_bankInterests);
+      dataStream.add(await compute(_convertBankInterestData, data));
     });
     interestCrawler.loadUrl(urlByCrawlerMap[interestCrawler]!);
     return dataStream.stream.first;
@@ -44,7 +37,7 @@ class InterestRepositoryImpl implements InterestRepository {
     }
   }
 
-  static Iterable<BankInterest> _convertBankInterestData(
+  static BankInterests _convertBankInterestData(
     Map<String, dynamic> interestData,
   ) {
     final interestModel = InterestModel.fromJson(interestData);
@@ -82,7 +75,7 @@ class InterestRepositoryImpl implements InterestRepository {
         )
     };
 
-    return bankNames.map(
+    final bankInterests = bankNames.map(
       (name) => BankInterest(
         bankName: name,
         counterInterestByTermMap: {
@@ -96,6 +89,11 @@ class InterestRepositoryImpl implements InterestRepository {
                 onlineInterestMap[name]?.elementAt(i) ?? double.negativeInfinity
         },
       ),
+    );
+    final updatedTime = getUpdatedTime(interestData) ?? DateTime.now();
+    return BankInterests(
+      interestList: bankInterests,
+      updatedTime: updatedTime,
     );
   }
 }

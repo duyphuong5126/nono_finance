@@ -15,6 +15,7 @@ sealed class InterestState with _$InterestState {
     required InterestType type,
     required Map<String, Map<String, double>> interestRatesByGroup,
     required Map<String, InterestDataDescriptions> descriptionsByGroup,
+    required DateTime updatedAt,
   }) = Initialized;
 }
 
@@ -26,4 +27,6 @@ abstract class InterestInitializedState implements InterestState {
   Map<String, InterestDataDescriptions> get descriptionsByGroup;
 
   InterestType get type;
+
+  DateTime get updatedAt;
 }
