@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:nono_finance/currency/currencies_page_ios.dart';
 import 'package:nono_finance/interest/interest_page_ios.dart';
 import 'package:nono_finance/products/products_page_ios.dart';
+import 'package:nono_finance/shared/ad/banner_ad_page.dart';
 
 import '../shared/colors.dart';
 import '../shared/dimens.dart';
@@ -27,35 +30,40 @@ class _HomePageIOSState extends State<HomePageIOS> {
 
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
-      child: CupertinoTabScaffold(
-        tabBar: CupertinoTabBar(
-          activeColor: primaryColor,
-          inactiveColor: CupertinoColors.inactiveGray,
-          items: [
-            _generateBarItem(
-              index: 0,
-              label: 'Lãi suất',
-              icon: 'assets/icon/ic_savings.svg',
-            ),
-            _generateBarItem(
-              index: 1,
-              label: 'Tỉ giá',
-              icon: 'assets/icon/ic_exchange.svg',
-            ),
-            _generateBarItem(
-              index: 2,
-              label: 'Giá cả',
-              icon: 'assets/icon/ic_coins.svg',
-            ),
-          ],
-          onTap: (int index) {
-            setState(() {
-              _selectedIndex = index;
-            });
+      child: BannerAdPage(
+        body: CupertinoTabScaffold(
+          tabBar: CupertinoTabBar(
+            activeColor: primaryColor,
+            inactiveColor: CupertinoColors.inactiveGray,
+            items: [
+              _generateBarItem(
+                index: 0,
+                label: 'Lãi suất',
+                icon: 'assets/icon/ic_savings.svg',
+              ),
+              _generateBarItem(
+                index: 1,
+                label: 'Tỉ giá',
+                icon: 'assets/icon/ic_exchange.svg',
+              ),
+              _generateBarItem(
+                index: 2,
+                label: 'Giá cả',
+                icon: 'assets/icon/ic_coins.svg',
+              ),
+            ],
+            onTap: (int index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+          ),
+          tabBuilder: (context, int index) {
+            return tabs[index];
           },
         ),
-        tabBuilder: (context, int index) {
-          return tabs[index];
+        onBannerAdFailed: (error) {
+          log('Failed to fetch banner ad with error $error');
         },
       ),
     );

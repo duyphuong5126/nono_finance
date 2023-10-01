@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:nono_finance/currency/currencies_page_android.dart';
 import 'package:nono_finance/interest/interest_page_android.dart';
+import 'package:nono_finance/shared/ad/banner_ad_page.dart';
 import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/widget/nono_icon.dart';
 
@@ -22,13 +25,18 @@ class _HomePageState extends State<HomePageAndroid> {
   Widget build(BuildContext context) {
     final unselectedColor = Colors.grey[500];
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: const [
-          InterestPageAndroid(),
-          CurrenciesPageAndroid(),
-          ProductPageAndroid(),
-        ],
+      body: BannerAdPage(
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: const [
+            InterestPageAndroid(),
+            CurrenciesPageAndroid(),
+            ProductPageAndroid(),
+          ],
+        ),
+        onBannerAdFailed: (error) {
+          log('Failed to fetch banner ad with error $error');
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
