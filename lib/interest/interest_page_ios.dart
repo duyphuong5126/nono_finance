@@ -6,10 +6,10 @@ import 'package:nono_finance/shared/widget/cupertino_widget_util.dart';
 
 import '../shared/dimens.dart';
 import '../shared/formatter/date_time_formatter.dart';
-import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/chart/bar_chart/not_applicable_text.dart';
 import '../shared/widget/info_banner.dart';
+import '../shared/widget/loading_body.dart';
 import '../shared/widget/nono_icon.dart';
 import '../shared/widget/chart/bar_chart/nono_bar_chart.dart';
 import 'interest_cubit.dart';
@@ -74,10 +74,7 @@ class InterestPageIOS extends StatelessWidget {
           child: BlocBuilder<InterestCubit, InterestState>(
             builder: (context, state) {
               return switch (state) {
-                InterestInitialState() => const BarChartListSkeleton(
-                    startColor: CupertinoColors.systemGrey,
-                    endColor: CupertinoColors.systemGrey4,
-                  ),
+                InterestInitialState() => const LoadingBody(),
                 InterestInitializedState() => _InitializedBody(state)
               };
             },

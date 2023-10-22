@@ -11,9 +11,9 @@ import 'package:nono_finance/shared/widget/info_banner.dart';
 import '../domain/entity/currency.dart';
 import '../shared/dimens.dart';
 import '../shared/formatter/date_time_formatter.dart';
-import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/chart/bar_chart/not_applicable_text.dart';
+import '../shared/widget/loading_body.dart';
 import '../shared/widget/material_widget_util.dart';
 import '../shared/widget/nono_icon.dart';
 import 'exchange_page_state.dart';
@@ -69,10 +69,7 @@ class ExchangePageAndroid extends StatelessWidget {
         body: BlocBuilder<ExchangePageCubit, ExchangePageState>(
           builder: (context, state) {
             return switch (state) {
-              ExchangePageInitialState() => BarChartListSkeleton(
-                  startColor: Colors.grey[800]!,
-                  endColor: Colors.grey[400]!,
-                ),
+              ExchangePageInitialState() => const LoadingBody(),
               ExchangePageInitializedState() => _InitializedBody(state),
               ExchangePageFailureState() => _ErrorBody(currency),
             };

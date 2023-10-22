@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../domain/entity/currency.dart';
 import '../shared/constants.dart';
 import '../shared/dimens.dart';
+import '../shared/widget/loading_body.dart';
 import 'currencies_cubit.dart';
-import 'currency_list_skeleton.dart';
 import 'currency_list_state.dart';
 
 class CurrenciesPageIOS extends StatelessWidget {
@@ -41,10 +41,7 @@ class _CurrencyListPage extends StatelessWidget {
         middle: Text(text),
       ),
       child: switch (currentState) {
-        CurrencyListInitialState() => const CurrencyListSkeleton(
-            startColor: CupertinoColors.systemGrey,
-            endColor: CupertinoColors.systemGrey3,
-          ),
+        CurrencyListInitialState() => const LoadingBody(),
         CurrencyListInitializedState() => _CurrencyList(
             currencyList: currentState.currencyList,
           ),

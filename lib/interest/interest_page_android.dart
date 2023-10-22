@@ -5,7 +5,7 @@ import 'package:nono_finance/interest/interest_data_descriptions.dart';
 import 'package:nono_finance/shared/colors.dart';
 import 'package:nono_finance/shared/dimens.dart';
 import 'package:nono_finance/shared/extension/data_ext.dart';
-import 'package:nono_finance/shared/widget/bar_chart_list_skeleton.dart';
+import 'package:nono_finance/shared/widget/loading_body.dart';
 import 'package:nono_finance/shared/widget/nono_icon.dart';
 
 import '../shared/formatter/date_time_formatter.dart';
@@ -73,10 +73,7 @@ class InterestPageAndroid extends StatelessWidget {
         body: BlocBuilder<InterestCubit, InterestState>(
           builder: (context, state) {
             return switch (state) {
-              InterestInitialState() => BarChartListSkeleton(
-                  startColor: Colors.grey[800]!,
-                  endColor: Colors.grey[400]!,
-                ),
+              InterestInitialState() => const LoadingBody(),
               InterestInitializedState() => _InitializedBody(state)
             };
           },

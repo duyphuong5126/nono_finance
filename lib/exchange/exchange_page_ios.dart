@@ -7,9 +7,9 @@ import 'package:nono_finance/shared/extension/data_ext.dart';
 
 import '../shared/formatter/date_time_formatter.dart';
 import '../shared/widget/info_banner.dart';
+import '../shared/widget/loading_body.dart';
 import 'exchange_type.dart';
 import '../shared/dimens.dart';
-import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/chart/bar_chart/not_applicable_text.dart';
 import '../shared/widget/cupertino_widget_util.dart';
@@ -81,10 +81,7 @@ class _ExchangePage extends StatelessWidget {
       ),
       child: SafeArea(
         child: switch (state) {
-          ExchangePageInitialState() => const BarChartListSkeleton(
-              startColor: CupertinoColors.systemGrey,
-              endColor: CupertinoColors.systemGrey4,
-            ),
+          ExchangePageInitialState() => const LoadingBody(),
           ExchangePageInitializedState() => _InitializedBody(state),
           ExchangePageFailureState() => _ErrorBody(currency),
         },

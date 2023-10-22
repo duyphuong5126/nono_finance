@@ -10,11 +10,11 @@ import 'package:nono_finance/shared/widget/chart/bar_chart/double_bar_configs.da
 
 import '../shared/dimens.dart';
 import '../shared/formatter/date_time_formatter.dart';
-import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/error_body.dart';
 import '../shared/widget/highlight_row.dart';
 import '../shared/widget/info_banner.dart';
+import '../shared/widget/loading_body.dart';
 import '../shared/widget/material_widget_util.dart';
 import '../shared/widget/nono_icon.dart';
 import 'gold_price_data_formatter.dart';
@@ -46,10 +46,7 @@ class GoldPricesPageAndroid extends StatelessWidget {
               ],
             ),
             body: switch (state) {
-              GoldPricesInitialState() => BarChartListSkeleton(
-                  startColor: Colors.grey[800]!,
-                  endColor: Colors.grey[400]!,
-                ),
+              GoldPricesInitialState() => const LoadingBody(),
               GoldPricesFullState() => _FullDataBody(state),
               GoldPricesPartialState() => _PartialDataBody(state),
               GoldPricesFailureState() => _ErrorBody(state),

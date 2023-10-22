@@ -5,11 +5,11 @@ import 'package:intl/intl.dart';
 import '../shared/colors.dart';
 import '../shared/dimens.dart';
 import '../shared/formatter/date_time_formatter.dart';
-import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/double_bar_configs.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_multi_bar_chart.dart';
 import '../shared/widget/error_body.dart';
 import '../shared/widget/info_banner.dart';
+import '../shared/widget/loading_body.dart';
 import 'gas_prices_cubit.dart';
 import 'gas_prices_state.dart';
 
@@ -31,10 +31,7 @@ class GasPricesPageIOS extends StatelessWidget {
             ),
             child: SafeArea(
               child: switch (state) {
-                GoldPricesInitialState() => const BarChartListSkeleton(
-                    startColor: CupertinoColors.systemGrey,
-                    endColor: CupertinoColors.systemGrey4,
-                  ),
+                GoldPricesInitialState() => const LoadingBody(),
                 GoldPricesInitializedState() => _InitializedBody(state),
                 GoldPricesFailureState() => const _ErrorBody(),
               },

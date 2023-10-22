@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nono_finance/currency/currencies_cubit.dart';
-import 'package:nono_finance/currency/currency_list_skeleton.dart';
 import 'package:nono_finance/currency/currency_list_state.dart';
 
 import '../domain/entity/currency.dart';
 import '../shared/constants.dart';
 import '../shared/dimens.dart';
+import '../shared/widget/loading_body.dart';
 
 class CurrenciesPageAndroid extends StatelessWidget {
   const CurrenciesPageAndroid({super.key});
@@ -30,10 +30,7 @@ class CurrenciesPageAndroid extends StatelessWidget {
         body: BlocBuilder<CurrencyListCubit, CurrencyListState>(
           builder: (context, state) {
             return switch (state) {
-              CurrencyListInitialState() => CurrencyListSkeleton(
-                  startColor: Colors.grey[800]!,
-                  endColor: Colors.grey[400]!,
-                ),
+              CurrencyListInitialState() => const LoadingBody(),
               CurrencyListInitializedState() => _CurrencyList(
                   currencyList: state.currencyList,
                 ),

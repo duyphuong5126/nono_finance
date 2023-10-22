@@ -6,11 +6,11 @@ import 'package:nono_finance/gasoline/gas_prices_cubit.dart';
 import '../shared/colors.dart';
 import '../shared/dimens.dart';
 import '../shared/formatter/date_time_formatter.dart';
-import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/double_bar_configs.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_multi_bar_chart.dart';
 import '../shared/widget/error_body.dart';
 import '../shared/widget/info_banner.dart';
+import '../shared/widget/loading_body.dart';
 import 'gas_prices_state.dart';
 
 class GasPricesPageAndroid extends StatelessWidget {
@@ -31,10 +31,7 @@ class GasPricesPageAndroid extends StatelessWidget {
             ),
             body: SafeArea(
               child: switch (state) {
-                GoldPricesInitialState() => BarChartListSkeleton(
-                    startColor: Colors.grey[800]!,
-                    endColor: Colors.grey[400]!,
-                  ),
+                GoldPricesInitialState() => const LoadingBody(),
                 GoldPricesInitializedState() => _InitializedBody(state),
                 GoldPricesFailureState() => const _ErrorBody(),
               },

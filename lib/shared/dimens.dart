@@ -1,5 +1,6 @@
 const actionBarIconSize = 16.0;
 const errorBodyIconSize = 128.0;
+const loadingIconSize = 64.0;
 
 const popUpRadius = 16.0;
 

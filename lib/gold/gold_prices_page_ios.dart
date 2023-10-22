@@ -8,13 +8,13 @@ import '../domain/entity/gold_prices.dart';
 import '../shared/colors.dart';
 import '../shared/dimens.dart';
 import '../shared/formatter/date_time_formatter.dart';
-import '../shared/widget/bar_chart_list_skeleton.dart';
 import '../shared/widget/chart/bar_chart/double_bar_configs.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_bar_chart.dart';
 import '../shared/widget/chart/bar_chart/nono_horizontal_multi_bar_chart.dart';
 import '../shared/widget/error_body.dart';
 import '../shared/widget/highlight_row.dart';
 import '../shared/widget/info_banner.dart';
+import '../shared/widget/loading_body.dart';
 import '../shared/widget/nono_icon.dart';
 import 'gold_price_data_formatter.dart';
 import 'gold_price_type.dart';
@@ -41,10 +41,7 @@ class GoldPricesPageIOS extends StatelessWidget {
             ),
             child: SafeArea(
               child: switch (state) {
-                GoldPricesInitialState() => const BarChartListSkeleton(
-                    startColor: CupertinoColors.systemGrey,
-                    endColor: CupertinoColors.systemGrey4,
-                  ),
+                GoldPricesInitialState() => const LoadingBody(),
                 GoldPricesFullState() => _FullDataBody(state),
                 GoldPricesPartialState() => _PartialDataBody(state),
                 GoldPricesFailureState() => _ErrorBody(state),
