@@ -39,8 +39,9 @@ class _BannerAdPageState extends State<BannerAdPage> {
           });
         },
         onAdFailedToLoad: (ad, err) {
+          log('Ad failed to load with error $err');
           setState(() {
-            _isAdReady = true;
+            _isAdReady = false;
           });
           widget.onBannerAdFailed(err);
           ad.dispose();
@@ -63,7 +64,7 @@ class _BannerAdPageState extends State<BannerAdPage> {
   Widget build(BuildContext context) {
     return _isAdReady
         ? Stack(
-            alignment: Alignment.bottomLeft,
+            alignment: Alignment.bottomCenter,
             children: [
               Container(
                 margin: EdgeInsets.only(
