@@ -6,6 +6,7 @@ import 'package:nono_finance/infrastructure/interest_repository_impl.dart';
 import 'package:nono_finance/interest/interest_state.dart';
 import 'package:nono_finance/interest/interest_type.dart';
 import 'package:nono_finance/shared/nono_cubit.dart';
+import 'package:nono_finance/shared/widget/view_mode/view_mode.dart';
 
 import '../domain/entity/bank_interest.dart';
 import '../domain/repository/interest_repository.dart';
@@ -22,6 +23,11 @@ class InterestCubit extends NonoCubit<InterestState> {
   }
 
   Future<void> changeInterestType(InterestType interestType) async {
+    ViewMode viewMode = ViewMode.plainText;
+    final currentState = state;
+    if (currentState is Initialized) {
+      viewMode = currentState.viewMode;
+    }
     emit(const InterestState.initial());
     try {
       final result = await _repository.getBankInterestList();
@@ -46,10 +52,20 @@ class InterestCubit extends NonoCubit<InterestState> {
           interestRatesByGroup: interestRatesByGroup,
           descriptionsByGroup: descriptionsByGroup,
           updatedAt: result.updatedTime,
+          viewMode: viewMode,
         ),
       );
     } on Exception catch (e) {
       log('InterestCubit>>> initialization failed by $e');
+    }
+  }
+
+  changeViewMode(ViewMode viewMode) async {
+    final currentState = state;
+    if (currentState is Initialized) {
+      emit(const InterestState.initial());
+      await Future.delayed(const Duration(seconds: 1));
+      emit(currentState.copyWith(viewMode: viewMode));
     }
   }
 
@@ -63,7 +79,7 @@ class InterestCubit extends NonoCubit<InterestState> {
                   (key, value) => key > 0
                       ? MapEntry('$key tháng', value)
                       : MapEntry('KKH', value),
-                )
+                ),
     };
   }
 
@@ -77,7 +93,7 @@ class InterestCubit extends NonoCubit<InterestState> {
                   (key, value) => key > 0
                       ? MapEntry('$key tháng', value)
                       : MapEntry('KKH', value),
-                )
+                ),
     };
   }
 

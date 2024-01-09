@@ -1,0 +1,4 @@
+enum ViewMode {
+  plainText,
+  chart;
+}

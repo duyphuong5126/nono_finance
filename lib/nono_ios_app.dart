@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:nono_finance/exchange/exchange_page_ios.dart';
 import 'package:nono_finance/gasoline/gas_prices_page_ios.dart';
 import 'package:nono_finance/gold/gold_prices_page_ios.dart';
+import 'package:nono_finance/shared/colors.dart';
 
 import 'crawler/finance_data_crawler.dart';
 import 'home/home_page_ios.dart';
@@ -29,6 +30,10 @@ class NonoIOSApp extends StatelessWidget {
         },
       ),
       home: const Stack(children: [FinanceDataCrawler(), HomePageIOS()]),
+      theme: const CupertinoThemeData(
+        scaffoldBackgroundColor: appBackground,
+        barBackgroundColor: appBackground,
+      ),
     );
   }
 }

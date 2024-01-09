@@ -67,6 +67,7 @@ class NonoAndroidApp extends StatelessWidget {
         ),
         backgroundColor: appBackground,
         elevation: 0.0,
+        scrolledUnderElevation: 0.0,
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: appBackground,
           statusBarIconBrightness: Brightness.dark,

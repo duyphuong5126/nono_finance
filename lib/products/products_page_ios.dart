@@ -51,7 +51,7 @@ class _ProductList extends StatelessWidget {
         );
       },
       separatorBuilder: (context, index) {
-        return const SizedBox(height: spaceHalf);
+        return const SizedBox(height: space1);
       },
       itemCount: ProductType.values.length,
     );

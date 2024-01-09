@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:nono_finance/currency/currencies_page_ios.dart';
 import 'package:nono_finance/interest/interest_page_ios.dart';
 import 'package:nono_finance/products/products_page_ios.dart';
@@ -35,6 +36,7 @@ class _HomePageIOSState extends State<HomePageIOS> {
           tabBar: CupertinoTabBar(
             activeColor: primaryColor,
             inactiveColor: CupertinoColors.inactiveGray,
+            height: kToolbarHeight + spaceHalf,
             items: [
               _generateBarItem(
                 index: 0,
@@ -76,11 +78,14 @@ class _HomePageIOSState extends State<HomePageIOS> {
   }) {
     const unselectedColor = CupertinoColors.inactiveGray;
     return BottomNavigationBarItem(
-      icon: NonoIcon(
-        icon,
-        width: space4,
-        height: space4,
-        color: _selectedIndex == index ? primaryColor : unselectedColor,
+      icon: Padding(
+        padding: const EdgeInsets.only(top: spaceHalf),
+        child: NonoIcon(
+          icon,
+          width: space4 + spaceHalf,
+          height: space4 + spaceHalf,
+          color: _selectedIndex == index ? primaryColor : unselectedColor,
+        ),
       ),
       label: label,
     );

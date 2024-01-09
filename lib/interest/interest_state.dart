@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nono_finance/interest/interest_type.dart';
+import 'package:nono_finance/shared/widget/view_mode/view_mode.dart';
 
 import 'interest_data_descriptions.dart';
 
@@ -16,6 +17,7 @@ sealed class InterestState with _$InterestState {
     required Map<String, Map<String, double>> interestRatesByGroup,
     required Map<String, InterestDataDescriptions> descriptionsByGroup,
     required DateTime updatedAt,
+    required ViewMode viewMode,
   }) = Initialized;
 }
 
@@ -29,4 +31,6 @@ abstract class InterestInitializedState implements InterestState {
   InterestType get type;
 
   DateTime get updatedAt;
+
+  ViewMode get viewMode;
 }
